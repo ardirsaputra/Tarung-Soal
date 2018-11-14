@@ -1,0 +1,42 @@
+{
+  "name": "ammil",
+  "version": "0.1.0",
+  "description": "ammil is system application for social/non profit organization",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/zakaaid/ammil.git"
+  },
+  "keywords": [
+    "ammil",
+    "erp",
+    "social"
+  ],
+  "author": "Zakaa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/zakaaid/ammil/issues"
+  },
+  "homepage": "https://gitlab.com/zakaaid/ammil#readme",
+  "dependencies": {
+    "bootstrap": "4.0.0",
+    "chart.js": "2.7.1",
+    "flag-icon-css": "2.9.0",
+    "font-awesome": "4.7.0",
+    "gulp-sourcemaps": "^2.6.3",
+    "jquery": "3.2.1",
+    "mdi": "2.1.19",
+    "popper.js": "1.12.9",
+    "simple-line-icons": "2.4.1"
+  },
+  "devDependencies": {
+    "compass-mixins": "^0.12.10",
+    "del": "2.2.2",
+    "merge-stream": "^1.0.1",
+    "minimatch": "^3.0.4",
+    "run-sequence": "^1.2.2"
+  }
+}

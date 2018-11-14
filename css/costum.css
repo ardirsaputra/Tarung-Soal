@@ -1,0 +1,45 @@
+/*------------------------------------------------------------------
+ [Costum Stylesheet]
+
+  Project:	Zakaa Admin Bootstrap Template [Open Version]
+  Version:	0.1.0
+-------------------------------------------------------------------*/
+
+.font-cash-card {
+    font-size: large;
+}
+
+.col-centered {
+    display:flex; 
+    justify-content:center;
+}
+
+.box-details {
+    padding: 12.5px;
+    background:rgba(228, 228, 228, 0.46);
+}
+
+.btn-file {
+    height: auto !important;
+    width: 30px !important;
+    padding: 1px !important;
+    margin: 0 1px;
+}
+
+.program-card-title {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    color: #404852;
+    margin-bottom: 22px;
+    font-size: 20px;
+    text-transform: capitalize; }
+    .rtl .card-title {
+      text-align: right; }
+
+main .stretch-card .prolink :hover {
+    text-decoration: none !important;
+}
+
+.logo-login {
+    padding: 2rem 4rem;
+}
