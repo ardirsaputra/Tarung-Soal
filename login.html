@@ -2,90 +2,194 @@
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Star Admin Free Bootstrap Admin Dashboard Template</title>
-  <!-- plugins:css -->
-  <link rel="stylesheet" href="./vendors/iconfonts/mdi/css/materialdesignicons.min.css">
-  <link rel="stylesheet" href="./vendors/css/vendor.bundle.base.css">
-  <link rel="stylesheet" href="./vendors/css/vendor.bundle.addons.css">
-  <!-- endinject -->
-  <!-- plugin css for this page -->
-  <!-- End plugin css for this page -->
-  <!-- inject:css -->
-  <link rel="stylesheet" href="./css/style.css">
-  <link rel="stylesheet" href="./css/costum.css">
-  <!-- endinject -->
-  <link rel="shortcut icon" href="./images/favicon.png" />
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Login / Sign Up - Tarung Soal</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="./vendors/iconfonts/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="./vendors/css/vendor.bundle.base.css">
+    <link rel="stylesheet" href="./vendors/css/vendor.bundle.addons.css">
+    <!-- endinject -->
+    <!-- plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/costum.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="./images/favicon.png" />
 </head>
 
 <body>
-  <div class="container-scroller">
-    <div class="container-fluid page-body-wrapper full-page-wrapper auth-page">
-      <div class="content-wrapper d-flex align-items-center auth auth-bg-1 theme-one">
-        <div class="row w-100">
-          <div class="col-lg-4 col-sm-10 mx-auto">
-            <div class="auto-form-wrapper">
-                <div class="logo-login">
-                    <img src="/images/login-logo.jpg" class="mx-auto d-block img-fluid">
-                </div>
-              <form action="#">
-                <div class="form-group">
-                  <label class="label">Username</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Username">
-                    <div class="input-group-append">
-                      <span class="input-group-text">
-                        <i class="mdi mdi-check-circle-outline"></i>
-                      </span>
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper auth-page">
+            <div class="content-wrapper d-flex align-items-center auth auth-bg-2 theme-one">
+                <div class="col-lg-4 col-sm-10 mx-auto">
+                    <div class="auto-form-wrapper">
+                        <div class="logo-login">
+                            <img src="/images/logo.png" class="img-fluid">
+                        </div>
+                        <br>
+                        <!-- Nav pills -->
+                        <div class="col-centered">
+                            <ul class="nav nav-pills" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="pill" href="#login">Masuk</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="pill" href="#register">Daftar</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Tab panes Form Transaksi-->
+                        <div class="tab-content">
+                            <div id="login" class="tab-pane active"><br>
+                                <form class="forms-sample">
+                                    <div class="form-group">
+                                        <label class="label">Email</label>
+                                        <div class="input-group">
+                                            <input type="email" class="form-control" placeholder="Username" required>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="mdi mdi-check-circle-outline"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">Password</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" placeholder="*********"
+                                                required>
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="mdi mdi-check-circle-outline"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-primary submit-btn btn-block">Masuk</button>
+                                    </div>
+                                    <div class="form-group d-flex justify-content-between">
+                                        <div class="form-check form-check-flat mt-0">
+                                            <label class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" checked> Biarkan
+                                                tetap masuk
+                                            </label>
+                                        </div>
+                                        <a href="#" class="text-small forgot-password text-black">Forgot Password</a>
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="register" class="tab-pane"><br>
+                                <form class="forms-sample">
+                                    <div class="form-group">
+                                        <label class="label">Nama Lengkap</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Username">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="mdi mdi-check-circle-outline"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">Email</label>
+                                        <div class="input-group">
+                                            <input type="email" class="form-control" placeholder="Email">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="mdi mdi-check-circle-outline"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">Tempat Lahir</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Tempat lahir">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="mdi mdi-check-circle-outline"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">Tanggal Lahir</label>
+                                        <div class="input-group">
+                                            <input type="date" class="form-control" placeholder="Tanggal Lahir">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="mdi mdi-check-circle-outline"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">Pendidikan Terakhir Kali</label>
+                                        <div class="input-group">
+                                            <select class="form-control">
+                                                <option value="">SMP</option>
+                                                <option value="">SMA</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Nama Sekolah">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">Password</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" placeholder="*********">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="mdi mdi-check-circle-outline"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="label">Konfirmasi Password</label>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control" placeholder="*********">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">
+                                                    <i class="mdi mdi-check-circle-outline"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button class="btn btn-primary submit-btn btn-block">Daftar</button>
+                                    </div>
+                                    <div class="form-group d-flex justify-content-between">
+                                        <a href="#login" class="text-small text-black text-center">Sudah ada akun</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <ul class="auth-footer">
+                            <p class="footer-text text-center">copyright © 2018 ARS. Infomatic Engineering UNILA .</p>
+                        </ul>
                     </div>
-                  </div>
                 </div>
-                <div class="form-group">
-                  <label class="label">Password</label>
-                  <div class="input-group">
-                    <input type="password" class="form-control" placeholder="*********">
-                    <div class="input-group-append">
-                      <span class="input-group-text">
-                        <i class="mdi mdi-check-circle-outline"></i>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <button class="btn btn-primary submit-btn btn-block">Login</button>
-                </div>
-                <div class="form-group d-flex justify-content-between">
-                  <div class="form-check form-check-flat mt-0">
-                    <label class="form-check-label">
-                      <input type="checkbox" class="form-check-input" checked> Biarkan tetap masuk
-                    </label>
-                  </div>
-                  <a href="#" class="text-small forgot-password text-black">Forgot Password</a>
-                </div>
-              </form>
+                <!-- content-wrapper ends -->
             </div>
-            <ul class="auth-footer">
-              
-            </ul>
-            <p class="footer-text text-center">copyright © 2018 Zakaa. In colaboration with Lazis Al-Wasii.</p>
-          </div>
+            <!-- page-body-wrapper ends -->
         </div>
-      </div>
-      <!-- content-wrapper ends -->
-    </div>
-    <!-- page-body-wrapper ends -->
-  </div>
-  <!-- container-scroller -->
-  <!-- plugins:js -->
-  <script src="./vendors/js/vendor.bundle.base.js"></script>
-  <script src="./vendors/js/vendor.bundle.addons.js"></script>
-  <!-- endinject -->
-  <!-- inject:js -->
-  <script src="./js/off-canvas.js"></script>
-  <script src="./js/misc.js"></script>
-  <!-- endinject -->
+        <!-- container-scroller -->
+        <!-- plugins:js -->
+        <script src="./vendors/js/vendor.bundle.base.js"></script>
+        <script src="./vendors/js/vendor.bundle.addons.js"></script>
+        <!-- endinject -->
+        <!-- inject:js -->
+        <script src="./js/off-canvas.js"></script>
+        <script src="./js/misc.js"></script>
+        <!-- endinject -->
 </body>
 
 </html>

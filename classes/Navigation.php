@@ -30,7 +30,7 @@ class Navigation {
         }
         return false;
     }
-    public static function getSourceImageProfilDonatur($idProfil){
+    public static function getSourceImageProfil($idProfil){
         return './imageview.php?id='.$idProfil.'';
     }
 }
