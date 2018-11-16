@@ -83,11 +83,11 @@
                                 </form>
                             </div>
                             <div id="register" class="tab-pane"><br>
-                                <form class="forms-sample">
+                                <form class="forms-sample" action="login.php" method="post" enctype="multipart/form-data">
                                     <div class="form-group">
                                         <label class="label">Nama Lengkap</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Username">
+                                            <input type="text" name="namaLengkap" class="form-control" placeholder="Username">
                                             <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     <i class="mdi mdi-check-circle-outline"></i>
@@ -109,7 +109,7 @@
                                     <div class="form-group">
                                         <label class="label">Tempat Lahir</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Tempat lahir">
+                                            <input type="text" class="form-control" name="tempatLahir" placeholder="Tempat lahir">
                                             <div class="input-group-append">
                                                 <span class="input-group-text">
                                                     <i class="mdi mdi-check-circle-outline"></i>
@@ -131,7 +131,7 @@
                                     <div class="form-group">
                                         <label class="label">Pendidikan Terakhir Kali</label>
                                         <div class="input-group">
-                                            <select class="form-control">
+                                            <select class="form-control" name="golongan">
                                                 <option value="">SMP</option>
                                                 <option value="">SMA</option>
                                             </select>

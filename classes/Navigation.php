@@ -274,7 +274,7 @@ class Navigation {
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="./logout.php">
                     <i class="menu-icon mdi mdi-restart"></i>
                     <span class="menu-title text-danger">Logout</span>
                 </a>
@@ -311,4 +311,3 @@ class Navigation {
     }
 }
 ?>
-            

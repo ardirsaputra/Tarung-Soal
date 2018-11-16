@@ -7,6 +7,6 @@ include('./classes/Page.php');
 if (Login::isLoggedIn()){
     echo Page::DefaultPage('Dashboard - Tarung Soal','','');    
 }else{
-    Login::Login();
+    Login::redirect('./login.php');
 }
 ?>

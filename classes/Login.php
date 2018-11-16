@@ -4,15 +4,15 @@ class Login{
         if(isset($_COOKIE['TS_A'])){
             if (DB::query ('SELECT idLogin FROM login_token WHERE token=:token', array (':token' => sha1( $_COOKIE['TS_A'])))){
                 $getIdProfil = self::getIdProfilLoggedIn();
-                $nama_lengkap = DB::query ('SELECT nama_lengkap FROM profil WHERE profil.idProfil = :idProfil' , array('idProfil'=>$getIdProfil))[0]['nama_lengkap'];
-                return $nama_lengkap;
+                $namaLengkap = DB::query ('SELECT namaLengkap FROM user WHERE idUser = :idUser' , array('idUser'=>$getIdProfil))[0]['namaLengkap'];
+                return $namaLengkap;
             }else return false;    
         }else false;
     }
     public static function getIdProfilLoggedIn(){
         if(isset($_COOKIE['TS_A'])){
             if (DB::query ('SELECT idLogin FROM login_token WHERE token=:token', array (':token' => sha1( $_COOKIE['TS_A'])))){
-                $userName = DB::query ('SELECT username FROM user, login_token WHERE user.idUser = login_token.idUser and token=:token', array (':token' => sha1( $_COOKIE['TS_A'])))[0]['username'];
+                $namaLengkap = DB::query ('SELECT namaLengkap FROM user, login_token WHERE user.idUser = login_token.idUser and token=:token', array (':token' => sha1( $_COOKIE['TS_A'])))[0]['namaLengkap'];
                 $idUser = DB::query('SELECT idUser FROM login_token WHERE token=:token', array('token'=> sha1($_COOKIE['TS_A'])))[0]['idUser'];
                 $idProfil = DB::query('SELECT user.idProfil FROM user,login_token WHERE token=:token AND user.idUser = login_token.idUser', array('token'=> sha1($_COOKIE['TS_A'])))[0]['idProfil'];
                 return $idProfil;
@@ -22,7 +22,7 @@ class Login{
     public static function isLoggedIn(){
         if (isset($_COOKIE['TS_A'])){
             if (DB::query ('SELECT idLogin FROM login_token WHERE token=:token', array (':token' => sha1( $_COOKIE['TS_A'])))){
-                $userName = DB::query ('SELECT username FROM user, login_token WHERE user.idUser = login_token.idUser and token=:token', array (':token' => sha1( $_COOKIE['TS_A'])))[0]['username'];
+                $namaLengkap = DB::query ('SELECT namaLengkap FROM user, login_token WHERE user.idUser = login_token.idUser and token=:token', array (':token' => sha1( $_COOKIE['TS_A'])))[0]['namaLengkap'];
                 $idUser = DB::query('SELECT idUser FROM login_token WHERE token=:token', array('token'=> sha1($_COOKIE['TS_A'])))[0]['idUser'];
                 
                 if (isset($_COOKIE['TS_B'])){
@@ -70,9 +70,6 @@ class Login{
     }
     public static function erorr404(){
         self::redirect('./pages/erorr-404.html');
-    }
-    public static function Login(){
-         self::redirect('./login.php');
     }
     public static function Dashboard(){
         self::redirect('./index.php');     
