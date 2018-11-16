@@ -1,6 +1,4 @@
-<?php
-//include('./classes/Log.php');
-//include('./classes/Time.php');
+<?php   
 class Login{
     public static function getNamaLengkapProfilLoggedIn(){
         if(isset($_COOKIE['TS_A'])){
@@ -33,7 +31,7 @@ class Login{
                     $cstrong = true;
                     $token = bin2hex(openssl_random_pseudo_bytes(64,$cstrong));
                     
-                    DB::query('INSERT INTO login_token VALUES (\'\', :user_id, :token)', array(':token' => sha1($token), ':user_id'=>$idUser));
+                    DB::query('INSERT INTO login_token VALUES (\'\', :idUser, :token)', array(':token' => sha1($token), ':idUser'=>$idUser));
                     DB::query('DELETE FROM login_token WHERE token = :token', array(':token'=>sha1($_COOKIE['TS_A'])));
  
                     setcookie("TS_A", $token, time() + 60 * 60 * 12, '/', null, null, true);
@@ -55,7 +53,7 @@ class Login{
         }
         return false;   
     }
-    public static function getRole(){
+    public static function getGolongan(){
         $tokenparams = "";
         if(isset($_COOKIE['TS_A'])){
             $tokenparams = $_COOKIE['TS_A'];
@@ -63,8 +61,8 @@ class Login{
             $tokenparams = $_COOKIE['TS_C'];
         }
         $idUser = DB::query('SELECT idUser FROM login_token WHERE token=:token', array('token'=> sha1($tokenparams)))[0]['idUser'];
-        $role = DB::query('SELECT idRole FROM user WHERE idUser = :idUser',array(':idUser'=>$idUser))[0]['idRole'];
-        return $role;
+        $golongan = DB::query('SELECT idGologan FROM user WHERE idUser = :idUser',array(':idUser'=>$idUser))[0]['idGolongan'];
+        return $golongan;
     }
     public static function redirect($location){
         header('Location: '.$location);
@@ -72,6 +70,12 @@ class Login{
     }
     public static function erorr404(){
         self::redirect('./pages/erorr-404.html');
+    }
+    public static function Login(){
+         self::redirect('./login.php');
+    }
+    public static function Dashboard(){
+        self::redirect('./index.php');     
     }
 }
 ?>

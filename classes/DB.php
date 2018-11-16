@@ -13,5 +13,15 @@ class DB {
             return $data;    
         }
     }
+    public static function insertUser($namaLengkap,$email,$passwordUser,$idGolongan,$gender,$tempatLahir,$tanggalLahir,$deskripsiUser,$foto){
+        self::query('INSERT INTO user VALUES (\'\',:namaLengkap,:email,:passwordUser,:idGolongan,:gender,:tempatLahir,:tanggalLahir,:deskripsiUser,:foto,NOW())',array(':namaLengkap'=>$namaLengkap,':email'=>$email,':passwordUser'=>password_hash($passwordUser,PASSWORD_BCRYPT),':idGolongan'=>$idGolongan,':gender'=>$gender,':tempatLahir'=>$tempatLahir,':tanggalLahir'=>$tanggalLahir,':deskripsiUser'=>$deskripsiUser,':foto'=>$foto,NOW()));
+    }
+    public static function loginUser(){
+        $cstrong = true;
+        $token = bin2hex(openssl_random_pseudo_bytes(64,$cstrong));    
+        Log::logUserIn($idUser,Time::timeDatetime());
+        DB::query('INSERT INTO login_token VALUES (\'\', :token, :idUser )', array(':token' => sha1($token), ':idUser'=>$idUser));          
+        setcookie("TS_A", $token, time() + 60 * 60 * 12, '/', null, null, true);
+        setcookie("TS_B", '1', time() + 60 * 60 * 12, '/', null, null, true);
+    }
 }
-?>
