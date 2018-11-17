@@ -1,7 +1,7 @@
 <?php
     include("./classes/DB.php");
     if(isset($_GET['id'])) {
-        $img = DB::query("SELECT foto FROM user WHERE idProfil=:id",array(':id'=>$_GET['id']))[0];
+        $img = DB::query("SELECT foto FROM user WHERE idUser=:id",array(':id'=>$_GET['id']))[0];
         header("Content-type: image/png");
         echo $img["foto"];
     }elseif(isset($_GET['idSoal'])){

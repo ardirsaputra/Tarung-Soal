@@ -27,7 +27,7 @@
             $tombolCommand ='
                 <div class="form-group row">
                     <div class="input-group col-md-12">      
-                        <input class="btn btn-success col-sm-12" type="submit" name="save" value="Save"/>
+                        <input class="btn btn-success col-sm-12" type="submit" name="updateUser" value="Save"/>
                     </div>        
                 </div>
             </form>
@@ -36,7 +36,7 @@
             <div class="card-body">
                 <h4 class="card-title">Formulir Biodata</h4>
                 <p class="card-description">Data profil biodata pengguna</p>
-                <form class="forms-sample" action="./transaction.php" method="post" enctype="multipart/form-data">
+                <form class="forms-sample" action="./setting.php" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
                         <div class="input-group col-md-12">
                             <img class="mb-3 mx-auto d-block" style="width:auto; height: 200px" src="'.Navigation::getSourceImageProfilLoggedIn().'" alt="Foto"/>
@@ -91,14 +91,14 @@
                         <div class="col-sm-4">
                             <div class="form-radio">
                                 <label class="form-check-label">
-                                    <input type="radio" class="form-check-input" name="jk" id="membershipRadios1" value="Laki-laki" '.$isLakilaki.' required> Laki-laki
+                                    <input type="radio" class="form-check-input" name="gender" id="membershipRadios1" value="Laki-laki" '.$isLakilaki.' required> Laki-laki
                                 </label>
                             </div>
                         </div>
                         <div class="col-sm-5">
                             <div class="form-radio">
                             <label class="form-check-label">
-                                <input type="radio" class="form-check-input" name="jk" id="membershipRadios2" value="Perempuan"'.$isPerempuan.' required> Perempuan
+                                <input type="radio" class="form-check-input" name="gender" id="membershipRadios2" value="Perempuan"'.$isPerempuan.' required> Perempuan
                             </label>
                             </div>
                         </div>
@@ -112,7 +112,7 @@
                     <div class="form-group row">
                         <label for="foto" class="col-sm-3 col-form-label">Foto</label>
                         <div class="input-group col-sm-9">
-                            <input type="file" name="gambar" class="form-control" id="">
+                            <input type="file" name="foto" class="form-control" id="">
                         </div>
                     </div>
                     <br>
@@ -424,14 +424,14 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-radio">
                                                         <label class="form-check-label">
-                                                            <input type="radio" name="jk" class="form-check-input" id="membershipRadios1" value="Laki-laki" required> Laki-laki
+                                                            <input type="radio" name="gender" class="form-check-input" id="membershipRadios1" value="Laki-laki" required> Laki-laki
                                                         </label>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <div class="form-radio">
                                                         <label class="form-check-label">
-                                                            <input type="radio" name="jk" class="form-check-input"  id="membershipRadios2" value="Perempuan" required> Perempuan
+                                                            <input type="radio" name="gender" class="form-check-input"  id="membershipRadios2" value="Perempuan" required> Perempuan
                                                         </label>
                                                         </div>
                                                     </div>

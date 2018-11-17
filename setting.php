@@ -38,6 +38,66 @@ if (Login::isLoggedIn()){
                 }else $notif = "Jawaban tidak ada";
             }else $notif ="Pertanyaan tidak ada";
         }else $notif = "Lupa id user";
+    }elseif(isset($_POST['updateUser'])){
+        if(isset($_POST['namaLengkap']) && strlen($_POST['namaLengkap']) >= 4 ){
+            if(isset($_POST['email'])){
+                if(isset($_POST['idGolongan'])){
+                    if(isset($_POST['nomorInduk'])){
+                        if(isset($_POST['sekolahUser'])){
+                        if(isset($_POST['gender'])){
+                            if(isset($_POST['tempatLahir'])){
+                                if(isset($_POST['tanggalLahir'])){
+                                    $idUser = Login::isLoggedIn();
+                                    $namaLengkap = $_POST['namaLengkap'];
+                                    $email = $_POST['email'];
+                                    $idGolongan = $_POST['idGolongan'];
+                                    $nomorInduk = $_POST['nomorInduk'];
+                                    $sekolahUser =$_POST['sekolahUser'];
+                                    $gender = $_POST['gender'];
+                                    $tempatLahir = $_POST['tempatLahir'];
+                                    $tanggalLahir = $_POST['tanggalLahir'];
+                                    $diskripsiUser = $_POST['deskripsiUser'];
+                                    if(!empty($_FILES['foto']['tmp_name'])){
+                                        $foto = file_get_contents($_FILES['foto']['tmp_name']);
+                                    }
+                                    if(!empty($_FILES['foto']['tmp_name'])){
+                                        DB::query('UPDATE user SET 
+                                        namaLengkap     = :namaLengkap,
+                                        email           = :email,
+                                        idGolongan      = :idGolongan ,
+                                        nomorInduk      = :nomorInduk ,
+                                        sekolahUser     = :sekolahUser,
+                                        gender          = :gender,
+                                        tempatLahir     = :tempatLahir, 
+                                        tanggalLahir    = :tanggalLahir,
+                                        foto            = :foto,
+                                        diskripsiUser   = :diskripsiUser 
+                                        WHERE 
+                                        idUser          = :idUser',
+                                        array(
+                                        ':namaLengkap'  =>$namaLengkap,
+                                        ':email'        =>$email,
+                                        ':idGolongan'   =>$idGolongan,
+                                        ':nomorInduk'   =>$nomorInduk,
+                                        ':sekolahUser'  =>$sekolahUser,
+                                        ':gender'       =>$gender,
+                                        ':tempatLahir'  =>$tempatLahir,
+                                        ':tanggalLahir' =>$tanggalLahir,
+                                        ':foto'         =>$foto,
+                                        ':diskripsiUser'=>$diskripsiUser,
+                                        ':idUser'       =>$idUser 
+                                    ));
+                                    }else{
+                                        DB::query('UPDATE user SET namaLengkap = :namaLengkap, email = :email ,idGolongan =:idGolongan ,nomorInduk =:nomorInduk,sekolahUser = :sekolahUser,gender = :gender, tempatLahir = :tempatLahir, tanggalLahir = :tanggalLahir, diskripsiUser = :diskripsiUser WHERE idUser = :idUser',array(':idUser' => $idUser ,':namaLengkap'=>$namaLengkap,':email'=>$email,':idGolongan'=>$idGolongan,':nomorInduk'=>$nomorInduk,':sekolahUser'=>$sekolahUser,':gender'=>$gender,':tempatLahir'=>$tempatLahir,':tanggalLahir'=>$tanggalLahir,':diskripsiUser'=>$diskripsiUser));
+                                    }
+                                }else $notif = 'Tanggal lahir harus ada';
+                            }else $notif = 'Tempat lahir harus ada';
+                        }else $notif = 'gender harus ada';
+                        }else $notif = 'Sekolah harus ada';
+                    }else $notif = 'Nomor induk harus ada';
+                }else $notif = 'Pendidikan terakhir harus ada';
+            }else $notif = 'Email harus ada';
+        }else $notif = 'Nama Lengkap harus ada';
     }
     //---------------------------------
     $profil = Content::profil($idUser);
