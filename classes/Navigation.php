@@ -19,19 +19,24 @@ class Navigation {
         return $combobox;    
     }
     public static function getSourceImageProfilLoggedIn(){
-        $idProfil = Login::getIdProfilLoggedIn();
-        if(DB::query('SELECT * FROM profil WHERE idProfil = :idProfil',array(':idProfil'=>$idProfil))){
-            $foto = DB::query('SELECT * FROM profil WHERE idProfil = :idProfil',array(':idProfil'=>$idProfil))[0]['foto'];
-            if($foto = "" || $foto = NULL){
-                return './images/faces-clipart/pic-1.png';
+        $idUser = Login::isLoggedIn();
+        if(DB::query('SELECT * FROM user WHERE idUser = :idUser',array(':idUser'=>$idUser))){
+            $foto = DB::query('SELECT foto FROM user WHERE idUser= :idUser',array(':idUser'=>$idUser))[0]['foto'];
+            if($foto == ""){
+                return './images/empty.jpg';
             }else{
-                return './imageview.php?id='.$idProfil.'';
+                return './img.php?id='.$idUser.'';
             }
         }
         return false;
     }
     public static function getSourceImageProfil($idProfil){
-        return './imageview.php?id='.$idProfil.'';
+        $foto = DB::query('SELECT foto FROM ser WHERE idUser= :idUser',array(':idUser'=>$idProfil))[0]['foto'];
+        if($foto = "" || $foto = NULL){
+            return './images/profil.jpg';
+        }else{
+            return './img.php?id='.$idProfil.'';
+        }
     }
     public static function Header($title){
         return '
@@ -62,7 +67,7 @@ class Navigation {
                 <img src="images/logo.png" alt="logo" />
             </a>
             <a class="navbar-brand brand-logo-mini" href="index.html">
-                <img src="images/logo.png" alt="logo" />
+                <img src="'.self::getSourceImageProfilLoggedIn().'" alt="logo" />
             </a>
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-center">
@@ -186,8 +191,8 @@ class Navigation {
                 <li class="nav-item dropdown d-none d-xl-inline-block">
                     <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown"
                         aria-expanded="false">
-                        <span class="profile-text">Nama Lengkap</span>
-                        <img class="img-xs rounded-circle" src="images/faces-clipart/pic-1.png" alt="Profile image">
+                        <span class="profile-text">'.Login::getNamaLengkapProfilLoggedIn().'</span>
+                        <img class="img-xs rounded-circle" src="'.Navigation::getSourceImageProfilLoggedIn().'" alt="Profile image">
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                         <br>
@@ -225,10 +230,10 @@ class Navigation {
                 <div class="nav-link">
                     <div class="user-wrapper">
                         <div class="profile-image">
-                            <img src="images/faces-clipart/pic-1.png" alt="profile image">
+                            <img src="'.Navigation::getSourceImageProfilLoggedIn().'" alt="profile image">
                         </div>
                         <div class="text-wrapper">
-                            <p class="profile-name">Nama Lengkap</p>
+                            <p class="profile-name">'.Login::getNamaLengkapProfilLoggedIn().'</p>
                             <div>
                                 <small class="designation text-muted">Online</small>
                                 <span class="status-indicator online"></span>
@@ -238,45 +243,45 @@ class Navigation {
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./index.html">
+                <a class="nav-link" href="./index.php">
                     <i class="menu-icon mdi mdi-television"></i>
                     <span class="menu-title">Home</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./transaction.html">
+                <a class="nav-link" href="./colection.php">
                     <i class="menu-icon mdi mdi-television"></i>
                     <span class="menu-title">Koleksi</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./donatur.html">
+                <a class="nav-link" href="./datasoal.php">
                     <i class="menu-icon mdi mdi-backup-restore"></i>
                     <span class="menu-title">Soal</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./program.html">
+                <a class="nav-link" href="./record.php">
                     <i class="menu-icon mdi mdi-bookmark-plus-outline"></i>
                     <span class="menu-title">Hasil</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./notification.html">
+                <a class="nav-link" href="./send.php">
                     <i class="menu-icon mdi mdi-sticker"></i>
                     <span class="menu-title">Kirim Soal</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="./setting.php">
                     <i class="menu-icon mdi mdi-restart"></i>
-                    <span class="menu-title text-muted">Pengaturan</span>
+                    <span class="menu-title">Pengaturan</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./logout.php">
                     <i class="menu-icon mdi mdi-restart"></i>
-                    <span class="menu-title text-danger">Logout</span>
+                    <span class="menu-title text-danger">Keluar</span>
                 </a>
             </li>
         </ul>

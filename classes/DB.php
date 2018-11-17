@@ -13,8 +13,11 @@ class DB {
             return $data;    
         }
     }
-    public static function insertUser($namaLengkap,$email,$passwordUser,$idGolongan,$sekolahUser,$gender,$tempatLahir,$tanggalLahir,$deskripsiUser,$foto){
-        self::query('INSERT INTO user VALUES (\'\',:namaLengkap,:email,:passwordUser,:idGolongan,:sekolahUser,:gender,:tempatLahir,:tanggalLahir,:deskripsiUser,:foto,\'\')',array(':namaLengkap'=>$namaLengkap,':email'=>$email,':passwordUser'=>password_hash($passwordUser,PASSWORD_BCRYPT),':idGolongan'=>$idGolongan,':sekolahUser'=>$sekolahUser,':gender'=>$gender,':tempatLahir'=>$tempatLahir,':tanggalLahir'=>$tanggalLahir,':deskripsiUser'=>$deskripsiUser,':foto'=>$foto));
+    public static function insertUser($namaLengkap,$email,$passwordUser,$idGolongan,$nomorInduk,$sekolahUser,$gender,$tempatLahir,$tanggalLahir,$deskripsiUser,$foto){
+        self::query('INSERT INTO user VALUES (\'\',:namaLengkap,:email,:passwordUser,:idGolongan,:nomorInduk,:sekolahUser,:gender,:tempatLahir,:tanggalLahir,:deskripsiUser,:foto,NOW())',array(':namaLengkap'=>$namaLengkap,':email'=>$email,':passwordUser'=>password_hash($passwordUser,PASSWORD_BCRYPT),':idGolongan'=>$idGolongan,':nomorInduk'=>$nomorInduk,':sekolahUser'=>$sekolahUser,':gender'=>$gender,':tempatLahir'=>$tempatLahir,':tanggalLahir'=>$tanggalLahir,':deskripsiUser'=>$deskripsiUser,':foto'=>$foto));
+    }
+    public static function selectUser($idUser){
+        return self::query('SELECT * FROM user WHERE idUser = :idUser',array(':idUser'=>$idUser))[0];
     }
     public static function loginUser($idUser){
         $cstrong = true;
@@ -23,6 +26,9 @@ class DB {
         DB::query('INSERT INTO login_token VALUES (\'\', :token, :idUser )', array(':token' => sha1($token), ':idUser'=>$idUser));          
         setcookie("TS_A", $token, time() + 60 * 60 * 12, '/', null, null, true);
         setcookie("TS_B", '1', time() + 60 * 60 * 12, '/', null, null, true);
+    }
+    public static function selectAllGolongan(){
+        return self::query('SELECT * FROM golongan');
     }
 }
 ?>

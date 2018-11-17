@@ -5,8 +5,11 @@ include('./classes/Navigation.php');
 include('./classes/Content.php');
 include('./classes/Page.php');
 if (Login::isLoggedIn()){
-    echo Page::DefaultPage('Dashboard - Tarung Soal','','');    
+    $title = 'Dashboard - Tarung Soal';
+    $content = Page::Dashboard();
+    $notif = '';
+    echo Page::DefaultPage($title,$notif,$content);    
 }else{
     Login::redirect('./login.php');
 }
-?>
+?>  
