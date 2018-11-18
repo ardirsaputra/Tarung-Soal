@@ -6,7 +6,7 @@ include('./classes/Content.php');
 include('./classes/Page.php');
 if (Login::isLoggedIn()){
     $title = 'Dashboard - Tarung Soal';
-    $content = Page::Dashboard();
+    $content = Content::Dashboard();
     $notif = '';
     echo Page::DefaultPage($title,$notif,$content);    
 }else{

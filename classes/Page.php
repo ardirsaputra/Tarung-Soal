@@ -101,5 +101,19 @@
         public static function Dashboard(){
             return '';
         }
+        public static function List($nama,$content){
+            return '
+            <div class="table-responsive">
+                <table class="table table-striped">
+                <thead>
+                    '.$nama.'
+                </thead>
+                <tbody>
+                    '.$content.'
+                </tbody>
+                </table>
+            </div>
+            ';
+        }
     }
 ?>

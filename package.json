@@ -1,26 +1,26 @@
 {
-  "name": "ammil",
+  "name": "tarung-soal",
   "version": "0.1.0",
-  "description": "ammil is system application for social/non profit organization",
+  "description": "tarung-soal is system try out for educational system",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/zakaaid/ammil.git"
+    "url": "git+ssh://git@gitlab.com/ardirsaputra/tarung-soal.git"
   },
   "keywords": [
-    "ammil",
+    "tarung-soal",
     "erp",
     "social"
   ],
   "author": "Zakaa",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/zakaaid/ammil/issues"
+    "url": "https://gitlab.com/ardirsaputra/tarung-soal/issues"
   },
-  "homepage": "https://gitlab.com/zakaaid/ammil#readme",
+  "homepage": "https://gitlab.com/ardirsaputra/tarung-soal#readme",
   "dependencies": {
     "bootstrap": "4.0.0",
     "chart.js": "2.7.1",

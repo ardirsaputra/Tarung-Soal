@@ -483,5 +483,316 @@
                                     </ul>
             ';
         } 
+        public static function Dashboard(){
+            return '';
+        }
+        public static function BuatSoal(){
+            $dataGolongan = DB::selectAllGolongan();
+            $listGolongan ="";
+            foreach($dataGolongan as $i){
+                 $listGolongan .= '<option value="'.$i['idGolongan'].'">'.$i['namaGolongan'].'</option>';
+            }
+            return '
+            <div class="card-body">
+                <h4 class="card-title">Membuat Soal</h4>
+                <p class="card-description">Data yang dibutuhkan untuk membuat soal</p>
+                <form class="forms-sample" action="./zip.php" method="post">
+                    <div class="form-group row">    
+                        <label for="keterangan" class="col-sm-2 col-form-label">Judul Soal</label>    
+                        <div class="input-group col-sm-10">
+                            <input type="text" name="judul" class="form-control"  placeholder="Judul Soal" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="exampleInputEmail2" class="col-sm-2 col-form-label">Deskripsi</label>
+                        <div class="input-group col-sm-10">
+                            <textarea type="text" name="deskripsi" class="form-control" placeholder="Deskripsi Soal" aria-label="Deskripsi Soal" rows="2" aria-describedby="colored-addon3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="nama_panggilan" class="col-md-2 col-form-label">Tingkat</label>
+                        <div class="input-group col-md-10">
+                           <select name="idGolongan" class="form-control">
+                           '.$listGolongan.'
+                           </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="waktu mulai" class="col-md-2 col-form-label">Waktu Mulai</label>
+                        <div class="input-group col-md-5">
+                           <input type="date" name="startdate" class="form-control" >
+                        </div>
+                        <label for="waktu mulai" class="col-md-1 col-form-label text-center"> Jam </label>
+                        <div class="input-group col-md-1">
+                            <select name="starttime" class="form-control">
+                            '.Navigation::Time().'
+                            </select>
+                        </div>
+                        <label for="waktu mulai" class="col-md-2 col-form-label"> WIB (jika perlu)</label> 
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="waktu selesai" class="col-md-2 col-form-label">Waktu Selesai</label>
+                        <div class="input-group col-md-5">
+                           <input type="date" name="finishdate" class="form-control" >
+                        </div>
+                        <label for="waktu selesai" class="col-md-1 col-form-label text-center"> Jam </label>
+                        <div class="input-group col-md-1">
+                            <select name="finishtime"  class="form-control">
+                            '.Navigation::Time().'
+                            </select>
+                        </div>
+                        <label for="waktu selesai" class="col-md-3 col-form-label"> WIB (jika perlu)</label> 
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="password" class="col-md-2 col-form-label">Password</label>
+                        <div class="input-group col-md-10">
+                            <input type="text" name="passwordzip" class="form-control" placeholder="Isi jika ingin ada password">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="input-group col-md-12">      
+                            <input class="btn btn-success col-sm-12" type="submit" name="buatsoal" value="Buat"/>
+                        </div>        
+                    </div>
+                </form>
+            </div>';
+        }
+        public static function ListZip($idUser){
+            $list='';
+            $iteration = 1 ;
+            $ListZip = DB::query('SELECT * FROM user_zip WHERE idUser = :idUser ORDER BY idUserZip DESC',array(':idUser' => $idUser));
+            foreach ($ListZip as $i){
+                $Zip = DB::query('SELECT idZip,judulZip , deskripsiZip , idGolongan , createZip FROM zip WHERE idZIp = :idZip',array(':idZip'=>$i['idZip']))[0];
+                $golongan  = DB::query('SELECT namaGolongan FROM golongan WHERE idGolongan = :idGolongan',array(':idGolongan'=>$Zip['idGolongan']))[0]['namaGolongan'];
+                $list .= '
+                <tr>
+                    <td>
+                        '.$iteration.'
+                    </td>
+                    <td>
+                        '.$Zip['judulZip'].'
+                    </td>
+                    <td>
+                        '.$golongan.'
+                    </td>
+                    <td>
+                        '.$Zip['createZip'].'
+                    </td>
+                    <td>
+                        <a href="./zip.php?id='.$Zip['idZip'].'" class="btn btn-primary">Lihat</a>
+                    </td>
+                </tr>';
+                $iteration ++;
+            }
+            return $list;
+        }
+        //Array => HeadTabel 
+        public static function Headtable($array){
+            $jumlah = count($array);
+            $list = '';
+            for($i = 0 ; $i < $jumlah ;$i++){
+                $list .='<th>'.$array[$i].'</th>';
+            }
+            return '<tr>'.$list.'</tr>';
+        }
+        public static function Zip($idZip){
+            $Zip = DB::query('SELECT * FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))[0];
+            $dataGolongan = DB::selectAllGolongan();
+            $listGolongan ="";
+            foreach($dataGolongan as $i){
+                if($i['idGolongan'] == $Zip['idGolongan']){
+                    $listGolongan .= '<option value="'.$i['idGolongan'].'" selected>'.$i['namaGolongan'].'</option>';
+                }else{
+                    $listGolongan .= '<option value="'.$i['idGolongan'].'">'.$i['namaGolongan'].'</option>';
+                }
+            }
+            $start = Navigation::DecodeTime($Zip['startZip']);
+            $startDate = $start[0];
+            $startTime = $start[1];
+
+            $finish = Navigation::DecodeTime($Zip['finishZip']);
+            $finishDate = $finish[0];
+            $finishTime = $finish[1];
+            $create = $Zip['createZip'];
+            return '
+            <div class="card-body">
+                <h4 class="card-title">Soal</h4>
+                <p class="card-description">Data Deskripsi Soal</p>
+                <form class="forms-sample" action="./zip.php" method="post">
+                    <div class="form-group row">    
+                        <label for="keterangan" class="col-sm-2 col-form-label">ID Soal</label>    
+                        <div class="input-group col-sm-1">
+                            <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['idZip'].'"disabled>
+                        </div>
+                        <label for="keterangan" class="col-sm-2 col-form-label">Tanggal Pembuatan Soal</label>    
+                        <div class="input-group col-sm-4">
+                            <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['createZip'].'"disabled>
+                        </div>
+                        <div class="input-group col-sm-3">      
+                            <input class="btn btn-success col-sm-12" type="submit" name="editsoal" value="Edit"/>
+                        </div>        
+                    </div>
+                    <div class="form-group row">    
+                        <label for="keterangan" class="col-sm-2 col-form-label">Judul Soal</label>    
+                        <div class="input-group col-sm-10">
+                            <input type="text" name="judul" class="form-control"  placeholder="Judul Soal" value="'.$Zip['judulZip'].'"disabled>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="exampleInputEmail2" class="col-sm-2 col-form-label">Deskripsi</label>
+                        <div class="input-group col-sm-10">
+                            <textarea type="text" name="deskripsi" class="form-control" placeholder="Deskripsi Soal" aria-label="Deskripsi Soal" rows="2" aria-describedby="colored-addon3" disabled>'.$Zip['deskripsiZip'].'</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="nama_panggilan" class="col-md-2 col-form-label">Tingkat</label>
+                        <div class="input-group col-md-10">
+                           <select name="idGolongan" class="form-control" disabled>
+                           '.$listGolongan.'
+                           </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="waktu mulai" class="col-md-2 col-form-label">Waktu Mulai</label>
+                        <div class="input-group col-md-5">
+                           <input type="date" name="startdate" class="form-control" value="'.$startDate.'" disabled>
+                        </div>
+                        <label for="waktu mulai" class="col-md-1 col-form-label text-center"> Jam </label>
+                        <div class="input-group col-md-1">
+                            <select name="starttime" class="form-control" disabled>
+                                <option value="'.$startTime.'">'.$startTime.'</option>
+                            </select>
+                        </div>
+                        <label for="waktu mulai" class="col-md-2 col-form-label"> WIB</label> 
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="waktu selesai" class="col-md-2 col-form-label">Waktu Selesai</label>
+                        <div class="input-group col-md-5">
+                           <input type="date" name="finishdate" class="form-control" value="'.$finishDate.'" disabled>
+                        </div>
+                        <label for="waktu selesai" class="col-md-1 col-form-label text-center"> Jam </label>
+                        <div class="input-group col-md-1">
+                            <select name="finishtime"  class="form-control" disabled>
+                                <option value="'.$finishTime.'">'.$finishTime.'</option>
+                            </select>
+                        </div>
+                        <label for="waktu selesai" class="col-md-3 col-form-label"> WIB </label> 
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="password" class="col-md-2 col-form-label">Password</label>
+                        <div class="input-group col-md-10">
+                            <input type="text" name="passwordzip" class="form-control" placeholder="Tidak ada password" value="'.$Zip['passwordZip'].'" disabled>
+                        </div>
+                    </div>
+                </form>
+            </div>';
+        }
+        public static function EditZip($idZip){
+            $Zip = DB::query('SELECT * FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))[0];
+            $dataGolongan = DB::selectAllGolongan();
+            $listGolongan ="";
+            foreach($dataGolongan as $i){
+                if($i['idGolongan'] == $Zip['idGolongan']){
+                    $listGolongan .= '<option value="'.$i['idGolongan'].'" selected>'.$i['namaGolongan'].'</option>';
+                }else{
+                    $listGolongan .= '<option value="'.$i['idGolongan'].'">'.$i['namaGolongan'].'</option>';
+                }
+            }
+            $start = Navigation::DecodeTime($Zip['startZip']);
+            $startDate = $start[0];
+            $startTime = $start[1];
+
+            $finish = Navigation::DecodeTime($Zip['finishZip']);
+            $finishDate = $finish[0];
+            $finishTime = $finish[1];
+            $create = $Zip['createZip'];
+            return '
+            <div class="card-body">
+                <h4 class="card-title">Soal</h4>
+                <p class="card-description">Data Deskripsi Soal</p>
+                <form class="forms-sample" action="./zip.php" method="post">
+                    <div class="form-group row">    
+                        <label for="keterangan" class="col-sm-2 col-form-label">ID Soal</label>    
+                        <div class="input-group col-sm-1">
+                            <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['idZip'].'"required>
+                        </div>
+                        <label for="keterangan" class="col-sm-2 col-form-label">Tanggal Pembuatan Soal</label>    
+                        <div class="input-group col-sm-4">
+                            <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['createZip'].'"required>
+                        </div>
+                        <div class="input-group col-sm-3">      
+                            <input class="btn btn-success col-sm-12" type="submit" name="editsoal" value="Edit"/>
+                        </div>        
+                    </div>
+                    <div class="form-group row">    
+                        <label for="keterangan" class="col-sm-2 col-form-label">Judul Soal</label>    
+                        <div class="input-group col-sm-10">
+                            <input type="text" name="judul" class="form-control"  placeholder="Judul Soal" value="'.$Zip['judulZip'].'"required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="exampleInputEmail2" class="col-sm-2 col-form-label">Deskripsi</label>
+                        <div class="input-group col-sm-10">
+                            <textarea type="text" name="deskripsi" class="form-control" placeholder="Deskripsi Soal" aria-label="Deskripsi Soal" rows="2" aria-describedby="colored-addon3">'.$Zip['deskripsiZip'].'</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="nama_panggilan" class="col-md-2 col-form-label">Tingkat</label>
+                        <div class="input-group col-md-10">
+                           <select name="idGolongan" class="form-control">
+                           '.$listGolongan.'
+                           </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="waktu mulai" class="col-md-2 col-form-label">Waktu Mulai</label>
+                        <div class="input-group col-md-5">
+                           <input type="date" name="startdate" class="form-control" value="'.$startDate.'">
+                        </div>
+                        <label for="waktu mulai" class="col-md-1 col-form-label text-center"> Jam </label>
+                        <div class="input-group col-md-1">
+                            <select name="starttime" class="form-control">
+                                <option value="'.$startTime.'">'.$startTime.'</option>
+                            </select>
+                        </div>
+                        <label for="waktu mulai" class="col-md-2 col-form-label"> WIB (jika perlu)</label> 
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label for="waktu selesai" class="col-md-2 col-form-label">Waktu Selesai</label>
+                        <div class="input-group col-md-5">
+                           <input type="date" name="finishdate" class="form-control" value="'.$finishDate.'">
+                        </div>
+                        <label for="waktu selesai" class="col-md-1 col-form-label text-center"> Jam </label>
+                        <div class="input-group col-md-1">
+                            <select name="finishtime"  class="form-control">
+                                <option value="'.$finishTime.'">'.$finishTime.'</option>
+                            </select>
+                        </div>
+                        <label for="waktu selesai" class="col-md-3 col-form-label"> WIB (jika perlu)</label> 
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="password" class="col-md-2 col-form-label">Password</label>
+                        <div class="input-group col-md-10">
+                            <input type="text" name="passwordzip" class="form-control" placeholder="Isi jika ingin ada password" value="'.$Zip['password'].'">
+                        </div>
+                    </div>
+                </form>
+            </div>';
+        }
     }
 ?>

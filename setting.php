@@ -40,13 +40,13 @@ if (Login::isLoggedIn()){
         }else $notif = "Lupa id user";
     }elseif(isset($_POST['updateUser'])){
         if(isset($_POST['namaLengkap']) && strlen($_POST['namaLengkap']) >= 4 ){
-            if(isset($_POST['email'])){
-                if(isset($_POST['idGolongan'])){
-                    if(isset($_POST['nomorInduk'])){
-                        if(isset($_POST['sekolahUser'])){
-                        if(isset($_POST['gender'])){
-                            if(isset($_POST['tempatLahir'])){
-                                if(isset($_POST['tanggalLahir'])){
+            if(isset($_POST['email']) && $_POST['email']!=''){
+                if(isset($_POST['idGolongan'])&& $_POST['idGolongan']!=''){
+                    if(isset($_POST['nomorInduk'])&& $_POST['nomorInduk']!=''){
+                        if(isset($_POST['sekolahUser'])&& $_POST['sekolahUser']!=''){
+                        if(isset($_POST['gender'])&& $_POST['gender']!=''){
+                            if(isset($_POST['tempatLahir'])&& $_POST['tempatLahir']!=''){
+                                if(isset($_POST['tanggalLahir'])&& $_POST['tanggalLahir']!=''){
                                     $idUser = Login::isLoggedIn();
                                     $namaLengkap = $_POST['namaLengkap'];
                                     $email = $_POST['email'];
@@ -87,8 +87,10 @@ if (Login::isLoggedIn()){
                                         ':diskripsiUser'=>$diskripsiUser,
                                         ':idUser'       =>$idUser 
                                     ));
+                                    $notif = 'Pembaharuan data profil berhasil!';
                                     }else{
                                         DB::query('UPDATE user SET namaLengkap = :namaLengkap, email = :email ,idGolongan =:idGolongan ,nomorInduk =:nomorInduk,sekolahUser = :sekolahUser,gender = :gender, tempatLahir = :tempatLahir, tanggalLahir = :tanggalLahir, diskripsiUser = :diskripsiUser WHERE idUser = :idUser',array(':idUser' => $idUser ,':namaLengkap'=>$namaLengkap,':email'=>$email,':idGolongan'=>$idGolongan,':nomorInduk'=>$nomorInduk,':sekolahUser'=>$sekolahUser,':gender'=>$gender,':tempatLahir'=>$tempatLahir,':tanggalLahir'=>$tanggalLahir,':diskripsiUser'=>$diskripsiUser));
+                                        $notif = 'Pembaharuan data profil berhasil!';
                                     }
                                 }else $notif = 'Tanggal lahir harus ada';
                             }else $notif = 'Tempat lahir harus ada';

@@ -249,7 +249,7 @@ class Navigation {
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./colection.php">
+                <a class="nav-link" href="./collection.php">
                     <i class="menu-icon mdi mdi-television"></i>
                     <span class="menu-title">Koleksi</span>
                 </a>
@@ -313,6 +313,18 @@ class Navigation {
                 </span>
             </div>
         </footer>';
+    }
+    public static function Time(){
+        $list ='';
+        for ($i = 0 ;$i <25 ;$i++){
+            $list .= '<option value="'.$i.'">'.$i.'</option>';
+        }
+        return $list;
+    }
+    public static function DecodeTime($time){
+        $date = substr($time, 0, 10); 
+        $jam   = substr($time, 10, 3);
+        return [$date,$jam] ;
     }
 }
 ?>
