@@ -44,57 +44,57 @@ if (Login::isLoggedIn()){
                 if(isset($_POST['idGolongan'])&& $_POST['idGolongan']!=''){
                     if(isset($_POST['nomorInduk'])&& $_POST['nomorInduk']!=''){
                         if(isset($_POST['sekolahUser'])&& $_POST['sekolahUser']!=''){
-                        if(isset($_POST['gender'])&& $_POST['gender']!=''){
-                            if(isset($_POST['tempatLahir'])&& $_POST['tempatLahir']!=''){
-                                if(isset($_POST['tanggalLahir'])&& $_POST['tanggalLahir']!=''){
-                                    $idUser = Login::isLoggedIn();
-                                    $namaLengkap = $_POST['namaLengkap'];
-                                    $email = $_POST['email'];
-                                    $idGolongan = $_POST['idGolongan'];
-                                    $nomorInduk = $_POST['nomorInduk'];
-                                    $sekolahUser =$_POST['sekolahUser'];
-                                    $gender = $_POST['gender'];
-                                    $tempatLahir = $_POST['tempatLahir'];
-                                    $tanggalLahir = $_POST['tanggalLahir'];
-                                    $diskripsiUser = $_POST['deskripsiUser'];
-                                    if(!empty($_FILES['foto']['tmp_name'])){
-                                        $foto = file_get_contents($_FILES['foto']['tmp_name']);
-                                    }
-                                    if(!empty($_FILES['foto']['tmp_name'])){
-                                        DB::query('UPDATE user SET 
-                                        namaLengkap     = :namaLengkap,
-                                        email           = :email,
-                                        idGolongan      = :idGolongan ,
-                                        nomorInduk      = :nomorInduk ,
-                                        sekolahUser     = :sekolahUser,
-                                        gender          = :gender,
-                                        tempatLahir     = :tempatLahir, 
-                                        tanggalLahir    = :tanggalLahir,
-                                        foto            = :foto,
-                                        diskripsiUser   = :diskripsiUser 
-                                        WHERE 
-                                        idUser          = :idUser',
-                                        array(
-                                        ':namaLengkap'  =>$namaLengkap,
-                                        ':email'        =>$email,
-                                        ':idGolongan'   =>$idGolongan,
-                                        ':nomorInduk'   =>$nomorInduk,
-                                        ':sekolahUser'  =>$sekolahUser,
-                                        ':gender'       =>$gender,
-                                        ':tempatLahir'  =>$tempatLahir,
-                                        ':tanggalLahir' =>$tanggalLahir,
-                                        ':foto'         =>$foto,
-                                        ':diskripsiUser'=>$diskripsiUser,
-                                        ':idUser'       =>$idUser 
-                                    ));
-                                    $notif = 'Pembaharuan data profil berhasil!';
-                                    }else{
-                                        DB::query('UPDATE user SET namaLengkap = :namaLengkap, email = :email ,idGolongan =:idGolongan ,nomorInduk =:nomorInduk,sekolahUser = :sekolahUser,gender = :gender, tempatLahir = :tempatLahir, tanggalLahir = :tanggalLahir, diskripsiUser = :diskripsiUser WHERE idUser = :idUser',array(':idUser' => $idUser ,':namaLengkap'=>$namaLengkap,':email'=>$email,':idGolongan'=>$idGolongan,':nomorInduk'=>$nomorInduk,':sekolahUser'=>$sekolahUser,':gender'=>$gender,':tempatLahir'=>$tempatLahir,':tanggalLahir'=>$tanggalLahir,':diskripsiUser'=>$diskripsiUser));
+                            if(isset($_POST['gender'])&& $_POST['gender']!=''){
+                                if(isset($_POST['tempatLahir'])&& $_POST['tempatLahir']!=''){
+                                    if(isset($_POST['tanggalLahir'])&& $_POST['tanggalLahir']!=''){
+                                        $idUser = Login::isLoggedIn();
+                                        $namaLengkap = $_POST['namaLengkap'];
+                                        $email = $_POST['email'];
+                                        $idGolongan = $_POST['idGolongan'];
+                                        $nomorInduk = $_POST['nomorInduk'];
+                                        $sekolahUser =$_POST['sekolahUser'];
+                                        $gender = $_POST['gender'];
+                                        $tempatLahir = $_POST['tempatLahir'];
+                                        $tanggalLahir = $_POST['tanggalLahir'];
+                                        $diskripsiUser = $_POST['deskripsiUser'];
+                                        if(!empty($_FILES['foto']['tmp_name'])){
+                                            $foto = file_get_contents($_FILES['foto']['tmp_name']);
+                                        }
+                                        if(!empty($_FILES['foto']['tmp_name'])){
+                                            DB::query('UPDATE user SET 
+                                            namaLengkap     = :namaLengkap,
+                                            email           = :email,
+                                            idGolongan      = :idGolongan ,
+                                            nomorInduk      = :nomorInduk ,
+                                            sekolahUser     = :sekolahUser,
+                                            gender          = :gender,
+                                            tempatLahir     = :tempatLahir, 
+                                            tanggalLahir    = :tanggalLahir,
+                                            foto            = :foto,
+                                            diskripsiUser   = :diskripsiUser 
+                                            WHERE 
+                                            idUser          = :idUser',
+                                            array(
+                                            ':namaLengkap'  =>$namaLengkap,
+                                            ':email'        =>$email,
+                                            ':idGolongan'   =>$idGolongan,
+                                            ':nomorInduk'   =>$nomorInduk,
+                                            ':sekolahUser'  =>$sekolahUser,
+                                            ':gender'       =>$gender,
+                                            ':tempatLahir'  =>$tempatLahir,
+                                            ':tanggalLahir' =>$tanggalLahir,
+                                            ':foto'         =>$foto,
+                                            ':diskripsiUser'=>$diskripsiUser,
+                                            ':idUser'       =>$idUser 
+                                        ));
                                         $notif = 'Pembaharuan data profil berhasil!';
-                                    }
-                                }else $notif = 'Tanggal lahir harus ada';
-                            }else $notif = 'Tempat lahir harus ada';
-                        }else $notif = 'gender harus ada';
+                                        }else{
+                                            DB::query('UPDATE user SET namaLengkap = :namaLengkap, email = :email ,idGolongan =:idGolongan ,nomorInduk =:nomorInduk,sekolahUser = :sekolahUser,gender = :gender, tempatLahir = :tempatLahir, tanggalLahir = :tanggalLahir, diskripsiUser = :diskripsiUser WHERE idUser = :idUser',array(':idUser' => $idUser ,':namaLengkap'=>$namaLengkap,':email'=>$email,':idGolongan'=>$idGolongan,':nomorInduk'=>$nomorInduk,':sekolahUser'=>$sekolahUser,':gender'=>$gender,':tempatLahir'=>$tempatLahir,':tanggalLahir'=>$tanggalLahir,':diskripsiUser'=>$diskripsiUser));
+                                            $notif = 'Pembaharuan data profil berhasil!';
+                                        }
+                                    }else $notif = 'Tanggal lahir harus ada';
+                                }else $notif = 'Tempat lahir harus ada';
+                            }else $notif = 'gender harus ada';
                         }else $notif = 'Sekolah harus ada';
                     }else $notif = 'Nomor induk harus ada';
                 }else $notif = 'Pendidikan terakhir harus ada';

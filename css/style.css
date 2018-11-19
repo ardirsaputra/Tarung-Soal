@@ -13870,7 +13870,7 @@ input:focus {
 /* Navbar */
 .navbar.default-layout {
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(120deg, #00e4d0, #5983e8);
+  background: linear-gradient(120deg, #c28500, #ff0017);
   transition: background 0.25s ease;
   -webkit-transition: background 0.25s ease;
   -moz-transition: background 0.25s ease;

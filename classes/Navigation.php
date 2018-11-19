@@ -5,7 +5,7 @@ class Navigation {
         if($choose!='' || $choose != NULL){
             foreach ($params as $i){
                 if($choose == $i){
-                    $combobox .='<option v  alue="'.$i.'" selected>'.$i.'</option>';
+                    $combobox .='<option value="'.$i.'" selected>'.$i.'</option>';
                 }else{ 
                     $combobox .='<option value="'.$i.'">'.$i.'</option>';
                 }
