@@ -105,7 +105,7 @@ if (Login::isLoggedIn()){
     $profil = Content::profil($idUser);
     $password = Content::password($idUser);
     $recovery = Content::passwordRecovery();
-    $content = Page::Setting($profil,$password,$recovery);
+    $content = Page::BlockContent($profil,$password,$recovery);
     echo Page::DefaultPage('Setting - Tarung Soal',$notif,$content);    
 }else{
     Login::redirect('./login.php');

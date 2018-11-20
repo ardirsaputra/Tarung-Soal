@@ -1,6 +1,6 @@
 <?php 
     class Content {
-        public static function profil ($idUser){
+        public static function profil($idUser){
             $user = DB::selectUser($idUser);
             $dataGolongan = DB::selectAllGolongan();
             $namaLengkap    = $user['namaLengkap'];
@@ -424,14 +424,14 @@
                                                     <div class="col-sm-6">
                                                         <div class="form-radio">
                                                         <label class="form-check-label">
-                                                            <input type="radio" name="gender" class="form-check-input" id="membershipRadios1" value="Laki-laki" required> Laki-laki
+                                                            <input type="radio" name="jk" class="form-check-input" id="membershipRadios1" value="Laki-laki" required> Laki-laki
                                                         </label>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6">
                                                         <div class="form-radio">
                                                         <label class="form-check-label">
-                                                            <input type="radio" name="gender" class="form-check-input"  id="membershipRadios2" value="Perempuan" required> Perempuan
+                                                            <input type="radio" name="jk" class="form-check-input"  id="membershipRadios2" value="Perempuan" required> Perempuan
                                                         </label>
                                                         </div>
                                                     </div>
@@ -585,6 +585,7 @@
                     </td>
                     <td>
                         <a href="./zip.php?id='.$Zip['idZip'].'" class="btn btn-primary">Lihat</a>
+                        <a href="./user.php?idz='.$Zip['idZip'].'" class="btn btn-info">Kirim soal</a>
                     </td>
                 </tr>';
                 $iteration ++;
@@ -668,8 +669,8 @@
                         '.$foto.'
                     </td>
                     <td>
-                        <a href="./zip.php?id='.$idZip.'&ids='.$Soal['idSoal'].'&edit" class="btn btn-danger">Edit</a>
-                        <a href="./zip.php?id='.$idZip.'&ids='.$Soal['idSoal'].'&delete" class="btn btn-success">Hapus</a>
+                        <a href="./zip.php?id='.$idZip.'&ids='.$Soal['idSoal'].'&edit" class="btn btn-success">Edit</a>
+                        <a href="./zip.php?id='.$idZip.'&ids='.$Soal['idSoal'].'&delete" class="btn btn-danger">Hapus</a>
                     </td>
                 </tr>';
                 $iteration ++;
@@ -879,7 +880,7 @@
                     </div>
                     <div class="form-group row">    
                         <div class="input-group col-sm-12">      
-                            <input class="btn btn-success col-sm-12" type="submit" name="editsoal" value="Edit"/>
+                            <input class="btn btn-success col-sm-12" type="submit" name="editzip" value="Edit"/>
                         </div>
                     </div>
                     </form>
@@ -958,6 +959,285 @@
                 </form>
             </div>
             ';
+        }
+        public static function EditSoal($idZip,$idSoal){
+            $Soal = DB::query('SELECT * FROM soal WHERE idSoal = :idSoal',array(':idSoal'=>$idSoal))[0];
+            $soal = $Soal['soal'];
+            $a = $Soal ['jawabanA'];
+            $b = $Soal ['jawabanB'];
+            $c = $Soal ['jawabanC'];
+            $d = $Soal ['jawabanD'];
+            $jawaban = $Soal ['jawaban'];
+            $listJawaban = ['A','B','C','D'];
+            $optionjawaban ='';
+            for($i = 0 ; $i < 4 ;$i++){
+                if($listJawaban[$i] == $jawaban){
+                    $optionjawaban .= '<option value="'.$listJawaban[$i].'" selected>'.$listJawaban[$i].'</option>';
+                }else{
+                    $optionjawaban .= '<option value="'.$listJawaban[$i].'">'.$listJawaban[$i].'</option>';
+                }
+            }
+            return '
+            <div class="card-body">
+                <form action="./zip.php?id='.$idZip.'&ids='.$idSoal.'" method="post">               
+                        
+                    <h4 class="card-title">Edit Soal</h4>
+                    <div class="form-group row">
+                        <label for="exampleInputEmail2" class="col-sm-2 col-form-label">ID Soal</label>
+                        <div class="input-group col-sm-10">
+                            <input type="text" class="form-control" aria-label="Deskripsi Soal" rows="2" aria-describedby="colored-addon3" value="'.$Soal['idSoal'].'" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="exampleInputEmail2" class="col-sm-2 col-form-label">Soal</label>
+                        <div class="input-group col-sm-10">
+                            <textarea type="text" name="soal" class="form-control" placeholder="Isi Pertanyaan" aria-label="Deskripsi Soal" rows="2" aria-describedby="colored-addon3" required>'.$soal.'</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="exampleInputEmail2" class="col-form-label col-sm-2">Gambar</label>
+                        <div class="input-group col-sm-10">
+                            <input type="file" name="foto" class="form-control" placeholder=""aria-describedby="colored-addon3">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Pilihan A</label>
+                        <div class="input-group col-md-10">
+                           <input type="text" name="pilihana" class="form-control" placeholder="Pilihan A" value="'.$a.'" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Pilihan B</label>
+                        <div class="input-group col-md-10">
+                            <input type="text" name="pilihanb" class="form-control" placeholder="Pilihan B" value="'.$b.'" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Pilihan C</label>
+                        <div class="input-group col-md-10">
+                            <input type="text" name="pilihanc" class="form-control" placeholder="Pilihan C" value="'.$c.'" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Pilihan D</label>
+                        <div class="input-group col-md-10">
+                            <input type="text" name="pilihand" class="form-control" placeholder="Pilihan D" value="'.$d.'" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-md-2 col-form-label">Jawaban Benar</label>
+                        <div class="input-group col-md-10">
+                            <select name="jawaban" class="form-control" required>
+                            '.$optionjawaban.'
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row"> 
+                        <a href="./zip.php?id='.$idZip.'" class="btn btn-danger col-sm-1 form-control" data-dismiss="modal">Kembali</a>
+                        <p class="col-sm-1"> </p>
+                        <div class="col-sm-10 ">
+                            <input class="btn btn-success form-control" type="submit" name="editsoal" value="Simpan"/>
+                        </div>
+                    </div>
+                </form>
+            </div>';
+        }
+        public static function UserView($idUser){
+            $user = DB::selectUser($idUser);
+            $dataGolongan = DB::selectAllGolongan();
+            $namaLengkap    = $user['namaLengkap'];
+            $email          = $user['email'];
+            $golongan       = $user['idGolongan'];
+            $nomorInduk     = $user['nomorInduk'];
+            $sekolah        = $user['sekolahUser'];
+            $gender         = $user['gender'];
+            $tempatLahir    = $user['tempatLahir'];
+            $tanggalLahir   = $user['tanggalLahir'];
+            $foto           = $user['foto'];
+            $diskripsi      = $user['diskripsiUser'];
+            $Golongan='';
+            foreach($dataGolongan as $i){
+                if($golongan == $i['idGolongan']){
+                    $Golongan .= ''.$i['namaGolongan'].'';
+                }   
+            }
+            return '
+            <div class="card-body">
+                <h4 class="card-title"></h4>
+                <p class="card-description"></p>
+                    <div class="form-group row">
+                        <div class="input-group col-md-12">
+                            <img class="mb-3 mx-auto d-block" style="width:auto; height: 200px" src="'.Navigation::getSourceImageProfil($idUser).'" alt="Foto"/>
+                        </div>
+                    </div>
+                    <div class="form-group row">    
+                        <div class="input-group col-md-12">
+                            <label for="keterangan" class=" col-form-label">Deskripsi Diri</label>    
+                            <div class="input-group">
+                                <p  class="form-control" >'.$diskripsi.'</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="exampleInputEmail2" class="col-sm-2 col-form-label">Nama</label>
+                        <div class="input-group col-sm-10">
+                            <p class="form-control">'.$namaLengkap.'</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nama_panggilan" class="col-md-2 col-form-label">Sekolah</label>
+                        <div class="input-group col-md-2">
+                           <p class="form-control">'.$Golongan.'</p>
+                        </div>
+                        <div class="input-group col-md-8">
+                            <p class="form-control">'.$sekolah.'</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="nama_panggilan" class="col-sm-2 col-form-label">Nomor Induk</label>
+                        <div class="input-group col-sm-10">
+                            <p class="form-control">'.$nomorInduk.'</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="tempat_lahir" class="col-sm-2 col-form-label">Tempat Lahir</label>
+                        <div class="input-group col-sm-10">
+                            <p class="form-control">'.$tempatLahir.'</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="tanggal_lahir" class="col-sm-2 col-form-label">Tanggal Lahir</label>
+                        <div class="input-group col-sm-10">
+                            <p class="form-control">'.NAvigation::FormatDateIndo($tanggalLahir).'</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Gender</label>
+                        <div class="input-group col-sm-10">
+                            <p class="form-control">'.$gender.'</p>
+                        </div>
+                    </div>
+            </div>
+            ';
+        }
+        public static function TombolKirim($idPenerima,$idZip){
+            $idUser = Login::isLoggedIn();
+            $namaLengkap = DB::getNamaLengkap($idPenerima);
+            return '
+            <div class="card-body">   
+                <form action="./user.php?id='.$idPenerima.'&idz='.$idZip.'" method="post">                      
+                    <h4 class="card-title">Kirim Soal</h4>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Berikan Pesan</label>
+                        <div class="input-group col-sm-10">
+                            <textarea type="text" name="keterangan" class="form-control" placeholder="Berikan pesan untuk '.$namaLengkap.' sebelum mengirim soal" aria-label="Deskripsi Soal" rows="2" aria-describedby="colored-addon3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="input-group col-sm-12">
+                            <input name="kirimsoal" class="form-control btn btn-success" type="submit" value="Kirim Soal"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            ';
+        }
+        public static function SearchUser($idZip){
+            return '
+            <form class="forms-sample" action="./user.php?idz='.$idZip.'" method="post">
+                <div class="form-group row">  
+                    <div class="input-group col-sm-12">
+                        <input type="text" name="nama" class="form-control" placeholder="Cari Penerima Disini" aria-label="Masukkan Nama" aria-describedby="colored-addon3">
+                        <div class="input-group-append bg-primary border-primary">
+                            <button class="btn btn-primary" type="submit">
+                                <span class="fa fa-search text-white"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            ';
+        }
+        public static function ListUser($namaLengkap,$idZip){
+            if(!empty($namaLengkap)){
+                $idUser = Login::isLoggedIn();
+                $user = DB::query('SELECT namaLengkap,sekolahUser,tanggalLahir,idUser FROM user WHERE idUser != '.$idUser.' AND namaLengkap LIKE :namaLengkap LIMIT 30 ', array(':namaLengkap'=>'%'.$namaLengkap.'%'));
+                $listUser ='';
+                $getCount =0;
+                 foreach($user as $user){
+                    $listUser .= '
+                       <tr><td>
+                       '.$user['namaLengkap'].' 
+                       </td><td>'.$user['sekolahUser'].'
+                       </td><td>'.Navigation::FormatDateIndo($user['tanggalLahir']).'
+                       </td><td><a class="btn btn-success" href="./user.php?id='.$user['idUser'].'&idz='.$idZip.'"> Pilih </a></td>
+                       </tr>
+                    ';
+                    $getCount++;
+                }
+                $head = self::Headtable(['Nama Lengkap','Asal Sekolah','Tanggal Lahir']);
+                if($getCount==0){
+                    $head ='';
+                    $listUser = "<tr><td>Tidak ada nama yang ditemukan <td><tr>";
+                }
+            }else{
+                $head='';
+                $listUser = '';
+            }
+            return Page::List($head,$listUser);
+        }
+        public static function PesanStatus($status){
+            $idUser = Login::isLoggedIn();
+            $title = '';
+            if($status == 0){
+                $title = 'Soal Diterima';
+            }elseif($status == 1){
+                $title = 'Soal Disimpan';
+            }
+            if(DB::query('SELECT * FROM koleksi WHERE idPenerima = :idPenerima AND statusKoleksi = :statusKoleksi ',array(':idPenerima'=>$idUser,':statusKoleksi'=>$status))){
+                $Pesan = DB::query('SELECT * FROM koleksi WHERE idPenerima = :idPenerima AND statusKoleksi = :statusKoleksi ORDER BY idKoleksi DESC',array(':idPenerima'=>$idUser,':statusKoleksi'=>$status));
+                $head = Content::Headtable(['No','Soal','Pengirim','Pesan','Waktu']);
+                $listPesan = '';
+                $nomor = 1;
+                foreach ($Pesan as $i){
+                    if($status == 0){
+                        $tombol = '
+                        <form action="./notification.php" method="post" >
+                        <a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'">Lihat</a>
+                        <input type="hidden" name="simpan" value="'.$i['idKoleksi'].'">
+                        <button class="btn btn-warning" type="submit">Simpan</button>
+                        </form>
+                        ';
+                    }elseif($status == 1){
+                        $tombol = '
+                        <form action="./notification.php" method="post" >
+                        <a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'">Lihat</a>
+                        <input type="hidden" name="hapus" value="'.$i['idKoleksi'].'">
+                        <button class="btn btn-danger" type="submit">Hapus</button>
+                        </form>
+                        ';
+                    }
+                    $listPesan .= '
+                       <tr><td>
+                       '.$nomor.'
+                       </td>
+                       <td>
+                       '.DB::getJudulZip($i['idZip']).' 
+                       </td><td>'.DB::getNamaLengkap($i['idPengirim']).'
+                       </td><td>'.$i['keteranganKoleksi'].'
+                       </td><td>'.Navigation::FormatDateIndo($i['createKoleksi']).'
+                       </td><td>'.$tombol.'</td>
+                       </tr>
+                    ';
+                    $nomor++;
+                }
+                return Page::Title($title,Page::List($head,$listPesan));    
+            }else{
+                return Page::Title($title,'');    
+            }
+
         }
     }
 ?>

@@ -31,9 +31,9 @@ class Navigation {
         return false;
     }
     public static function getSourceImageProfil($idProfil){
-        $foto = DB::query('SELECT foto FROM ser WHERE idUser= :idUser',array(':idUser'=>$idProfil))[0]['foto'];
-        if($foto = "" || $foto = NULL){
-            return './images/profil.jpg';
+        $foto = DB::query('SELECT foto FROM user WHERE idUser= :idUser',array(':idUser'=>$idProfil))[0]['foto'];
+        if($foto == "" || $foto == NULL){
+            return './images/empty.jpg';
         }else{
             return './img.php?id='.$idProfil.'';
         }
@@ -233,7 +233,7 @@ class Navigation {
                             <img src="'.Navigation::getSourceImageProfilLoggedIn().'" alt="profile image">
                         </div>
                         <div class="text-wrapper">
-                            <p class="profile-name">'.Login::getNamaLengkapProfilLoggedIn().'</p>
+                            <p class="profile-name"><a href="./user.php?id='.Login::isLoggedIn().'">'.Login::getNamaLengkapProfilLoggedIn().'</a></p>
                             <div>
                                 <small class="designation text-muted">Online</small>
                                 <span class="status-indicator online"></span>
@@ -255,7 +255,7 @@ class Navigation {
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./datasoal.php">
+                <a class="nav-link" href="./zip.php">
                     <i class="menu-icon mdi mdi-backup-restore"></i>
                     <span class="menu-title">Soal</span>
                 </a>
@@ -267,9 +267,9 @@ class Navigation {
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./send.php">
+                <a class="nav-link" href="./notification.php">
                     <i class="menu-icon mdi mdi-sticker"></i>
-                    <span class="menu-title">Kirim Soal</span>
+                    <span class="menu-title">Notifikasi</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -325,6 +325,14 @@ class Navigation {
         $date = substr($time, 0, 10); 
         $jam   = substr($time, 10, 3);
         return [$date,$jam] ;
+    }
+    public static function FormatDateIndo($date){
+        $BulanIndo = array("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");        
+        $tahun = substr($date, 0, 4);               
+        $bulan = substr($date, 5, 2);
+        $tanggal = substr($date, 8, 2);
+        $result = $tanggal." ".$BulanIndo[(int)$bulan-1]. " ". $tahun;
+        return $result ;
     }
 }
 ?>

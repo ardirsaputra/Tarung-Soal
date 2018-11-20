@@ -67,7 +67,7 @@ class Login{
         die();
     }
     public static function erorr404(){
-        self::redirect('./pages/erorr-404.html');
+        self::redirect('./pages/samples/error-404.html');
     }
     public static function Dashboard(){
         self::redirect('./index.php');     

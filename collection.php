@@ -10,6 +10,9 @@ if (Login::isLoggedIn()){
     $notif = '';
     $array = ['No','Judul Soal','Tingkat Soal','Tanggal Pembuatan','<a href="./zip.php" class="btn btn-success"><span class"fa fa-plus" aria-hidden="true">+</span>Soal</a>'];
     $content = Page::List(Content::Headtable($array),Content::ListZip($idUser));
+    if(isset($_GET['msg'])){
+        $notif = $_GET['msg'];
+    }
     echo Page::DefaultPage($title,$notif,$content);    
 }else{
     Login::redirect('./login.php');

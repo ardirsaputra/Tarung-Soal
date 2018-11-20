@@ -77,12 +77,57 @@ if (Login::isLoggedIn()){
                         $judul = $_POST['judul'];
                         $deskripsi = $_POST['deskripsi'];
                         $idGolongan = $_POST['idGolongan'];
-                        DB::query('UPDATE zip SET judulZip = :judul ,deskripsiZip =  :deskripsi,idGolongan => :idGolongan, startZip => :starttime,finishZip => :finishtime,passwordZip =>:passwordzip WHERE idZip =:idZip',array(':judul'=>$judul,':deskripsi'=>$deskripsi,':idGolongan'=>$idGolongan,':starttime'=>$start,':finishtime'=>$finish,':passwordzip'=>$password));
+                        DB::query('UPDATE zip SET 
+                        judulZip = :judul,
+                        deskripsiZip =  :deskripsi,
+                        idGolongan = :idGolongan,
+                        startZip = :starttime,
+                        finishZip = :finishtime,
+                        passwordZip = :passwordzip
+                        WHERE
+                        idZip =:idZip',
+                        array(
+                            ':idZip'=>$idZip,
+                            ':judul'=>$judul,
+                            ':deskripsi'=>$deskripsi,
+                            ':idGolongan'=>$idGolongan,
+                            ':starttime'=>$start,
+                            ':finishtime'=>$finish,
+                            ':passwordzip'=>$password));
                         $notif = "Update data soal berhasil";
                         Login::redirect('./zip.php?id='.$idZip.'&msg='.$notif.'');
                     }else $notif ="Tingkat Soal Kosong";
                 }else $notif ="Deskripsi kosong";
             }else $notif = "Judul kosong";    
+        }elseif(isset($_GET['ids'])){
+            $idSoal = $_GET['ids'];
+            if(isset($_POST['editsoal'])){
+                if(isset($_POST['soal'])&& $_POST['soal'] != ''){
+                    if(isset($_POST['jawaban']) && $_POST['jawaban']!= ''){
+                        $soal = $_POST['soal'];
+                        $jawabanA = $_POST['pilihana'];
+                        $jawabanB = $_POST['pilihanb'];
+                        $jawabanC = $_POST['pilihanc'];
+                        $jawabanD = $_POST['pilihand'];
+                        $jawaban = $_POST['jawaban'];
+                        if(!empty($_FILES['foto']['tmp_name'])){
+                            $foto = file_get_contents($_FILES['foto']['tmp_name']);
+                            DB::query('UPDATE soal SET soal = :soal,jawabanA = :A ,jawabanB = :B,jawabanC = :C,jawabanD = :D,jawaban = :jawaban,foto = :foto WHERE idSoal = :idSoal ',array(':idSoal'=>$idSoal,':soal'=>$soal,':A'=>$jawabanA,':B'=>$jawabanB,':C'=>$jawabanC,':D'=>$jawabanD,':jawaban'=>$jawaban,':foto'=>$foto));
+                        }else{
+                            DB::query('UPDATE soal SET soal = :soal,jawabanA = :A ,jawabanB = :B,jawabanC = :C,jawabanD = :D,jawaban = :jawaban WHERE idSoal = :idSoal',array(':idSoal'=>$idSoal,':soal'=>$soal,':A'=>$jawabanA,':B'=>$jawabanB,':C'=>$jawabanC,':D'=>$jawabanD,':jawaban'=>$jawaban));
+                        }
+                        $content = Content::Zip($idZip);
+                        $notif = 'Soal ID '.$idSoal.' berhasil diedit';
+                    }
+                }
+            }elseif(isset($_GET['delete'])){
+                DB::query('DELETE FROM zip_soal WHERE idSoal = :idSoal',array(':idSoal'=>$_GET['ids']));
+                DB::query('DELETE FROM soal WHERE idSoal = :idSoal',array(':idSoal'=>$_GET['ids']));
+                $notif = 'Hapus Soal id '.$_GET['ids'].' berhasil!';
+                $content = Content::Zip($idZip);
+            }elseif(isset($_GET['edit'])){
+                $content = Content::EditSoal($idZip,$idSoal);
+            }
         }elseif(isset($_GET['edit'])){
             $content = Content::ZipEdit($idZip);
         }elseif(isset($_POST['isisoal'])){
@@ -136,13 +181,6 @@ if (Login::isLoggedIn()){
                 $content = Content::Zip($idZip);
             }else{
                 $notif = "Soal belum ada!";
-            }
-        }elseif(isset($_GET['ids'])){
-            if(isset($_GET['delete'])){
-                DB::query('DELETE FROM zip_soal WHERE idSoal = :idSoal',array(':idSoal'=>$_GET['ids']));
-                DB::query('DELETE FROM soal WHERE idSoal = :idSoal',array(':idSoal'=>$_GET['ids']));
-                $notif = 'Hapus Soal id '.$_GET['ids'].' berhasil!';
-                $content = Content::Zip($idZip);
             }
         }
     }

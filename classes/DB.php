@@ -24,11 +24,19 @@ class DB {
         $token = bin2hex(openssl_random_pseudo_bytes(64,$cstrong));    
         Log::logUserIn($idUser,Time::timeDateHours());
         DB::query('INSERT INTO login_token VALUES (\'\', :token, :idUser )', array(':token' => sha1($token), ':idUser'=>$idUser));          
-        setcookie("TS_A", $token, time() + 60 * 60 * 12, '/', null, null, true);
-        setcookie("TS_B", '1', time() + 60 * 60 * 12, '/', null, null, true);
+        setcookie("TS_A", $token, time() + 60 * 60 * 17, '/', null, null, true);
+        setcookie("TS_B", '1', time() + 60 * 60 * 17, '/', null, null, true);
     }
     public static function selectAllGolongan(){
         return self::query('SELECT * FROM golongan');
+    }
+    public static function getNamaLengkap ($idUser){
+        $idUser = DB::query('SELECT namaLengkap FROM user WHERE idUser =:idUser',array(':idUser'=>$idUser))[0]['namaLengkap'];
+        return $idUser;
+    }
+    public static function getJudulZip($idZip){
+        $namaZip = DB::query('SELECT judulZip FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))[0]['judulZip'];
+        return $namaZip;
     }
 }
 ?>

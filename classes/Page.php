@@ -81,7 +81,7 @@
             </html>
             ';
         }
-        public static function Setting($content1,$content2,$content3){
+        public static function BlockContent($content1,$content2,$content3){
             return '
             <div class="row">
                 <div class="col-md-12">
@@ -113,6 +113,17 @@
                 </tbody>
                 </table>
             </div>
+            ';
+        }
+        public static function Title($title, $content){
+            return '
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title Text-light bg-warning p-3 text-center">'.$title.'</h4>
+                    '.$content.'
+                </div>
+            </div>
+            <br>
             ';
         }
     }
