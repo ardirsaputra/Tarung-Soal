@@ -51,6 +51,7 @@ class Navigation {
             <link rel="stylesheet" href="vendors/css/vendor.bundle.addons.css">
             <!-- endinject -->
             <!-- plugin css for this page -->
+            <link rel="stylesheet" href="vendors/iconfonts/font-awesome/css/font-awesome.css">
             <!-- End plugin css for this page -->
             <!-- inject:css -->
             <link rel="stylesheet" href="css/style.css">
@@ -60,8 +61,86 @@ class Navigation {
         </head>
         ';
     }
+    public static function TimeSender($date){
+        $BulanIndo = array("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");        
+        
+        date_default_timezone_set("Asia/Jakarta");
+        $today = date("Y-m-d");
+        $tahunNow = substr($today, 0, 4);               
+        $bulanNow = substr($today, 5, 2);
+        $tglNow   = substr($today, 8, 2);
+
+
+        $tahun = substr($date, 0, 4);               
+        $bulan = substr($date, 5, 2);
+        $tgl   = substr($date, 8, 2);
+        $jam   = substr($date, 10, 6);
+        
+        if(($tahunNow == $tahun)&&($bulanNow == $bulan )&&( $tglNow == $tgl )){
+            $result = ''. $jam .'';
+        }else{
+            $result = $tgl . " " . $BulanIndo[(int)$bulan-1]. " ". $tahun;
+        }
+        return $result ;
+        
+    }
     public static function NavigationBar(){
-        return' <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+        $dataNotifPesan = DB::query('SELECT * FROM koleksi WHERE statusKoleksi = 0 AND idPenerima = :idPenerima',array(':idPenerima'=>Login::isLoggedIn()));
+        $countNotifPesan = 0;
+        $listPesan ='';
+        foreach($dataNotifPesan as $i ){
+            $namaPegirim = DB::getNamaLengkap($i['idPengirim']);
+            $fotoPofilPengirim = Navigation::getSourceImageProfil($i['idPengirim']);
+            $waktuKirim = Navigation::TimeSender($i['createKoleksi']);
+            $judul = DB::getJudulZip($i['idZip']);
+            $listPesan .= '
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item preview-item">
+                <div class="preview-thumbnail">
+                    <img src="'.$fotoPofilPengirim.'" alt="image"  class="img-xs rounded-circle profile-pic" >
+                </div>
+                <div class="preview-item-content flex-grow">
+                    <h6 class="preview-subject ellipsis font-weight-medium text-dark">'.$namaPegirim.'
+                        <span class="float-right font-weight-light small-text">'.$waktuKirim.'</span>
+                    </h6>
+                    <p class="font-weight-light small-text">
+                       Mengirimkan Soal '.$judul.'
+                    </p>
+                </div>
+            </a>
+            ';
+            $countNotifPesan++;
+        }
+        if($countNotifPesan != 0){
+            $ifanypesan = '<a href="notification.php" ><span class="badge badge-info badge-pill float-right">Lihat Semua</span></a>'    ;                
+            $infojumlahpesan = '<span class="count">'.$countNotifPesan.'</span>';
+        }else{
+            $infojumlahpesan = '';
+            $ifanypesan ='';
+        }
+        return' 
+        <div class="modal" id="search">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form class="forms-sample" action="./search.php" method="post">
+                            <div class="form-group row">  
+                                <div class="input-group col-sm-12">
+                                    <input type="text" name="soal" class="form-control" placeholder="Cari Soal Disini" aria-label="Masukkan Nama" aria-describedby="colored-addon3">
+                                    <div class="input-group-append bg-primary border-primary">
+                                        <button class="btn btn-primary" type="submit">
+                                            <span class="fa fa-search text-white"></span>
+                                        </button>
+                                        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="fa fa-times text-white"></span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
             <a class="navbar-brand brand-logo" href="index.html">
                 <img src="images/logo.png" alt="logo" />
@@ -70,50 +149,30 @@ class Navigation {
                 <img src="'.self::getSourceImageProfilLoggedIn().'" alt="logo" />
             </a>
         </div>
-        <div class="navbar-menu-wrapper d-flex align-items-center">
 
+        <div class="navbar-menu-wrapper d-flex align-items-center">
+            <ul class="navbar-nav navbar-nav-left header-links d-none d-md-flex">
+                <li class="nav-item">
+                    <a href="#search" class="nav-link" data-toggle="modal" data-target="#search">
+                        <span class="fa fa-search"></span>
+                    </a>
+                </li>
+            </ul>
             <ul class="navbar-nav navbar-nav-right">
                 <!--Message notif on top-right-->
                 <li class="nav-item dropdown">
                     <a class="nav-link count-indicator dropdown-toggle" id="messageDropdown" href="#" data-toggle="dropdown"
                         aria-expanded="false">
                         <i class="mdi mdi-file-document-box"></i>
-                        <span class="count">2</span>
+                        '.$infojumlahpesan.'
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
                         <div class="dropdown-item">
-                            <p class="mb-0 font-weight-normal float-left">Kamu Memilik 2 Kiriman Soal
+                            <p class="mb-0 font-weight-normal float-left">Kamu Memilik '.$countNotifPesan.' Kiriman Soal
                             </p>
-                            <span class="badge badge-info badge-pill float-right">Lihat Semua</span>
+                            '.$ifanypesan.'
                         </div>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item preview-item">
-                            <div class="preview-thumbnail">
-                                <img src="images/faces-clipart/pic-1.png" alt="image" class="profile-pic">
-                            </div>
-                            <div class="preview-item-content flex-grow">
-                                <h6 class="preview-subject ellipsis font-weight-medium text-dark">David Grey
-                                    <span class="float-right font-weight-light small-text">10 Menit Yang Lalu</span>
-                                </h6>
-                                <p class="font-weight-light small-text">
-                                    Telah Mengirimkan Soal A
-                                </p>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item preview-item">
-                            <div class="preview-thumbnail">
-                                <img src="images/faces-clipart/pic-1.png" alt="image" class="profile-pic">
-                            </div>
-                            <div class="preview-item-content flex-grow">
-                                <h6 class="preview-subject ellipsis font-weight-medium text-dark">David Grey
-                                    <span class="float-right font-weight-light small-text">10 Menit Yang Lalu</span>
-                                </h6>
-                                <p class="font-weight-light small-text">
-                                    Telah Mengirimkan Soal B
-                                </p>
-                            </div>
-                        </a>
+                        '.$listPesan.'
                     </div>
                 </li>
                 <!--Notification on top-right side-->
@@ -244,43 +303,60 @@ class Navigation {
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./index.php">
-                    <i class="menu-icon mdi mdi-television"></i>
+                    <i class="menu-icon mdi mdi-home"></i>
                     <span class="menu-title">Home</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./collection.php">
-                    <i class="menu-icon mdi mdi-television"></i>
-                    <span class="menu-title">Koleksi</span>
+                <a class="nav-link" href="./search.php">
+                    <i class="menu-icon fa fa-search"></i>
+                    <span class="menu-title">Cari Soal</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./zip.php">
-                    <i class="menu-icon mdi mdi-backup-restore"></i>
-                    <span class="menu-title">Soal</span>
+                <a class="nav-link" data-toggle="collapse" href="#datakoleksi" aria-expanded="false" aria-controls="datakoleksi">
+                    <i class="menu-icon mdi mdi-content-copy"></i>
+                    <span class="menu-title">Koleksi</span>
+                    <i class="menu-arrow"></i>
                 </a>
+                <div class="collapse" id="datakoleksi">
+                    <ul class="nav flex-column sub-menu">
+                        <li class="nav-item">
+                            <a class="nav-link" href="./collection.php">
+                                <i class="menu-icon fa fa-dropbox"></i>
+                                <span class="menu-title">Koleksi</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./zip.php">
+                                <i class="menu-icon mdi mdi-pencil"></i>
+                                <span class="menu-title">Soal</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./record.php">
-                    <i class="menu-icon mdi mdi-bookmark-plus-outline"></i>
+                    <i class="menu-icon fa fa-check-circle"></i>
                     <span class="menu-title">Hasil</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./notification.php">
-                    <i class="menu-icon mdi mdi-sticker"></i>
+                    <i class="menu-icon fa fa-stack-exchange"></i>
                     <span class="menu-title">Notifikasi</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./setting.php">
-                    <i class="menu-icon mdi mdi-restart"></i>
+                    <i class="menu-icon fa fa-gears"></i>
                     <span class="menu-title">Pengaturan</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./logout.php">
-                    <i class="menu-icon mdi mdi-restart"></i>
+                    <i class="menu-icon fa fa-power-off"></i>
                     <span class="menu-title text-danger">Keluar</span>
                 </a>
             </li>
@@ -308,7 +384,7 @@ class Navigation {
             <div class="container-fluid clearfix">
                 <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © 2018
                     <a href="http://www.zakaa.id/" target="_blank">Zakaa Studio</a>. All rights reserved.</span>
-                <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Pengembangan untuk Pendidikan Indonesia by 
+                <span class="float-none float-sm-right text-muted d-block mt-1 mt-sm-0 text-center">Pengembangan untuk Pendidikan Indonesia dari  
                 <a href="https://codepen.io/ardiragilsaputra/full/yxoOOm/" target="_blank">Ars</a>
                 </span>
             </div>

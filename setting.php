@@ -102,9 +102,9 @@ if (Login::isLoggedIn()){
         }else $notif = 'Nama Lengkap harus ada';
     }
     //---------------------------------
-    $profil = Content::profil($idUser);
-    $password = Content::password($idUser);
-    $recovery = Content::passwordRecovery();
+    $profil = Page::Title('Data Profil',Content::profil($idUser));
+    $password = Page::Title('Ganti Password',Content::password($idUser));
+    $recovery = Page::Title('Pemulihan Akun',Content::passwordRecovery());
     $content = Page::BlockContent($profil,$password,$recovery);
     echo Page::DefaultPage('Setting - Tarung Soal',$notif,$content);    
 }else{

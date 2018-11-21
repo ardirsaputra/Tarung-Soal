@@ -7,9 +7,11 @@ include('./classes/Page.php');
 if (Login::isLoggedIn()){
     $idUser = Login::isLoggedIn();
     $title = 'Buat soal - Tarung Soal';
-    $content = Content::BuatZip();
     $notif = '';
-    if(isset($_POST['buatsoal'])){
+
+    if(isset($_GET['tambahzip'])){
+        $content = Page::Title('Buat Soal' , Content::BuatZip());
+    }elseif(isset($_POST['buatsoal'])){
         if($_POST['judul'] != ''){
             if($_POST['deskripsi'] != ''){
                 if($_POST['idGolongan'] != ''){
@@ -45,10 +47,9 @@ if (Login::isLoggedIn()){
                 }else $notif ="Tingkat Soal Kosong";
             }else $notif ="Deskripsi kosong";
         }else $notif = "Judul kosong";    
-    }
-    if(isset($_GET['id'])){
+    }elseif(isset($_GET['id'])){
         $idZip = $_GET['id'];
-        $content = Content::Zip($idZip);
+        $content = Page::Title('Data Soal',Content::Zip($idZip));
         if(isset($_POST['editzip'])){
             if($_POST['judul'] != ''){
                 if($_POST['deskripsi'] != ''){
@@ -124,12 +125,12 @@ if (Login::isLoggedIn()){
                 DB::query('DELETE FROM zip_soal WHERE idSoal = :idSoal',array(':idSoal'=>$_GET['ids']));
                 DB::query('DELETE FROM soal WHERE idSoal = :idSoal',array(':idSoal'=>$_GET['ids']));
                 $notif = 'Hapus Soal id '.$_GET['ids'].' berhasil!';
-                $content = Content::Zip($idZip);
+                $content = Page::Title('Soal',Content::Zip($idZip));
             }elseif(isset($_GET['edit'])){
-                $content = Content::EditSoal($idZip,$idSoal);
+                $content = Page::Title('Edit Soal',Content::EditSoal($idZip,$idSoal));
             }
         }elseif(isset($_GET['edit'])){
-            $content = Content::ZipEdit($idZip);
+            $content = Page::Title('Edit Data Soal',Content::ZipEdit($idZip));
         }elseif(isset($_POST['isisoal'])){
             if(isset($_POST['soal'])&& $_POST['soal'] != ''){
                 if(isset($_POST['jawaban']) && $_POST['jawaban']!= ''){
@@ -147,7 +148,7 @@ if (Login::isLoggedIn()){
                     DB::query('INSERT INTO soal VALUES (\'\',:soal,:A,:B,:C,:D,:jawaban,:foto)',array(':soal'=>$soal,':A'=>$jawabanA,':B'=>$jawabanB,':C'=>$jawabanC,':D'=>$jawabanD,':jawaban'=>$jawaban,':foto'=>$foto));
                     $idSoal = DB::query('SELECT idSoal FROM soal WHERE soal = :soal AND jawabanA = :jawabanA AND jawaban = :jawaban ORDER BY idSoal DESC',array(':soal'=>$soal, ':jawabanA'=>$jawabanA,':jawaban'=>$jawaban))[0]['idSoal'];
                     DB::query('INSERT INTO zip_soal VALUES (\'\',:idZip,:idSoal)',array(':idZip'=>$idZip,':idSoal'=>$idSoal));
-                    $content = Content::Zip($idZip);
+                    $content = Page::Title('Data Soal',Content::Zip($idZip));
                     $notif = 'Soal berhasil dibuat';
                 }
             }
@@ -169,7 +170,7 @@ if (Login::isLoggedIn()){
                 DB::query('DELETE FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip));
             }
         }elseif(isset($_GET['tambahsoal'])){
-            $content  = Content::BuatSoal($idZip);
+            $content  = Page::Title('Tambah Soal',Content::BuatSoal($idZip));
         }elseif(isset($_GET['deleteallsoal'])){
             if(DB::query('SELECT idSoal FROM zip_soal WHERE idZip = :idZip',array(':idZip'=>$idZip))){
                 $listSoal = DB::query('SELECT * FROM zip_soal WHERE idZip = :idZip',array(':idZip'=>$idZip));
@@ -178,11 +179,13 @@ if (Login::isLoggedIn()){
                     DB::query('DELETE FROM soal WHERE idSoal = :idSoal',array(':idSoal'=>$i['idSoal']));
                 }
                 $notif = "Hapus Semua Soal berhasil!";
-                $content = Content::Zip($idZip);
+                $content = Page::Title('Data Soal',Content::Zip($idZip));
             }else{
                 $notif = "Soal belum ada!";
             }
         }
+    }else{
+        Login::redirect('./collection.php');
     }
     if(isset($_GET['msg'])){
         $notif = $_GET['msg']; 

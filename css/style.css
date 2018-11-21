@@ -10752,11 +10752,11 @@ tbody.collapse.show {
     color: #00381c; }
 
 .alert-info {
-  color: #473374;
-  background-color: #e7e0f9;
-  border-color: #ded3f6; }
+  color: #336a74;
+  background-color: #e0f3f9;
+  border-color: #00e1ff; }
   .alert-info hr {
-    border-top-color: #cebef2; }
+    border-top-color: #06f7ff; }
   .alert-info .alert-link {
     color: #312351; }
 
@@ -13870,7 +13870,7 @@ input:focus {
 /* Navbar */
 .navbar.default-layout {
   font-family: "Poppins", sans-serif;
-  background: linear-gradient(120deg, #00e4d0, #5983e8);
+  background: linear-gradient(0deg, #05fff3, #5983e8);
   transition: background 0.25s ease;
   -webkit-transition: background 0.25s ease;
   -moz-transition: background 0.25s ease;

@@ -34,8 +34,6 @@
             ';
             return '
             <div class="card-body">
-                <h4 class="card-title">Formulir Biodata</h4>
-                <p class="card-description">Data profil biodata pengguna</p>
                 <form class="forms-sample" action="./setting.php" method="post" enctype="multipart/form-data">
                     <div class="form-group row">
                         <div class="input-group col-md-12">
@@ -122,8 +120,6 @@
         public static function password ($idUser){
             return '
             <div class="card-body">
-                <h4 class="card-title">Password</h4>
-                <p class="card-description">Ganti Password</p>
                 <form class="forms-sample" action="./setting.php" method="post">
                     <div class="form-group">
                         <label class="label">Password Lama</label>
@@ -157,7 +153,6 @@
             $forgot = DB::query('SELECT * FROM forgot WHERE idUser = :idUser',array(':idUser'=>$idUser))[0];
             return '
               <div class="card-body">
-              <h4 class="card-title">Recovery Password</h4>
                 <form class="forms-sample" action="./setting.php" method="post">
                 <div class="form-group">
                     <label class="label">Pertanyaan</label>
@@ -1227,7 +1222,7 @@
                        '.DB::getJudulZip($i['idZip']).' 
                        </td><td>'.DB::getNamaLengkap($i['idPengirim']).'
                        </td><td>'.$i['keteranganKoleksi'].'
-                       </td><td>'.Navigation::FormatDateIndo($i['createKoleksi']).'
+                       </td><td>'.Navigation::TimeSender($i['createKoleksi']).'
                        </td><td>'.$tombol.'</td>
                        </tr>
                     ';
@@ -1238,6 +1233,151 @@
                 return Page::Title($title,'');    
             }
 
+        }
+        public static function PesanDashboard(){
+            $idUser = Login::isLoggedIn();
+            if(DB::query('SELECT * FROM koleksi WHERE idPenerima = :idPenerima AND statusKoleksi = 1',array(':idPenerima'=>$idUser))){
+                $Pesan = DB::query('SELECT * FROM koleksi WHERE idPenerima = :idPenerima AND statusKoleksi = 1 ORDER BY idKoleksi DESC',array(':idPenerima'=>$idUser));
+                $head = Content::Headtable(['Soal','Pengirim','Waktu']);
+                $listPesan = '';
+                $nomor = 1;
+                foreach ($Pesan as $i){
+                    $tombol = '
+                    <a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'">Lihat</a>
+                   
+                    ';
+                    $listPesan .= '
+                       <tr>
+                       <td>
+                       '.DB::getJudulZip($i['idZip']).' 
+                       </td><td>'.DB::getNamaLengkap($i['idPengirim']).'
+                       </td><td>'.Navigation::FormatDateIndo($i['createKoleksi']).'
+                       </td><td>'.$tombol.'</td>
+                       </tr>
+                    ';
+                    $nomor++;
+                }
+                return Page::List($head,$listPesan);    
+            }else{
+                return '<p class="text-center col-sm-12">Belum ada pesan tersimpan</p>';    
+            }
+        }
+        public static function HasilCariSoal($nama){
+            if(!empty($nama)){
+                $user = DB::query('SELECT * FROM zip WHERE judulZip LIKE :judul ORDER BY idZip DESC LIMIT 30 ', array(':judul'=>'%'.$nama.'%'));
+                $listuser ='';
+                $getCount =0;
+                $listSoal ='';
+                 foreach($user as $i){
+                    $golongan = DB::query('SELECT namaGolongan FROM golongan WHERE idGolongan = :idGolongan ',array(':idGolongan'=>$i['idGolongan']))[0]['namaGolongan'];
+                    $listSoal .= '
+                       <tr><td>
+                       '.$i['judulZip'].' 
+                       </td><td>'.$i['deskripsiZip'].'
+                       </td><td>'.$golongan.'
+                       </td><td>'.Navigation::FormatDateIndo($i['createZip']).'
+                       </td><td><a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'"> Lihat </a></td>
+                       </tr>
+                    ';
+                    $getCount++;
+                }
+                $head = self::Headtable(['Judul Soal','Deskripsi','Tingkat Soal','Tanggal Pembuatan']);
+                if($getCount==0){
+                    $head ='';
+                    $listSoal = "<tr><td>Tidak ada soal yang ditemukan <td><tr>";
+                }
+            }else{
+                $head='';
+                $listSoal = '';
+            }
+            return Page::List($head,$listSoal);
+        }
+        public static function CariSoal(){
+            return '
+            <form class="forms-sample" action="./search.php" method="post">
+                <div class="form-group row">  
+                    <div class="input-group col-sm-12">
+                        <input type="text" name="soal" class="form-control" placeholder="Cari Soal Disini" aria-label="Masukkan Nama" aria-describedby="colored-addon3">
+                        <div class="input-group-append bg-primary border-primary">
+                            <button class="btn btn-primary" type="submit">
+                                <span class="fa fa-search text-white"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            ';
+        }
+        public static function Total($keterangan,$table){
+            if($table == 'user'){
+                $count = DB::query('SELECT count(idUser) as Jumlah FROM user')[0]['Jumlah'];
+                $icon = "fa fa-user-circle text-primary";
+            }elseif($table == 'zip'){
+                $count = DB::query('SELECT count(idZip) as Jumlah FROM zip')[0]['Jumlah'];
+                $icon = "fa fa-file text-success";
+            }elseif($table == 'soal'){
+                $count = DB::query('SELECT count(idSoal) as Jumlah FROM soal')[0]['Jumlah'];
+                $icon = "fa fa-list-alt text-info";
+            }elseif($table == 'koleksi'){
+                $count = DB::query('SELECT count(idKoleksi) as Jumlah FROM koleksi Where statusKoleksi = 1')[0]['Jumlah'];
+                $icon = "fa fa-inbox text-warning";    
+            }
+            return '
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 grid-margin stretch-card">
+                <div class="card card-statistics">
+                    <div class="card-body">
+                        <div class="clearfix">
+                            <div class="float-left">
+                                <i class="'.$icon.' icon-lg"></i>
+                            </div>
+                            <div class="float-right">
+                                <p class="mb-0 text-right">'.$keterangan.'</p>
+                                <div class="fluid-container">
+                                    <h3 class="font-weight-medium text-right mb-0 font-cash-card">
+                                        '.$count.'
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>';
+        }
+        public static function CardLarge6($content){
+            return '
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row d-sm-flex mb-4">
+                            '.$content.'
+                        </div>
+                    </div>
+                </div>
+            </div>';
+        }
+        public static function ListZipDasboard(){
+            $list='';
+            $iteration = 1 ;
+            $idUser = Login::isLoggedIn();
+            $ListZip = DB::query('SELECT * FROM user_zip WHERE idUser = :idUser ORDER BY idUserZip DESC LIMIT 5',array(':idUser'=>$idUser));
+            foreach ($ListZip as $i){
+                $Zip = DB::query('SELECT idZip,judulZip , deskripsiZip , idGolongan , createZip FROM zip WHERE idZIp = :idZip',array(':idZip'=>$i['idZip']))[0];
+                $golongan  = DB::query('SELECT namaGolongan FROM golongan WHERE idGolongan = :idGolongan',array(':idGolongan'=>$Zip['idGolongan']))[0]['namaGolongan'];
+                $list .= '
+                <tr>
+                    <td>
+                        '.$Zip['judulZip'].'
+                    </td>
+                    <td>
+                        '.$golongan.'
+                    </td>
+                    <td>
+                        '.$Zip['createZip'].'
+                    </td>
+                   ';
+                $iteration ++;
+            }
+            return $list;
         }
     }
 ?>

@@ -2,7 +2,7 @@
     class Page{
         public static function DefaultPage($title,$notif,$content){
             if($notif !=''){
-                $n = '<div class="row"><span class="bg-warning col-md-12 rounded  text-center text-bold text-light">
+                $n = '<div class="row"><span class="bg-info col-md-12 rounded  text-center text-bold text-light">
                 '.$notif.'
                 </span>
                 </div>';
@@ -46,7 +46,7 @@
         }
         public static function LoginPage($title,$notif,$content){
             if($notif !=''){
-                $n = '<div class="row"><span class="bg-warning col-md-12 rounded  text-center text-bold text-light">
+                $n = '<div class="row"><span class="bg-primary col-md-12 rounded  text-center text-bold text-light">
                 '.$notif.'
                 </span>
                 </div>';
@@ -98,9 +98,6 @@
             </div>
             ';
         }
-        public static function Dashboard(){
-            return '';
-        }
         public static function List($nama,$content){
             return '
             <div class="table-responsive">
@@ -119,12 +116,16 @@
             return '
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title Text-light bg-warning p-3 text-center">'.$title.'</h4>
+                    <h4 class="Text-light alert alert-info p-3 text-center">'.$title.'</h4>
                     '.$content.'
                 </div>
             </div>
             <br>
             ';
+        }
+        public static function Row($content){
+            return '<div class="row">'.$content.'</div>';
+         
         }
     }
 ?>
