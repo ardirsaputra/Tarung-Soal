@@ -1550,13 +1550,12 @@
             return '
             <div class="card-body">
                 <form action="./soal.php" method="post">                   
-                '.$gambar.'
                 <div class="form-group row">
                     <div class="input-group col-sm-12">
                         Soal No. '.$nomor.'
                     </div>
                 </div>
-                
+                '.$gambar.'
                 <div class="form-group row">
                     <div class="input-group col-sm-12">
                         <p class="form-control">'.$DataSoal['soal'].'</p>
