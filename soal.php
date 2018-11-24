@@ -31,8 +31,13 @@ if (Login::isLoggedIn()){
         $sisa = count($arraysoal);
         $jumlahSoal = $_COOKIE['TSC'];
         $nomor = $jumlahSoal - $sisa;
-        $Soal = Content::JawabSoal($idSoal,$nomor);
-        $content = Page::Title('Soal ke '.$nomor.' dari '.$jumlahSoal.'',$Soal);
+        if(DB::query('SELECT idSoal FROM soal WHERE idSoal = :idSoal',array(':idSoal'=>$idSoal))){
+            $Soal = Content::JawabSoal($idSoal,$nomor);
+            $content = Page::Title('Soal ke '.$nomor.' dari '.$jumlahSoal.'',$Soal);    
+        }else{
+            $jumlahSoal = DB::query('SELECT count(idSoal) as Jumlah FROM zip_soal WHERE idZip = :idZip ',array(':idZip'=>$idZip))[0]['Jumlah'];
+            setcookie("TSC", $jumlahSoal, time() + 60 * 60 *24 , '/', null, null, true);
+        }
         if($sisa == 0 || $sisa == NULL){
             setcookie("TSS",0, time() - 60 * 60 , '/', null, null, true);       
         }else{
