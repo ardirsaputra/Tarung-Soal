@@ -16,4 +16,4 @@ if (Login::isLoggedIn()){
 }else{
     Login::redirect('./login.php');
 }
-?>  
+?>

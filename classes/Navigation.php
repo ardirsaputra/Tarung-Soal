@@ -38,6 +38,9 @@ class Navigation {
             return './img.php?id='.$idProfil.'';
         }
     }
+    public static function getSourceImageSoal($idSoal){
+        return './img.php?idSoal='.$idSoal.'';
+    }
     public static function Header($title){
         return '
         <head>
@@ -403,11 +406,14 @@ class Navigation {
         return [$date,$jam] ;
     }
     public static function FormatDateIndo($date){
-        $BulanIndo = array("Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");        
+        $BulanIndo = array("","Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");        
         $tahun = substr($date, 0, 4);               
         $bulan = substr($date, 5, 2);
         $tanggal = substr($date, 8, 2);
-        $result = $tanggal." ".$BulanIndo[(int)$bulan-1]. " ". $tahun;
+        $result = $tanggal." ".$BulanIndo[(int)$bulan]. " ". $tahun;
+        if($bulan == "00"){
+            return "Tidak ada";
+        }
         return $result ;
     }
 }

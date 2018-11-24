@@ -49,6 +49,7 @@ if (Login::isLoggedIn()){
         }else $notif = "Judul kosong";    
     }elseif(isset($_GET['id'])){
         $idZip = $_GET['id'];
+        $title = 'Soal - Tarung Soal';
         $content = Page::Title('Data Soal',Content::Zip($idZip));
         if(isset($_POST['editzip'])){
             if($_POST['judul'] != ''){
@@ -140,6 +141,7 @@ if (Login::isLoggedIn()){
                     $jawabanC = $_POST['pilihanc'];
                     $jawabanD = $_POST['pilihand'];
                     $jawaban = $_POST['jawaban'];
+                    $foto = '';
                     if(!empty($_FILES['foto']['tmp_name'])){
                         $foto = file_get_contents($_FILES['foto']['tmp_name']);
                     }else{
@@ -153,7 +155,6 @@ if (Login::isLoggedIn()){
                 }
             }
         }elseif(isset($_POST['delete'])){
-            DB::query('DELETE FROM user_zip WHERE idZip =:idZip',array(':idZip'=>$idZip));
             if(DB::query('SELECT idZip FROM koleksi WHERE idZip =:idZip',array(':idZip'=>$idZip))){
                 DB::query('DELETE FROM koleksi WHERE idZip =:idZip',array(':idZip'=>$idZip));
             }
@@ -163,12 +164,13 @@ if (Login::isLoggedIn()){
             if(DB::query('SELECT idSoal FROM zip_soal WHERE idZip = :idZip',array(':idZip'=>$idZip))){
                 $listSoal = DB::query('SELECT * FROM zip_soal WHERE idZip = :idZip',array(':idZip'=>$idZip));
                 foreach($listSoal as $i){
-                    DB::query('DELETE FROM user_zip WHERE idSoal = :idSoal;DELETE FROM zip_soal WHERE idSoal = :idSoal;DELETE FROM soal WHERE idSoal = :idSoal',array(':idSoal'=>$i['idSoal']));
+                    DB::query('DELETE FROM zip_soal WHERE idSoal = :idSoal',array(':idSoal'=>$i['idSoal']));
+                    DB::query('DELETE FROM soal WHERE idSoal = :idSoal',array(':idSoal'=>$i['idSoal']));
                 }
             }
-            if(DB::query('SELECT idZip FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))){
-                DB::query('DELETE FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip));
-            }
+            DB::query('DELETE FROM user_zip WHERE idZip =:idZip',array(':idZip'=>$idZip));
+            DB::query('DELETE FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip));
+            Login::redirect('./collection.php?msg=Data soal terhapus');
         }elseif(isset($_GET['tambahsoal'])){
             $content  = Page::Title('Tambah Soal',Content::BuatSoal($idZip));
         }elseif(isset($_GET['deleteallsoal'])){
@@ -182,6 +184,63 @@ if (Login::isLoggedIn()){
                 $content = Page::Title('Data Soal',Content::Zip($idZip));
             }else{
                 $notif = "Soal belum ada!";
+            }
+        }elseif(isset($_POST['kerjakan'])){
+            if(isset($_POST['passwordzip'])){
+                $password = DB::query('SELECT passwordZip , finishZip FROM zip WHERE idZip = :idZip',array(':idZip'=>$idZip))[0];
+                if($_POST['passwordzip'] == $password['passwordZip'] ){
+                    $time = '';
+                    $jumlahSoal = DB::query('SELECT count(idSoal) as Jumlah FROM zip_soal WHERE idZip = :idZip ',array(':idZip'=>$idZip))[0]['Jumlah'];
+                    if($password['finishZip'] == '0000-00-00 00:00:00'){
+                        $time = time() + 60 * 60 * 24 ; 
+                    }else{
+                        $time = strtotime($password['finishZip']);
+                    }
+                    $idSoal = [];
+                    if(DB::query('SELECT idSoal FROM zip_soal WHERE idZip = :idZip',array(':idZip'=>$idZip))){
+                        $dataSoal = DB::query('SELECT idSoal FROM zip_soal WHERE idZip = :idZip',array(':idZip'=>$idZip));
+                        foreach ($dataSoal as $soal){
+                            array_push($idSoal,$soal['idSoal']);
+                        }
+                    }else{
+                        array_push($idSoal,'Kosong');    
+                    }
+                    print_r($idSoal);
+                    setcookie("TSSR", 0, $time + 60 + 5 , '/', null, null, true);
+                    setcookie("TSS", json_encode($idSoal), $time + 60 + 5 , '/', null, null, true);
+                    setcookie("TSC", $jumlahSoal, $time + 60 + 5 , '/', null, null, true);
+                    setcookie("TSI", $idZip, $time + 60 + 5 , '/', null, null, true);
+                    setcookie("TSI_", $idZip , $time, '/', null, null, true);
+                    
+                    Login::redirect('./soal.php');
+                }else{
+                    $notif = 'Password Salah';
+                }
+            }else{
+                $password = DB::query('SELECT passwordZip , finishZip FROM zip WHERE idZip = :idZip',array(':idZip'=>$idZip))[0];
+                $time = '';
+                $jumlahSoal = DB::query('SELECT count(idSoal) as Jumlah FROM zip_soal WHERE idZip = :idZip ',array(':idZip'=>$idZip))[0]['Jumlah'];
+                if($password['finishZip'] == '0000-00-00 00:00:00'){
+                    $time = time() + 60 * 60 * 24 ; 
+                }else{
+                    $time = strtotime($password['finishZip']);
+                }
+                
+                $data = array();
+                if(DB::query('SELECT idSoal FROM zip_soal WHERE idZip = :idZip',array(':idZip'=>$idZip))){
+                    $dataSoal = DB::query('SELECT idSoal FROM zip_soal WHERE idZip = :idZip ORDER BY idSoal DESC',array(':idZip'=>$idZip));
+                    foreach ($dataSoal as $soal){
+                        $data  = array_push($soal['idSoal'],$data);
+                    }
+                }else{
+                    $data = array('Kosong');    
+                }
+                setcookie("TSS", json_encode($data), $time + 60 + 5 , '/', null, null, true);
+                setcookie("TSC", $jumlahSoal, $time + 60 + 5 , '/', null, null, true);
+                setcookie("TSI", $idZip, $time + 60 + 5 , '/', null, null, true);
+                setcookie("TSI_", $idZip , $time, '/', null, null, true);
+                
+                Login::redirect('./soal.php');  
             }
         }
     }else{

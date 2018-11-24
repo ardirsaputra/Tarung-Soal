@@ -8,7 +8,7 @@ if (Login::isLoggedIn()){
     $idUser = Login::isLoggedIn();
     $title = 'Koleksi Soal - Tarung Soal';
     $notif = '';
-    $array = ['No','Judul Soal','Tingkat Soal','Tanggal Pembuatan','<a href="./zip.php" class="btn btn-success"><span class"fa fa-plus" aria-hidden="true">+</span>Soal</a>'];
+    $array = ['No','Judul Soal','Tingkat Soal','Tanggal Pembuatan','<a href="./zip.php?tambahzip" class="btn btn-success"><span class"fa fa-plus" aria-hidden="true">+</span>Soal</a>'];
     $content = Page::Title('Koleksi Soal',Page::List(Content::Headtable($array),Content::ListZip($idUser)));
     if(isset($_GET['msg'])){
         $notif = $_GET['msg'];

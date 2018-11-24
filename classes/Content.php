@@ -579,8 +579,8 @@
                         '.$Zip['createZip'].'
                     </td>
                     <td>
-                        <a href="./zip.php?id='.$Zip['idZip'].'" class="btn btn-primary">Lihat</a>
-                        <a href="./user.php?idz='.$Zip['idZip'].'" class="btn btn-info">Kirim soal</a>
+                        <a href="./zip.php?id='.$Zip['idZip'].'" class="btn btn-primary"><span class="fa fa-arrow-right"></span></a>
+                        <a href="./user.php?idz='.$Zip['idZip'].'" class="btn btn-info"><span class="fa fa-send-o"></span></a>
                     </td>
                 </tr>';
                 $iteration ++;
@@ -664,8 +664,8 @@
                         '.$foto.'
                     </td>
                     <td>
-                        <a href="./zip.php?id='.$idZip.'&ids='.$Soal['idSoal'].'&edit" class="btn btn-success">Edit</a>
-                        <a href="./zip.php?id='.$idZip.'&ids='.$Soal['idSoal'].'&delete" class="btn btn-danger">Hapus</a>
+                        <a href="./zip.php?id='.$idZip.'&ids='.$Soal['idSoal'].'&edit" class="btn btn-success"><span class="fa fa-pencil"></span></a>
+                        <a href="./zip.php?id='.$idZip.'&ids='.$Soal['idSoal'].'&delete" class="btn btn-danger"><span class="fa fa-trash-o"></span></a>
                     </td>
                 </tr>';
                 $iteration ++;
@@ -678,119 +678,218 @@
             return $content ;
         }
         public static function Zip($idZip){
-            $Zip = DB::query('SELECT * FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))[0];
-            $jumlahSoal = DB::query('SELECT count(idSoal) as Jumlah FROM zip_soal WHERE idZip =:idZip',array(':idZip'=>$idZip))[0]['Jumlah'];
-            $dataGolongan = DB::selectAllGolongan();
-            $listGolongan ="";
-            foreach($dataGolongan as $i){
-                if($i['idGolongan'] == $Zip['idGolongan']){
-                    $listGolongan .= '<option value="'.$i['idGolongan'].'" selected>'.$i['namaGolongan'].'</option>';
-                }else{
-                    $listGolongan .= '<option value="'.$i['idGolongan'].'">'.$i['namaGolongan'].'</option>';
+            if(DB::query('SELECT * FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))){
+                $Zip = DB::query('SELECT * FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))[0];
+                $jumlahSoal = DB::query('SELECT count(idSoal) as Jumlah FROM zip_soal WHERE idZip =:idZip',array(':idZip'=>$idZip))[0]['Jumlah'];
+                $dataGolongan = DB::selectAllGolongan();
+                $listGolongan ="";
+                foreach($dataGolongan as $i){
+                    if($i['idGolongan'] == $Zip['idGolongan']){
+                        $listGolongan .= '<option value="'.$i['idGolongan'].'" selected>'.$i['namaGolongan'].'</option>';
+                    }else{
+                        $listGolongan .= '<option value="'.$i['idGolongan'].'">'.$i['namaGolongan'].'</option>';
+                    }
                 }
+                $start = Navigation::DecodeTime($Zip['startZip']);
+                $startDate = Navigation::FormatDateIndo($start[0]);
+                $startTime = Navigation::FormatDateIndo($start[1]);
+
+                $finish = Navigation::DecodeTime($Zip['finishZip']);
+                $finishDate = Navigation::FormatDateIndo($finish[0]);
+                $finishTime = Navigation::FormatDateIndo($finish[1]);
+                $create = $Zip['createZip'];
+                $idUser = Login::isLoggedIn();
+                $password = $Zip['passwordZip'];
+                
+                if(DB::query('SELECT idZip FROM user_zip WHERE idUser = :idUser AND idZip = :idZip',array('idUser'=>$idUser,':idZip'=>$idZip))){
+                    return '
+                    <div class="card-body">
+                        <h4 class="card-title">Soal</h4>
+                        <p class="card-description">Data Deskripsi Soal</p>
+                            <div class="form-group row">    
+                                <label for="keterangan" class="col-sm-2 col-form-label">ID Soal</label>    
+                                <div class="input-group col-sm-1">
+                                    <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['idZip'].'"disabled>
+                                </div>
+                                <label for="keterangan" class="col-sm-2 col-form-label">Tanggal Pembuatan Soal</label>    
+                                <div class="input-group col-sm-4">
+                                    <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['createZip'].'"disabled>
+                                </div>
+                                <div class="input-group col-sm-3">      
+                                <form class="forms-sample" action="./zip.php" method="get">
+                                    <input type="hidden" name="id" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['idZip'].'">
+                                    <input class="btn btn-success col-sm-12" type="submit" name="edit" value="Edit"/>
+                                </form> 
+                                </div>        
+                            </div>
+                            <div class="form-group row">    
+                                <label for="keterangan" class="col-sm-2 col-form-label">Judul Soal</label>    
+                                <div class="input-group col-sm-10">
+                                    <input type="text" name="judul" class="form-control"  placeholder="Judul Soal" value="'.$Zip['judulZip'].'"disabled>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <label for="exampleInputEmail2" class="col-sm-2 col-form-label">Deskripsi</label>
+                                <div class="input-group col-sm-10">
+                                    <textarea type="text" name="deskripsi" class="form-control" placeholder="Deskripsi Soal" aria-label="Deskripsi Soal" rows="2" aria-describedby="colored-addon3" disabled>'.$Zip['deskripsiZip'].'</textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="nama_panggilan" class="col-md-2 col-form-label">Tingkat</label>
+                                <div class="input-group col-md-10">
+                                <select name="idGolongan" class="form-control" disabled>
+                                '.$listGolongan.'
+                                </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <label for="waktu mulai" class="col-md-2 col-form-label">Waktu Mulai</label>
+                                <div class="input-group col-md-5">
+                                <input type="text" name="startdate" class="form-control" value="'.$startDate.'" disabled>
+                                </div>
+                                <label for="waktu mulai" class="col-md-1 col-form-label text-center"> Jam </label>
+                                <div class="input-group col-md-1">
+                                    <select name="starttime" class="form-control" disabled>
+                                        <option value="'.$startTime.'">'.$startTime.'</option>
+                                    </select>
+                                </div>
+                                <label for="waktu mulai" class="col-md-2 col-form-label"> WIB</label> 
+                            </div>
+                            
+                            <div class="form-group row">
+                                <label for="waktu selesai" class="col-md-2 col-form-label">Waktu Selesai</label>
+                                <div class="input-group col-md-5">
+                                <input type="text" name="finishdate" class="form-control" value="'.$finishDate.'" disabled>
+                                </div>
+                                <label for="waktu selesai" class="col-md-1 col-form-label text-center"> Jam </label>
+                                <div class="input-group col-md-1">
+                                    <select name="finishtime"  class="form-control" disabled>
+                                        <option value="'.$finishTime.'">'.$finishTime.'</option>
+                                    </select>
+                                </div>
+                                <label for="waktu selesai" class="col-md-3 col-form-label"> WIB </label> 
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="password" class="col-md-2 col-form-label">Password</label>
+                                <div class="input-group col-md-10">
+                                    <input type="text" name="passwordzip" class="form-control" placeholder="Tidak ada password" value="'.$Zip['passwordZip'].'" disabled>
+                                </div>
+                            </div>
+                            <div class="form-group row">  
+                                <label for="password" class="col-md-2 col-form-label">Jumlah soal</label>
+                                <div class="input-group col-md-10">
+                                    <p class="form-control ">'.$jumlahSoal.'</p><a href="./zip.php?id='.$idZip.'&tambahsoal"class="btn btn-primary ">Tambah Soal</a><a href="./zip.php?id='.$idZip.'&deleteallsoal" class="btn btn-danger">Hapus Semua Soal</a>
+                                </div>  
+                            </div>
+                    </div>    
+                    <div class="card-body">
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">  
+                            '.self::ListSoalZipView($idZip).'  
+                        </div>
+                    </div>
+                    
+                    ';
+
+            }else{
+                $password = '';
+                if(DB::query('SELECT count(idSoal) AS Jumlah FROM zip_soal WHERE idZip = :idZip',array(':idZip'=>$idZip))[0]['Jumlah'] >= 5){
+                    if($Zip['passwordZip']!=''){
+                        $password = '
+                        <form action="./zip.php?id='.$idZip.'" method="post">
+                            <div class="form-group row">
+                                <label for="password" class="col-md-2 col-form-label">Password</label>
+                                <div class="input-group col-md-10">
+                                    <input type="text" name="passwordzip" class="form-control" placeholder="Masukan Password" value="" required>
+                                </div>
+                            </div>    
+                            <div class="form-group row">
+                                <div class="input-group col-md-12">
+                                    <button type="submit" name="kerjakan" class="form-control btn btn-primary"> Masuk </button>
+                                </div>
+                            </div>
+                        </form>
+                        ';
+                    }else{
+                        $password = '
+                            <form action="./zip.php?id='.$idZip.'" method="post">
+                                <div class="input-group col-md-12">
+                                    <button type="submit" name="kerjakan" class="form-control btn btn-primary" value="'.$Zip['passwordZip'].'"> Masuk </button>
+                                </div>
+                            </form>
+                        ';
+                    }
+                }
+                return '
+                        <div class="card-body">
+                            <div class="form-group row">    
+                                <label for="keterangan" class="col-sm-2 col-form-label">Judul Soal</label>    
+                                <div class="input-group col-sm-10">
+                                    <input type="text" name="judul" class="form-control"  placeholder="Judul Soal" value="'.$Zip['judulZip'].'"disabled>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <label for="exampleInputEmail2" class="col-sm-2 col-form-label">Deskripsi</label>
+                                <div class="input-group col-sm-10">
+                                    <textarea type="text" name="deskripsi" class="form-control" placeholder="Deskripsi Soal" aria-label="Deskripsi Soal" rows="2" aria-describedby="colored-addon3" disabled>'.$Zip['deskripsiZip'].'</textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="nama_panggilan" class="col-md-2 col-form-label">Tingkat</label>
+                                <div class="input-group col-md-10">
+                                <select name="idGolongan" class="form-control" disabled>
+                                '.$listGolongan.'
+                                </select>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group row">
+                                <label for="waktu mulai" class="col-md-2 col-form-label">Waktu Mulai</label>
+                                <div class="input-group col-md-5">
+                                <input type="text" name="startdate" class="form-control" value="'.$startDate.'" disabled>
+                                </div>
+                                <label for="waktu mulai" class="col-md-1 col-form-label text-center"> Jam </label>
+                                <div class="input-group col-md-1">
+                                    <select name="starttime" class="form-control" disabled>
+                                        <option value="'.$startTime.'">'.$startTime.'</option>
+                                    </select>
+                                </div>
+                                <label for="waktu mulai" class="col-md-2 col-form-label"> WIB</label> 
+                            </div>
+                            
+                            <div class="form-group row">
+                                <label for="waktu selesai" class="col-md-2 col-form-label">Waktu Selesai</label>
+                                <div class="input-group col-md-5">
+                                <input type="text" name="finishdate" class="form-control" value="'.$finishDate.'" disabled>
+                                </div>
+                                <label for="waktu selesai" class="col-md-1 col-form-label text-center"> Jam </label>
+                                <div class="input-group col-md-1">
+                                    <select name="finishtime"  class="form-control" disabled>
+                                        <option value="'.$finishTime.'">'.$finishTime.'</option>
+                                    </select>
+                                </div>
+                                <label for="waktu selesai" class="col-md-3 col-form-label"> WIB </label> 
+                            </div>
+                            <div class="form-group row">  
+                                <label for="password" class="col-md-2 col-form-label">Jumlah soal</label>
+                                <div class="input-group col-md-10">
+                                    <p class="form-control ">'.$jumlahSoal.'</p>
+                                </div>  
+                            </div>
+                            '.$password.'
+                        </div>                        
+                    ';
+                }
+            }else{
+                self::BuatSoal();
             }
-            $start = Navigation::DecodeTime($Zip['startZip']);
-            $startDate = $start[0];
-            $startTime = $start[1];
-
-            $finish = Navigation::DecodeTime($Zip['finishZip']);
-            $finishDate = $finish[0];
-            $finishTime = $finish[1];
-            $create = $Zip['createZip'];
-
-            return '
-            <div class="card-body">
-                <h4 class="card-title">Soal</h4>
-                <p class="card-description">Data Deskripsi Soal</p>
-                    <div class="form-group row">    
-                        <label for="keterangan" class="col-sm-2 col-form-label">ID Soal</label>    
-                        <div class="input-group col-sm-1">
-                            <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['idZip'].'"disabled>
-                        </div>
-                        <label for="keterangan" class="col-sm-2 col-form-label">Tanggal Pembuatan Soal</label>    
-                        <div class="input-group col-sm-4">
-                            <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['createZip'].'"disabled>
-                        </div>
-                        <div class="input-group col-sm-3">      
-                        <form class="forms-sample" action="./zip.php" method="get">
-                            <input type="hidden" name="id" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['idZip'].'">
-                            <input class="btn btn-success col-sm-12" type="submit" name="edit" value="Edit"/>
-                        </form> 
-                        </div>        
-                    </div>
-                    <div class="form-group row">    
-                        <label for="keterangan" class="col-sm-2 col-form-label">Judul Soal</label>    
-                        <div class="input-group col-sm-10">
-                            <input type="text" name="judul" class="form-control"  placeholder="Judul Soal" value="'.$Zip['judulZip'].'"disabled>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group row">
-                        <label for="exampleInputEmail2" class="col-sm-2 col-form-label">Deskripsi</label>
-                        <div class="input-group col-sm-10">
-                            <textarea type="text" name="deskripsi" class="form-control" placeholder="Deskripsi Soal" aria-label="Deskripsi Soal" rows="2" aria-describedby="colored-addon3" disabled>'.$Zip['deskripsiZip'].'</textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="nama_panggilan" class="col-md-2 col-form-label">Tingkat</label>
-                        <div class="input-group col-md-10">
-                           <select name="idGolongan" class="form-control" disabled>
-                           '.$listGolongan.'
-                           </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group row">
-                        <label for="waktu mulai" class="col-md-2 col-form-label">Waktu Mulai</label>
-                        <div class="input-group col-md-5">
-                           <input type="date" name="startdate" class="form-control" value="'.$startDate.'" disabled>
-                        </div>
-                        <label for="waktu mulai" class="col-md-1 col-form-label text-center"> Jam </label>
-                        <div class="input-group col-md-1">
-                            <select name="starttime" class="form-control" disabled>
-                                <option value="'.$startTime.'">'.$startTime.'</option>
-                            </select>
-                        </div>
-                        <label for="waktu mulai" class="col-md-2 col-form-label"> WIB</label> 
-                    </div>
-                    
-                    <div class="form-group row">
-                        <label for="waktu selesai" class="col-md-2 col-form-label">Waktu Selesai</label>
-                        <div class="input-group col-md-5">
-                           <input type="date" name="finishdate" class="form-control" value="'.$finishDate.'" disabled>
-                        </div>
-                        <label for="waktu selesai" class="col-md-1 col-form-label text-center"> Jam </label>
-                        <div class="input-group col-md-1">
-                            <select name="finishtime"  class="form-control" disabled>
-                                <option value="'.$finishTime.'">'.$finishTime.'</option>
-                            </select>
-                        </div>
-                        <label for="waktu selesai" class="col-md-3 col-form-label"> WIB </label> 
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="password" class="col-md-2 col-form-label">Password</label>
-                        <div class="input-group col-md-10">
-                            <input type="text" name="passwordzip" class="form-control" placeholder="Tidak ada password" value="'.$Zip['passwordZip'].'" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group row">  
-                        <label for="password" class="col-md-2 col-form-label">Jumlah soal</label>
-                        <div class="input-group col-md-10">
-                            <p class="form-control ">'.$jumlahSoal.'</p><a href="./zip.php?id='.$idZip.'&tambahsoal"class="btn btn-primary ">Tambah Soal</a><a href="./zip.php?id='.$idZip.'&deleteallsoal" class="btn btn-danger">Hapus Semua Soal</a>
-                        </div>  
-                    </div>
-            </div>    
-            <div class="card-body">
-            </div>
-            <div class="card-body">
-                <div class="form-group row">  
-                    '.self::ListSoalZipView($idZip).'  
-                </div>
-            </div>
-            
-            ';
         }
         public static function ZipEdit($idZip){
             $Zip = DB::query('SELECT * FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))[0];
@@ -889,6 +988,7 @@
             </div>';
         }
         public static function BuatSoal($idZip){
+
             return '
                 <div class="card-body">
                 <form action="./zip.php?id='.$idZip.'" method="post">               
@@ -1200,17 +1300,17 @@
                     if($status == 0){
                         $tombol = '
                         <form action="./notification.php" method="post" >
-                        <a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'">Lihat</a>
+                        <a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'"><span class="fa fa-arrow-right"></span></a>
                         <input type="hidden" name="simpan" value="'.$i['idKoleksi'].'">
-                        <button class="btn btn-warning" type="submit">Simpan</button>
+                        <button class="btn btn-warning" type="submit"><span class="fa fa-save"></span></button>
                         </form>
                         ';
                     }elseif($status == 1){
                         $tombol = '
                         <form action="./notification.php" method="post" >
-                        <a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'">Lihat</a>
+                        <a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'"><span class="fa fa-arrow-right"></span></a>
                         <input type="hidden" name="hapus" value="'.$i['idKoleksi'].'">
-                        <button class="btn btn-danger" type="submit">Hapus</button>
+                        <button class="btn btn-danger" type="submit"><span class="fa fa-trash-o"></span></button>
                         </form>
                         ';
                     }
@@ -1243,7 +1343,7 @@
                 $nomor = 1;
                 foreach ($Pesan as $i){
                     $tombol = '
-                    <a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'">Lihat</a>
+                    <a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'"><span class="fa fa-arrow-right"></span></a>
                    
                     ';
                     $listPesan .= '
@@ -1372,12 +1472,151 @@
                         '.$golongan.'
                     </td>
                     <td>
-                        '.$Zip['createZip'].'
+                        '.Navigation::FormatDateIndo($Zip['createZip']).'
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" href="./zip?id'.$i['idZip'].'" ><span class="fa fa-arrow-right"></span></a>
                     </td>
                    ';
                 $iteration ++;
             }
             return $list;
+        }
+        public static function JawabSoal($idSoal,$nomor){
+            $DataSoal  = DB::query('SELECT * FROM soal WHERE idSoal = :idSoal',array(':idSoal'=>$idSoal))[0];
+            if($DataSoal['foto'] != ''){
+                $gambar = '
+                <div class="form-group row">
+                    <div class="input-group col-sm-12">
+                        <img src="'.Navigation::getSourceImageSoal($idSoal).'" class="mb-3 mx-auto d-block" style="width:auto; height: 200px">
+                    </div>
+                </div>';
+            }else{
+                $gambar = '';
+            }
+            return '
+            <div class="card-body">
+                <form action="./soal.php" method="post">                   
+                '.$gambar.'
+                <div class="form-group row">
+                    <div class="input-group col-sm-12">
+                        Soal No. '.$nomor.'
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <div class="input-group col-sm-12">
+                        <p class="form-control">'.$DataSoal['soal'].'</p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-1">
+                        <div class="form-radio">
+                            <label class="form-check-label">
+                                A<input type="radio" class="form-check-input" name="jawab" id="membershipRadios1" value="A" required>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-11 form-control">
+                        '.$DataSoal['jawabanA'].'
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-1">
+                        <div class="form-radio">
+                            <label class="form-check-label">
+                                B<input type="radio" class="form-check-input" name="jawab" id="membershipRadios2" value="B"  required>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-11 form-control">
+                        '.$DataSoal['jawabanB'].'
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-1">
+                        <div class="form-radio">
+                            <label class="form-check-label">
+                                C<input type="radio" class="form-check-input" name="jawab" id="membershipRadios3" value="C" required>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-11 form-control">
+                        '.$DataSoal['jawabanC'].'
+                    </div>
+                </div>                
+                <div class="form-group row">
+                    <div class="col-sm-1">
+                        <div class="form-radio">
+                            <label class="form-check-label">
+                                D<input type="radio" class="form-check-input" name="jawab" id="membershipRadios4" value="D"  required>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-sm-11 form-control">
+                        '.$DataSoal['jawabanD'].'
+                    </div>
+                </div>
+                <div class="form-group row"> 
+                    <div class="col-sm-12">
+                        <input class="btn btn-success form-control" type="submit" name="jawabsoal" value="Simpan Jawaban"/>
+                    </div>
+                </div>
+                </form>
+            </div>';
+        }
+        public static function HasilMengerjakanSoal($idHasil){
+            $Hasil = DB::query('SELECT * FROM hasil WHERE idHasil =:idHasil',array(':idHasil'=>$idHasil))[0];
+            $idZip = $Hasil['idZip'];
+            $hasilBenar = $Hasil['PoinHasil'];
+            $jumlahSoal = $Hasil['jumlahSoal'];
+            $nilai = $Hasil['Hasil'] ;
+            $jumlahSalah =  $jumlahSoal- $hasilBenar ;
+            return '
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="input-group col-sm-12">
+                        '.DB::getJudulZip($idZip).'
+                    </div>    
+                </div>
+                <div class="form-group row">
+                    <div class="input-group col-sm-1">
+                        Nilai    
+                    </div>    
+                    <div class="input-group col-sm-11">
+                    <p class="form-control">'.$nilai.'</p>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="input-group col-sm-1">
+                        Jumlah Soal
+                    </div>
+                    <div class="input-group col-sm-11">
+                    <p class="form-control">'.$jumlahSoal.'</p>
+                    </div>
+                </div>
+                <!--
+                <div class="form-group row">
+                    <div class="input-group col-sm-1">
+                        Jumlah Benar
+                    </div>
+                    <div class="input-group col-sm-5">
+                        <p class="form-control">'.$hasilBenar.'</p>
+                    </div>
+                    <div class="input-group col-sm-1">
+                        Jumlah Salah
+                    </div>
+                    <div class="input-group col-sm-5">
+                        <p class="form-control">'.$jumlahSalah.'</p>
+                    </div>
+                </div> -->
+                <div class="form-group row">
+                    <div class="input-group col-sm-12">
+                        <a href="./zip.php?id='.$idZip.'" class="btn btn-primary form-control">Selesai</a>
+                    </div>
+                </div>
+            </div> 
+            ';
         }
     }
 ?>

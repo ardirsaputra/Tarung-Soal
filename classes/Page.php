@@ -46,7 +46,7 @@
         }
         public static function LoginPage($title,$notif,$content){
             if($notif !=''){
-                $n = '<div class="row"><span class="bg-primary col-md-12 rounded  text-center text-bold text-light">
+                $n = '<div class="row"><span class="bg-info col-md-12 rounded  text-center text-bold text-light">
                 '.$notif.'
                 </span>
                 </div>';
