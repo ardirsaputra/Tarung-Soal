@@ -145,7 +145,7 @@ class Navigation {
         </div>
         <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-            <a class="navbar-brand brand-logo" href="index.html">
+            <a class="navbar-brand brand-logo" href="index.php">
                 <img src="images/logo.png" alt="logo" />
             </a>
             <a class="navbar-brand brand-logo-mini" href="index.html">
@@ -178,7 +178,7 @@ class Navigation {
                         '.$listPesan.'
                     </div>
                 </li>
-                <!--Notification on top-right side-->
+                <!--Notification on top-right side
                 <li class="nav-item dropdown">
                     <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
                         data-toggle="dropdown">
@@ -191,6 +191,7 @@ class Navigation {
                             </p>
                             <span class="badge badge-info badge-pill float-right">Lihat Semua</span>
                         </div>
+                        
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item preview-item">
                             <div class="preview-thumbnail">
@@ -205,50 +206,10 @@ class Navigation {
                                 </p>
                             </div>
                         </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item preview-item">
-                            <div class="preview-thumbnail">
-                                <img src="images/faces-clipart/pic-1.png" alt="image" class="profile-pic">
-                            </div>
-                            <div class="preview-item-content flex-grow">
-                                <h6 class="preview-subject ellipsis font-weight-medium text-dark">David Grey
-                                    <span class="float-right font-weight-light small-text">5 Menit Yang Lalu</span>
-                                </h6>
-                                <p class="font-weight-light small-text">
-                                    Telah Mengerjakan Soal dan Mendapat Nilai 80
-                                </p>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item preview-item">
-                            <div class="preview-thumbnail">
-                                <img src="images/faces-clipart/pic-1.png" alt="image" class="profile-pic">
-                            </div>
-                            <div class="preview-item-content flex-grow">
-                                <h6 class="preview-subject ellipsis font-weight-medium text-dark">David Grey
-                                    <span class="float-right font-weight-light small-text">1 Menit Yang Lalu</span>
-                                </h6>
-                                <p class="font-weight-light small-text">
-                                    Telah Mengerjakan Soal dan Mendapat Nilai 90
-                                </p>
-                            </div>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item preview-item">
-                            <div class="preview-thumbnail">
-                                <img src="images/faces-clipart/pic-1.png" alt="image" class="profile-pic">
-                            </div>
-                            <div class="preview-item-content flex-grow">
-                                <h6 class="preview-subject ellipsis font-weight-medium text-dark">David Grey
-                                    <span class="float-right font-weight-light small-text">10 Detik Yang Lalu</span>
-                                </h6>
-                                <p class="font-weight-light small-text">
-                                    Telah Mengerjakan Soal dan Mendapat Nilai 100
-                                </p>
-                            </div>
-                        </a>
+                        
                     </div>
                 </li>
+                -->
                 <!--User account top-right-->
                 <li class="nav-item dropdown d-none d-xl-inline-block">
                     <a class="nav-link dropdown-toggle" id="UserDropdown" href="#" data-toggle="dropdown"
@@ -258,20 +219,20 @@ class Navigation {
                     </a>
                     <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
                         <br>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="./user.php">
                             Biodata
                         </a>
                         <a class="dropdown-item">
                             Ratting </a>
 
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="./collection.php">
                             Koleksi
                         </a>
 
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="./setting.php">
                             Pengaturan
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="./logout.php">
                             Keluar
                         </a>
                     </div>

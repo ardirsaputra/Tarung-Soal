@@ -37,6 +37,8 @@ if (Login::isLoggedIn()){
             $namaLengkap = $_POST['nama'];
             $content2 = Content :: ListUser($namaLengkap,$idZip);
         }
+    }else{
+        $content1 = Content::UserView($idUser);    
     }
     $notif = '';
     $content = Page::BlockContent($content1,$content2,'');

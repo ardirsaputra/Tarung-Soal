@@ -677,6 +677,58 @@
             $content = Page::List(self::Headtable($array),self::ListSoal($idZip));
             return $content ;
         }
+        public static function HasilZip($idUser){
+            $content = '';
+            if(DB::query('SELECT idZip , judulZip ,idGolongan FROM zip WHERE idZip IN (SELECT idZip FROM user_zip WHERE idUser =:idUser)',array(':idUser'=>$idUser))){
+                $list = '';
+                $DataZip = DB::query('SELECT idZip , judulZip FROM zip WHERE idZip IN (SELECT idZip FROM user_zip WHERE idUser =:idUser) ORDER BY idZip DESC',array(':idUser'=>$idUser));
+                $iteration = 1;
+                foreach ($DataZip as $zip){
+                    $dataJumlah = DB::query('SELECT count(idHasil) AS Jumlah FROM hasil WHERE idZip = :idZip',array(':idZip'=>$zip['idZip']))[0]['Jumlah'];
+                    $list .= '
+                    <tr>
+                        <td>'.$iteration.'</td>
+                        <td>'.DB::getJudulZip($zip['idZip']).'</td>
+                        <td>'.$dataJumlah.'</td>
+                        <td><a href="./record.php?id='.$zip['idZip'].'" class="btn btn-primary"><span class="fa fa-arrow-right"></span></a></td>
+                    </tr>
+                    ';
+                    $iteration ++;
+                }
+                $array = ['No','Judul','Total Data Hasil','Lihat'];
+                $content = Page::List(self::Headtable($array),$list);          
+            }else{
+                $content .= 'Anda tidak mempunyai data soal! <a href="./zip.php?tambahzip" class="btn btn-primary"/>Buat Data Soal</a>';
+            }
+            return $content ; 
+        }
+        public static function ListHasilZip($idZip){
+            $list = '';
+            if(DB::query('SELECT * FROM hasil WHERE idZip = :idZip',array(':idZip'=>$idZip))){
+                $DataHasil = DB::query('SELECT * FROM hasil WHERE idZip = :idZip',array(':idZip'=>$idZip));
+                $iteration = 1;
+                foreach ($DataHasil as $hasil){
+                    $dataUser = DB::query('SELECT * FROM user WHERE idUser = :idUser',array(':idUser'=>$hasil['idUser']))[0];
+                    $list .= '
+                    <tr>
+                        <td>'.$iteration.'</td>
+                        <td><img src="'.Navigation::getSourceImageProfil($hasil['idUser']).'"> '.$dataUser['namaLengkap'].'</td>
+                        <td>'.$dataUser['nomorInduk'].'</td>
+                        <td>'.$hasil['Hasil'].'</td>
+                        <td>'.$dataUser['sekolahUser'].'</td>
+                        <td>'.$hasil['jumlahSoal'].'</td>
+                        <td><a href="./record.php?id='.$hasil['idZip'].'&idh='.$hasil['idHasil'].'&d" class="btn btn-danger"><span class="fa fa-trash"></span></a></td>
+                    </tr>
+                    ';
+                    $iteration ++;
+                }
+                $array = ['No','Peserta','Nomor Identitas','Nilai','Sekolah','JumlahSoal','Aksi'];
+                $content = Page::List(self::Headtable($array),$list);          
+            }else{
+                $content = 'Tidak ada data hasil untuk soal ini !';
+            }
+            return $content ; 
+        }
         public static function Zip($idZip){
             if(DB::query('SELECT * FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))){
                 $Zip = DB::query('SELECT * FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))[0];
@@ -704,22 +756,15 @@
                 if(DB::query('SELECT idZip FROM user_zip WHERE idUser = :idUser AND idZip = :idZip',array('idUser'=>$idUser,':idZip'=>$idZip))){
                     return '
                     <div class="card-body">
-                        <h4 class="card-title">Soal</h4>
                         <p class="card-description">Data Deskripsi Soal</p>
                             <div class="form-group row">    
                                 <label for="keterangan" class="col-sm-2 col-form-label">ID Soal</label>    
-                                <div class="input-group col-sm-1">
+                                <div class="input-group col-sm-4">
                                     <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['idZip'].'"disabled>
                                 </div>
                                 <label for="keterangan" class="col-sm-2 col-form-label">Tanggal Pembuatan Soal</label>    
                                 <div class="input-group col-sm-4">
-                                    <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['createZip'].'"disabled>
-                                </div>
-                                <div class="input-group col-sm-3">      
-                                <form class="forms-sample" action="./zip.php" method="get">
-                                    <input type="hidden" name="id" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['idZip'].'">
-                                    <input class="btn btn-success col-sm-12" type="submit" name="edit" value="Edit"/>
-                                </form> 
+                                    <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.Navigation::FormatDateIndo($Zip['createZip']).'"disabled>
                                 </div>        
                             </div>
                             <div class="form-group row">    
@@ -782,7 +827,10 @@
                             <div class="form-group row">  
                                 <label for="password" class="col-md-2 col-form-label">Jumlah soal</label>
                                 <div class="input-group col-md-10">
-                                    <p class="form-control ">'.$jumlahSoal.'</p><a href="./zip.php?id='.$idZip.'&tambahsoal"class="btn btn-primary ">Tambah Soal</a><a href="./zip.php?id='.$idZip.'&deleteallsoal" class="btn btn-danger">Hapus Semua Soal</a>
+                                    <p class="form-control ">'.$jumlahSoal.'</p>
+                                    <a href="./zip.php?id='.$idZip.'&tambahsoal" class="btn btn-primary ">Tambah Soal</a>
+                                    <a href="./zip.php?id='.$Zip['idZip'].'" class="btn btn-success" />Edit Soal</a>
+                                    <a href="./zip.php?id='.$idZip.'&deleteallsoal" class="btn btn-danger">Hapus Semua Soal</a>
                                 </div>  
                             </div>
                     </div>    
@@ -991,7 +1039,7 @@
 
             return '
                 <div class="card-body">
-                <form action="./zip.php?id='.$idZip.'" method="post">               
+                <form action="./zip.php?id='.$idZip.'" method="post" enctype="multipart/form-data">               
                         
                     <h4 class="card-title">Membuat Pertanyaan</h4>
                     <div class="form-group row">
@@ -1074,7 +1122,7 @@
             }
             return '
             <div class="card-body">
-                <form action="./zip.php?id='.$idZip.'&ids='.$idSoal.'" method="post">               
+                <form action="./zip.php?id='.$idZip.'&ids='.$idSoal.'" method="post" enctype="multipart/form-data">               
                         
                     <h4 class="card-title">Edit Soal</h4>
                     <div class="form-group row">
@@ -1205,7 +1253,7 @@
                     <div class="form-group row">
                         <label for="tanggal_lahir" class="col-sm-2 col-form-label">Tanggal Lahir</label>
                         <div class="input-group col-sm-10">
-                            <p class="form-control">'.NAvigation::FormatDateIndo($tanggalLahir).'</p>
+                            <p class="form-control">'.Navigation::FormatDateIndo($tanggalLahir).'</p>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -1330,7 +1378,12 @@
                 }
                 return Page::Title($title,Page::List($head,$listPesan));    
             }else{
-                return Page::Title($title,'');    
+                if($status == 0){
+                    $status = "Tidak ada soal yang diterima";
+                }else{
+                    $status = "Tidak ada soal data yang disimpan";
+                }
+                return Page::Title($title,$status);    
             }
 
         }
@@ -1617,6 +1670,12 @@
                 </div>
             </div> 
             ';
+        }
+        public static function FormDataLogin($idUser){
+            $content ='
+            <a href="./logout.php?z" class="btn btn-danger form-control"> Keluar dari semua perangkat yang pernah masuk dan keluar</a>
+            ';
+            return $content;
         }
     }
 ?>

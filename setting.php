@@ -105,6 +105,8 @@ if (Login::isLoggedIn()){
     $profil = Page::Title('Data Profil',Content::profil($idUser));
     $password = Page::Title('Ganti Password',Content::password($idUser));
     $recovery = Page::Title('Pemulihan Akun',Content::passwordRecovery());
+    $login = Page::Title('Keluar dari semua perangkat',Content::FormDataLogin($idUser));
+    $recovery .= Page::BlockContent($login,'','');
     $content = Page::BlockContent($profil,$password,$recovery);
     echo Page::DefaultPage('Setting - Tarung Soal',$notif,$content);    
 }else{
