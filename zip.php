@@ -50,7 +50,7 @@ if ($idUser != false){
     }elseif(isset($_GET['id'])){
         $idZip = $_GET['id'];
         $title = 'Soal - Tarung Soal';
-        $content = Page::Title('Data Soal',Content::Zip($idZip));
+        $content = Page::Title('Data Soal',Content::Zip($idZip,$idUser));
         if(isset($_POST['editzip'])){
             if($_POST['judul'] != ''){
                 if($_POST['deskripsi'] != ''){
@@ -97,7 +97,7 @@ if ($idUser != false){
                             ':finishtime'=>$finish,
                             ':passwordzip'=>$password));
                         $notif = "Update data soal berhasil";
-                        Login::redirect('./zip.php?id='.$idZip.'&msg='.$notif.'');
+                        $content = Content::Zip($idZip,$idUser);
                     }else $notif ="Tingkat Soal Kosong";
                 }else $notif ="Deskripsi kosong";
             }else $notif = "Judul kosong";    
@@ -118,7 +118,7 @@ if ($idUser != false){
                         }else{
                             DB::query('UPDATE soal SET soal = :soal,jawabanA = :A ,jawabanB = :B,jawabanC = :C,jawabanD = :D,jawaban = :jawaban WHERE idSoal = :idSoal',array(':idSoal'=>$idSoal,':soal'=>$soal,':A'=>$jawabanA,':B'=>$jawabanB,':C'=>$jawabanC,':D'=>$jawabanD,':jawaban'=>$jawaban));
                         }
-                        $content = Content::Zip($idZip);
+                        $content = Content::Zip($idZip,$idUser);
                         $notif = 'Soal ID '.$idSoal.' berhasil diedit';
                     }
                 }
@@ -126,7 +126,7 @@ if ($idUser != false){
                 DB::query('DELETE FROM zip_soal WHERE idSoal = :idSoal',array(':idSoal'=>$_GET['ids']));
                 DB::query('DELETE FROM soal WHERE idSoal = :idSoal',array(':idSoal'=>$_GET['ids']));
                 $notif = 'Hapus Soal id '.$_GET['ids'].' berhasil!';
-                $content = Page::Title('Soal',Content::Zip($idZip));
+                $content = Page::Title('Soal',Content::Zip($idZip,$idUser));
             }elseif(isset($_GET['edit'])){
                 $content = Page::Title('Edit Soal',Content::EditSoal($idZip,$idSoal));
             }
@@ -181,7 +181,7 @@ if ($idUser != false){
                     DB::query('DELETE FROM soal WHERE idSoal = :idSoal',array(':idSoal'=>$i['idSoal']));
                 }
                 $notif = "Hapus Semua Soal berhasil!";
-                $content = Page::Title('Data Soal',Content::Zip($idZip));
+                $content = Page::Title('Data Soal',Content::Zip($idZip,$idUser));
             }else{
                 $notif = "Soal belum ada!";
             }
@@ -206,12 +206,11 @@ if ($idUser != false){
                         array_push($idSoal,'Kosong');    
                     }
                     print_r($idSoal);
-                    setcookie("TSSR", 0, $time + 60 + 5 , '/', null, null, true);
-                    setcookie("TSS", json_encode($idSoal), $time + 60 + 5 , '/', null, null, true);
-                    setcookie("TSC", $jumlahSoal, $time + 60 + 5 , '/', null, null, true);
-                    setcookie("TSI", $idZip, $time + 60 + 5 , '/', null, null, true);
+                    setcookie("TSSR", 0, $time + 60 * 5 , '/', null, null, true);
+                    setcookie("TSS", json_encode($idSoal), $time + 60 * 5 , '/', null, null, true);
+                    setcookie("TSC", $jumlahSoal, $time + 60 * 5 , '/', null, null, true);
+                    setcookie("TSI", $idZip, $time + 60 * 5 , '/', null, null, true);
                     setcookie("TSI_", $idZip , $time, '/', null, null, true);
-                    
                     Login::redirect('./soal.php');
                 }else{
                     $notif = 'Password Salah';
@@ -225,21 +224,21 @@ if ($idUser != false){
                 }else{
                     $time = strtotime($password['finishZip']);
                 }
-                
-                $data = array();
+                $idSoal = [];
                 if(DB::query('SELECT idSoal FROM zip_soal WHERE idZip = :idZip',array(':idZip'=>$idZip))){
-                    $dataSoal = DB::query('SELECT idSoal FROM zip_soal WHERE idZip = :idZip ORDER BY idSoal DESC',array(':idZip'=>$idZip));
+                    $dataSoal = DB::query('SELECT idSoal FROM zip_soal WHERE idZip = :idZip',array(':idZip'=>$idZip));
                     foreach ($dataSoal as $soal){
-                        $data  = array_push($soal['idSoal'],$data);
+                        array_push($idSoal,$soal['idSoal']);
                     }
                 }else{
-                    $data = array('Kosong');    
+                    array_push($idSoal,'Kosong');    
                 }
-                setcookie("TSS", json_encode($data), $time + 60 + 5 , '/', null, null, true);
-                setcookie("TSC", $jumlahSoal, $time + 60 + 5 , '/', null, null, true);
-                setcookie("TSI", $idZip, $time + 60 + 5 , '/', null, null, true);
+                print_r($idSoal);
+                setcookie("TSSR", 0, $time + 60 * 5 , '/', null, null, true);
+                setcookie("TSS", json_encode($idSoal), $time + 60 * 5 , '/', null, null, true);
+                setcookie("TSC", $jumlahSoal, $time + 60 * 5 , '/', null, null, true);
+                setcookie("TSI", $idZip, $time + 60 * 5 , '/', null, null, true);
                 setcookie("TSI_", $idZip , $time, '/', null, null, true);
-                
                 Login::redirect('./soal.php');  
             }
         }

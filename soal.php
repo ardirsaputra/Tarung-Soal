@@ -4,18 +4,18 @@ include('./classes/Login.php');
 include('./classes/Navigation.php');
 include('./classes/Content.php');
 include('./classes/Page.php');
-if (Login::isLoggedIn()){
+$idUser = Login::isLoggedIn();
+if ($idUser != false){
     $title = 'Mengerjakan Soal - Tarung Soal';
     $content = '';
     $notif = '';
-    $idUser = Login::isLoggedIn();
     if(isset($_POST['jawab'])){
         $jawabanbenar  = DB::query('SELECT jawaban FROM soal WHERE idSoal = :idSoal',array(':idSoal' => $_COOKIE['TSSI']))[0]['jawaban'];
         $hasil = $_COOKIE['TSSR'];
         if($jawabanbenar == $_POST['jawab']){
             $hasil ++;
         }
-        setcookie("TSSR", $hasil, time() + 60 + 60 * 24 , '/', null, null, true);
+        setcookie("TSSR", $hasil, time() + 60 * 60 * 24 , '/', null, null, true);
         if(!isset($_COOKIE['TSS'])){
             setcookie("TSH",'-', time() + 60 * 60 * 24 , '/', null, null, true);      
             Login::redirect('./soal.php'); 
@@ -24,7 +24,7 @@ if (Login::isLoggedIn()){
     if(isset($_COOKIE['TSS'])){
         $arraysoal = json_decode(stripslashes($_COOKIE['TSS']));
         $idSoal = array_shift($arraysoal);
-        setcookie("TSSI",$idSoal, time() + 60 + 60 , '/', null, null, true);
+        setcookie("TSSI",$idSoal, time() + 60 * 60 * 24 , '/', null, null, true);
         rsort($arraysoal);
         //print_r($arraysoal);  Result is array 
         //echo '<br>'.$idSoal.'<br>'; Last Array
@@ -41,7 +41,7 @@ if (Login::isLoggedIn()){
         if($sisa == 0 || $sisa == NULL){
             setcookie("TSS",0, time() - 60 * 60 , '/', null, null, true);       
         }else{
-            setcookie("TSS", json_encode($arraysoal),time()+60*60*24 , '/', null, null, true);
+            setcookie("TSS", json_encode($arraysoal),time()+ 60 * 60 * 24 , '/', null, null, true);
         }
     }
     if(isset($_COOKIE['TSH'])){

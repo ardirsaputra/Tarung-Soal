@@ -304,16 +304,12 @@
          ';
         }
         public static function Login(){
-            $golongan = DB::query('SELECT * FROM golongan');
+            $golongan = DB::selectAllGolongan();
             $listGolongan= '';
             foreach($golongan as $i ){
                 $listGolongan.= "<option value=".$i['idGolongan'].">".$i['namaGolongan']."</option>";
             }
             return '
-                                    <div class="logo-login">
-                                        <img src="./images/Logo.png" class="img-fluid">
-                                    </div>
-                                    <br>
                                     <!-- Nav pills -->
                                     <div class="col-centered">
                                         <ul class="nav nav-pills" role="tablist">
@@ -365,53 +361,39 @@
                                                         </label> -->
                                                     </div>
                                                     <a href="./forgot_password.php" class="text-small forgot-password text-black">Lupa Password</a>
+                                                    
                                                 </div>
+                                                <p class="footer-text text-center">copyright © 2018 ARS. Infomatic Engineering UNILA .</p>
                                             </form>
                                         </div>
                                         <div id="register" class="tab-pane"><br>
                                             <form class="forms-sample" action="./login.php" method="post" enctype="multipart/form-data">
                                                 <div class="form-group">
                                                     <label class="label">Nama Lengkap</label>
-                                                    <div class="input-group">
+                                                    <div class="input-form">
                                                         <input type="text" name="namaLengkap" class="form-control" placeholder="Nama Lengkap" required>
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text">
-                                                                <i class="mdi mdi-check-circle-outline"></i>
-                                                            </span>
-                                                        </div>
+                                                       
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="label">Email</label>
-                                                    <div class="input-group">
+                                                    <div class="input-form">
                                                         <input type="email" name="email" class="form-control" placeholder="Email" required>
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text">
-                                                                <i class="mdi mdi-check-circle-outline"></i>
-                                                            </span>
-                                                        </div>
+                                                       
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="label">Tempat Lahir</label>
-                                                    <div class="input-group">
+                                                    <div class="input-form">
                                                         <input type="text" class="form-control" name="tempatLahir" placeholder="Tempat lahir" required>
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text">
-                                                                <i class="mdi mdi-check-circle-outline"></i>
-                                                            </span>
-                                                        </div>
+                                                       
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="label">Tanggal Lahir</label>
-                                                    <div class="input-group">
+                                                    <div class="input-form">
                                                         <input type="date" name="tanggalLahir" class="form-control" placeholder="Tanggal Lahir" required>
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text">
-                                                                <i class="mdi mdi-check-circle-outline"></i>
-                                                            </span>
-                                                        </div>
+                                                       
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -432,53 +414,41 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="label">Pendidikan Terakhir Kali</label>
-                                                    <div class="input-group">
+                                                    <label class="label">Pendidikan Terakhir / Saat ini</label>
+                                                    <div class="input-form">
                                                         <select class="form-control" name="idgolongan" required>
                                                             '.$listGolongan.'
                                                         </select>
                                                     </div>
-                                                    <div class="input-group">
+                                                    <div class="input-form">
                                                         <input type="text" name="sekolahUser" class="form-control" placeholder="Nama Sekolah" required>
                                                     </div>
-                                                    <div class="input-group">
-                                                        <input type="text" name="nomorInduk" class="form-control" placeholder="NISN\NPM" required>
+                                                    <div class="input-form">
+                                                        <input type="text" name="nomorInduk" class="form-control" placeholder="NISN\NPM\NIP" required>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="label">Password</label>
-                                                    <div class="input-group">
+                                                    <div class="input-form">
                                                         <input type="password" name="password"class="form-control" placeholder="*********" required>
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text">
-                                                                <i class="mdi mdi-check-circle-outline"></i>
-                                                            </span>
-                                                        </div>
+                                                       
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="label">Konfirmasi Password</label>
-                                                    <div class="input-group">
+                                                    <div class="input-form">
                                                         <input type="password" name="password2" class="form-control" placeholder="*********" required>
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text">
-                                                                <i class="mdi mdi-check-circle-outline"></i>
-                                                            </span>
-                                                        </div>
+                                                       
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="label">Password Beta Tester</label>
-                                                    <div class="input-group">
+                                                    <div class="input-form">
                                                         <input type="password" name="passwordbeta" class="form-control" placeholder="*********" required>
-                                                        <div class="input-group-append">
-                                                            <span class="input-group-text">
-                                                                <i class="mdi mdi-check-circle-outline"></i>
-                                                            </span>
-                                                        </div>
+                                                    
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
+                                                <div class="input-form">
                                                     <input type="submit" name="create_account" class="btn btn-primary col-md-12" value="Daftar">
                                                 </div>
                                             </form>
@@ -581,16 +551,13 @@
                         '.$iteration.'
                     </td>
                     <td>
-                    '.Content::AdaPassword($Zip['passwordZip']).' '.$Zip['judulZip'].'
+                    '.Content::AdaPassword($Zip['passwordZip']).' <a href="./zip.php?id='.$Zip['idZip'].'" class="text-black">'.$Zip['judulZip'].'</a>
                     </td>
                     <td>
                         '.$golongan.'
                     </td>
                     <td>
                         '.$Zip['createZip'].'
-                    </td>
-                    <td>
-                        <a href="./zip.php?id='.$Zip['idZip'].'" class="btn btn-primary"><span class="fa fa-arrow-right"></span></a>
                     </td>
                 </tr>';
                 $iteration ++;
@@ -739,7 +706,7 @@
             }
             return $content ; 
         }
-        public static function Zip($idZip){
+        public static function Zip($idZip,$idUser){
             $Zip = DB::query('SELECT * FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))[0];
             if($Zip != false){
                 $jumlahSoal = DB::query('SELECT count(idSoal) as Jumlah FROM zip_soal WHERE idZip =:idZip',array(':idZip'=>$idZip))[0]['Jumlah'];
@@ -760,7 +727,6 @@
                 $finishDate = Navigation::FormatDateIndo($finish[0]);
                 $finishTime = Navigation::FormatDateIndo($finish[1]);
                 $create = $Zip['createZip'];
-                $idUser = Login::isLoggedIn();
                 $password = $Zip['passwordZip'];
                 
                 if(DB::query('SELECT idZip FROM user_zip WHERE idUser = :idUser AND idZip = :idZip',array('idUser'=>$idUser,':idZip'=>$idZip))){
@@ -783,14 +749,14 @@
 
                             <div class="form-group row">
                                 <label for="nama_panggilan" class="col-md-2 col-form-label">Tingkat</label>
-                                <div class="input-group col-md-4">
+                                <div class="input-group col-md-3">
                                     <select name="idGolongan" class="form-control" disabled>
                                     '.$listGolongan.'
                                     </select>
                                 </div>
-                                <label for="keterangan" class="col-sm-2 col-form-label">Tanggal Pembuatan Soal</label>    
+                                <label for="keterangan" class="col-sm-3 col-form-label text-right">Tanggal Pembuatan Soal</label>    
                                 <div class="input-group col-sm-4">
-                                    <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.Navigation::FormatDateIndo($Zip['createZip']).'"disabled>
+                                    <input type="text" name="" class="form-control"  placeholder="Tanggal Pembuatan " value="'.Navigation::FormatDateIndo($Zip['createZip']).'"disabled>
                                 </div>        
                             
                             </div>
@@ -863,30 +829,88 @@
                 $idPemilik = DB::query('SELECT idUser FROM user_zip WHERE idZip = :idZip',array(':idZip'=>$idZip))[0]['idUser'];
                 $password = '';
                 if(DB::query('SELECT count(idSoal) AS Jumlah FROM zip_soal WHERE idZip = :idZip',array(':idZip'=>$idZip))[0]['Jumlah'] >= 5){
-                    if($Zip['passwordZip']!=''){
-                        $password = '
-                        <form action="./zip.php?id='.$idZip.'" method="post">
+                    $Hasil = DB::query('SELECT * FROM hasil WHERE idZip = :idZip AND idUser = :idUser',array('idUser' => $idUser, ':idZip'=>$idZip));
+                    $password = '';
+                    $hasil = '';
+                    if($Hasil != false){
+                        $idZip = $Hasil[0]['idZip'];
+                        $hasilBenar = $Hasil[0]['PoinHasil'];
+                        $jumlahSoal = $Hasil[0]['jumlahSoal'];
+                        $nilai = $Hasil[0]['Hasil'] ;
+                        if($nilai >= 80){
+                            $bg = ' bg-primary ';
+                        }elseif($nilai >= 70){
+                            $bg = ' bg-success ';
+                        }elseif($nilai >= 50){
+                            $bg = ' bg-warning ';
+                        }elseif($nilai < 50){
+                            $bg = ' bg-danger ';
+                        }
+                        $bg .= ' text-white ';
+                        $jumlahSalah =  $jumlahSoal- $hasilBenar ;
+                        $hasil = '
+                        <div class="card-body">
                             <div class="form-group row">
-                                <label for="password" class="col-md-2 col-form-label">Password</label>
-                                <div class="input-group col-md-10">
-                                    <input type="text" name="passwordzip" class="form-control" placeholder="Masukan Password" value="" required>
+                                <div class="input-group col-sm-12">
+                                    <p class="form-control text-center '.$bg.'">Hasil Anda Mengerjakan Soal Ini</p>
+                                </div>    
+                            </div>
+                            <div class="form-group row">
+                                <div class="input-group col-sm-2">
+                                <p class="form-control text-center  bg-light">Nilai</>    
+                                </div>    
+                                <div class="input-group col-sm-4">
+                                <p class="form-control '.$bg.'">'.$nilai.'</p>
                                 </div>
-                            </div>    
-                            <div class="form-group row">
-                                <div class="input-group col-md-12">
-                                    <button type="submit" name="kerjakan" class="form-control btn btn-primary"> Masuk </button>
+                                <div class="input-group col-sm-2">
+                                <p class="form-control text-center  bg-light">Jumlah Benar</p>
+                                </div>
+                                <div class="input-group col-sm-4">
+                                    <p class="form-control'.$bg.'">'.$hasilBenar.'</p>
                                 </div>
                             </div>
-                        </form>
+                            <div class="form-group row">
+                                <div class="input-group col-sm-2">
+                                <p class="form-control text-center  bg-light">Jumlah Soal</p>
+                                </div>
+                                <div class="input-group col-sm-4">
+                                <p class="form-control'.$bg.'">'.$jumlahSoal.'</p>
+                                </div>    
+                                <div class="input-group col-sm-2">
+                                <p class="form-control text-center  bg-light">Jumlah Salah</p>
+                                </div>
+                                <div class="input-group col-sm-4">
+                                    <p class="form-control'.$bg.'">'.$jumlahSalah.'</p>
+                                </div>
+                            </div>
+                        </div> 
                         ';
                     }else{
-                        $password = '
+                        if($Zip['passwordZip']!=''){
+                            $password .= '
                             <form action="./zip.php?id='.$idZip.'" method="post">
-                                <div class="input-group col-md-12">
-                                    <button type="submit" name="kerjakan" class="form-control btn btn-primary" value="'.$Zip['passwordZip'].'"> Masuk </button>
+                                <div class="form-group row">
+                                    <label for="password" class="col-md-2 col-form-label">Password</label>
+                                    <div class="input-group col-md-10">
+                                        <input type="text" name="passwordzip" class="form-control" placeholder="Masukan Password" value="" required>
+                                    </div>
+                                </div>    
+                                <div class="form-group row">
+                                    <div class="input-group col-md-12">
+                                        <button type="submit" name="kerjakan" class="form-control btn btn-primary"> Masuk </button>
+                                    </div>
                                 </div>
                             </form>
-                        ';
+                            ';
+                        }else{
+                            $password .= '
+                                <form action="./zip.php?id='.$idZip.'" method="post">
+                                    <div class="input-group col-md-12">
+                                        <button type="submit" name="kerjakan" class="form-control btn btn-primary" value="'.$Zip['passwordZip'].'"> Masuk </button>
+                                    </div>
+                                </form>
+                            ';
+                        }
                     }
                 }
                 return '
@@ -956,10 +980,9 @@
                             </div>
                             '.$password.'
                         </div>                        
+                        '.$hasil.'
                     ';
                 }
-            }else{
-                self::BuatSoal();
             }
         }
         public static function ZipEdit($idZip){
@@ -1099,7 +1122,7 @@
                     <div class="form-group row">
                         <label class="col-md-2 col-form-label">Pilihan D</label>
                         <div class="input-group col-md-10">
-                            <input type="text" name="pilihand" class="form-control" placeholder="Pilihan D">
+                            <input type="text" name="pilihand" class="form-control" placeholder="Pilihan D" required>
                         </div>
                     </div>
 
@@ -1483,11 +1506,11 @@
                 $golongan = DB::query('SELECT namaGolongan FROM golongan WHERE idGolongan = :idGolongan ',array(':idGolongan'=>$i['idGolongan']))[0]['namaGolongan'];
                 $listSoal .= '
                    <tr><td>
-                   '.Content::AdaPassword($i['passwordZip']).' '.$i['judulZip'].' 
+                   '.Content::AdaPassword($i['passwordZip']).' <a class="text-black" href="./zip.php?id='.$i['idZip'].'">'.$i['judulZip'].'</a> 
                    </td><td>'.$i['deskripsiZip'].'
                    </td><td>'.$golongan.'
                    </td><td>'.Navigation::FormatDateIndo($i['createZip']).'
-                   </td><td><a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'"> Lihat </a></td>
+                   </td>
                    </tr>
                 ';
                 $getCount++;
@@ -1521,9 +1544,9 @@
             }elseif($table == 'soal'){
                 $count = DB::query('SELECT count(idSoal) as Jumlah FROM soal')[0]['Jumlah'];
                 $icon = "fa fa-list-alt text-info";
-            }elseif($table == 'koleksi'){
-                $count = DB::query('SELECT count(idKoleksi) as Jumlah FROM koleksi Where statusKoleksi = 1')[0]['Jumlah'];
-                $icon = "fa fa-inbox text-warning";    
+            }elseif($table == 'hasil'){
+                $count = DB::query('SELECT count(idHasil) as Jumlah FROM hasil')[0]['Jumlah'];
+                $icon = "fa fa-edit text-warning";    
             }
             return '
             <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 grid-margin stretch-card">
@@ -1569,7 +1592,7 @@
                 $list .= '
                 <tr>
                     <td>
-                        '.Content::AdaPassword($Zip['passwordZip']).' '.$Zip['judulZip'].'
+                        '.Content::AdaPassword($Zip['passwordZip']).' <a class="text-black" href="./zip.php?id='.$i['idZip'].'" >'.$Zip['judulZip'].'</a>
                     </td>
                     <td>
                         '.$golongan.'
@@ -1578,8 +1601,6 @@
                         '.Navigation::FormatDateIndo($Zip['createZip']).'
                     </td>
                     <td>
-                        <a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'" ><span class="fa fa-arrow-right"></span></a>
-                    </td>
                    ';
                 $iteration ++;
             }
@@ -1608,7 +1629,7 @@
                 '.$gambar.'
                 <div class="form-group row">
                     <div class="input-group col-sm-12">
-                        <p class="form-control">'.$DataSoal['soal'].'</p>
+                        <div class="form-control" id="post">'.$DataSoal['soal'].'</div>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -1619,7 +1640,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-sm-11 form-control">
+                    <div class="col-sm-11 form-control" id="posta">
                         '.$DataSoal['jawabanA'].'
                     </div>
                 </div>
@@ -1631,7 +1652,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-sm-11 form-control">
+                    <div class="col-sm-11 form-control" id="postb">
                         '.$DataSoal['jawabanB'].'
                     </div>
                 </div>
@@ -1643,7 +1664,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-sm-11 form-control">
+                    <div class="col-sm-11 form-control" id="postc">
                         '.$DataSoal['jawabanC'].'
                     </div>
                 </div>                
@@ -1655,7 +1676,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="col-sm-11 form-control">
+                    <div class="col-sm-11 form-control" id="postd">
                         '.$DataSoal['jawabanD'].'
                     </div>
                 </div>
@@ -1809,9 +1830,9 @@
                 $jumlah = 0 ;
                 foreach($rating as $i){
                     if($i['nilaiRating']>= 4){
-                        $review = '<span class="fa fa-thumbs-o-up"></span>';
+                        $review = '<span class="fa fa-thumbs-o-up text-success"></span>';
                     }else{
-                        $review = '<span class="fa fa-thumbs-o-down"></span>';
+                        $review = '<span class="fa fa-thumbs-o-down text-danger"></span>';
                     }
                     $list .='
                     <tr>

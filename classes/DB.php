@@ -28,7 +28,7 @@ class DB {
         setcookie("TS_B", '1', time() + 60 * 60 * 17, '/', null, null, true);
     }
     public static function selectAllGolongan(){
-        return self::query('SELECT * FROM golongan');
+        return self::query('SELECT * FROM golongan ORDER BY idGolongan DESC');
     }
     public static function getNamaLengkap ($idUser){
         $idUser = DB::query('SELECT namaLengkap FROM user WHERE idUser =:idUser',array(':idUser'=>$idUser))[0]['namaLengkap'];

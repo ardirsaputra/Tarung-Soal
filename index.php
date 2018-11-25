@@ -7,7 +7,7 @@ include('./classes/Page.php');
 $idUser = Login::isLoggedIn();
 if ($idUser != false){
     $title = 'Dashboard - Tarung Soal';
-    $content = Content::CariSoal().''.Page::Row(Content::Total('Jumlah Pengguna','user').''.Content::Total('Jumlah Data Soal','zip').''.Content::Total('Jumlah Soal','soal').''.Content::Total('Jumlah Pesan tersimpan','koleksi'));
+    $content = Content::CariSoal().''.Page::Row(Content::Total('Jumlah Pengguna','user').''.Content::Total('Jumlah Data Soal','zip').''.Content::Total('Jumlah Soal','soal').''.Content::Total('Jumlah Peserta Soal','hasil'));
     $array = ['Judul Soal','Tingkat','Pembuatan'];
     $zip = Page::Title('Koleksi Soal',Page::List(Content::Headtable($array),Content::ListZipDasboard()));
     $content .= Page::Row(Content::CardLarge6($zip).'');

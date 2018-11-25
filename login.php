@@ -27,7 +27,7 @@
             }else $notif = 'email kosong';
         }elseif(isset($_POST['create_account'])){
             if(isset($_POST['passwordbeta'])){
-                if($_POST['passwordbeta']=='Bismillah'){
+                if($_POST['passwordbeta']=='Teknik Informatika 2016'){
                     if(isset($_POST['namaLengkap']) && isset($_POST['password'])){
                         if(strlen($_POST['password']) >= 4 and strlen($_POST['password'])<=50){    
                             if(strlen($_POST['namaLengkap']) >= 4 and strlen($_POST['namaLengkap'])<=50){    

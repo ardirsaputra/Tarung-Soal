@@ -13868,6 +13868,57 @@ input:focus {
       right: 0; } }
 
 /* Navbar */
+#post{
+  display:block;
+  -khtml-user-select:none;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  -o-user-select:none;
+  user-select:none;
+}
+
+#posta{
+  display:block;
+  -khtml-user-select:none;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  -o-user-select:none;
+  user-select:none;
+}
+
+#postb{
+  display:block;
+  -khtml-user-select:none;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  -o-user-select:none;
+  user-select:none;
+}
+
+#postc{
+  display:block;
+  -khtml-user-select:none;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  -o-user-select:none;
+  user-select:none;
+}
+
+#postd{
+  display:block;
+  -khtml-user-select:none;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -ms-user-select:none;
+  -o-user-select:none;
+  user-select:none;
+}
+
+
 .navbar.default-layout {
   font-family: "Poppins", sans-serif;
   background: linear-gradient(0deg, #05fff3, #5983e8);
