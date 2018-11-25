@@ -468,6 +468,17 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
+                                                    <label class="label">Password Beta Tester</label>
+                                                    <div class="input-group">
+                                                        <input type="password" name="passwordbeta" class="form-control" placeholder="*********" required>
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">
+                                                                <i class="mdi mdi-check-circle-outline"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
                                                     <input type="submit" name="create_account" class="btn btn-primary col-md-12" value="Daftar">
                                                 </div>
                                             </form>
@@ -562,7 +573,7 @@
             $iteration = 1 ;
             $ListZip = DB::query('SELECT * FROM user_zip WHERE idUser = :idUser ORDER BY idUserZip DESC',array(':idUser' => $idUser));
             foreach ($ListZip as $i){
-                $Zip = DB::query('SELECT idZip,judulZip , deskripsiZip , idGolongan , createZip FROM zip WHERE idZIp = :idZip',array(':idZip'=>$i['idZip']))[0];
+                $Zip = DB::query('SELECT idZip,judulZip , deskripsiZip , idGolongan , createZip,passwordZip FROM zip WHERE idZIp = :idZip',array(':idZip'=>$i['idZip']))[0];
                 $golongan  = DB::query('SELECT namaGolongan FROM golongan WHERE idGolongan = :idGolongan',array(':idGolongan'=>$Zip['idGolongan']))[0]['namaGolongan'];
                 $list .= '
                 <tr>
@@ -570,7 +581,7 @@
                         '.$iteration.'
                     </td>
                     <td>
-                        '.$Zip['judulZip'].'
+                    '.Content::AdaPassword($Zip['passwordZip']).' '.$Zip['judulZip'].'
                     </td>
                     <td>
                         '.$golongan.'
@@ -1063,7 +1074,7 @@
                     <div class="form-group row">
                         <label for="exampleInputEmail2" class="col-form-label col-sm-2">Gambar</label>
                         <div class="input-group col-sm-10">
-                            <input type="file" name="foto" class="form-control" placeholder=""aria-describedby="colored-addon3">
+                            <input type="file" name="foto" class="form-control" placeholder=""aria-describedby="colored-addon3" disabled>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -1152,7 +1163,7 @@
                     <div class="form-group row">
                         <label for="exampleInputEmail2" class="col-form-label col-sm-2">Gambar</label>
                         <div class="input-group col-sm-10">
-                            <input type="file" name="foto" class="form-control" placeholder=""aria-describedby="colored-addon3">
+                            <input type="file" name="foto" class="form-control" placeholder=""aria-describedby="colored-addon3" disabled>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -1435,7 +1446,7 @@
         }
         public static function HasilCariSoal($nama){
             if(!empty($nama)){
-                $user = DB::query('SELECT * FROM zip WHERE judulZip LIKE :judul ORDER BY idZip DESC LIMIT 30 ', array(':judul'=>'%'.$nama.'%'));
+                $user = DB::query('SELECT * FROM zip WHERE judulZip LIKE :judul ORDER BY idZip DESC LIMIT 100 ', array(':judul'=>'%'.$nama.'%'));
                 $listuser ='';
                 $getCount =0;
                 $listSoal ='';
@@ -1443,7 +1454,7 @@
                     $golongan = DB::query('SELECT namaGolongan FROM golongan WHERE idGolongan = :idGolongan ',array(':idGolongan'=>$i['idGolongan']))[0]['namaGolongan'];
                     $listSoal .= '
                        <tr><td>
-                       '.$i['judulZip'].' 
+                       '.Content::AdaPassword($Zip['passwordZip']).' '.$i['judulZip'].' 
                        </td><td>'.$i['deskripsiZip'].'
                        </td><td>'.$golongan.'
                        </td><td>'.Navigation::FormatDateIndo($i['createZip']).'
@@ -1461,6 +1472,27 @@
                 $head='';
                 $listSoal = '';
             }
+            return Page::List($head,$listSoal);
+        }
+        public static function SoalTerbaru(){
+            $user = DB::query('SELECT * FROM zip ORDER BY idZip DESC LIMIT 50');
+            $listuser ='';
+            $getCount =0;
+            $listSoal ='';
+             foreach($user as $i){
+                $golongan = DB::query('SELECT namaGolongan FROM golongan WHERE idGolongan = :idGolongan ',array(':idGolongan'=>$i['idGolongan']))[0]['namaGolongan'];
+                $listSoal .= '
+                   <tr><td>
+                   '.Content::AdaPassword($i['passwordZip']).' '.$i['judulZip'].' 
+                   </td><td>'.$i['deskripsiZip'].'
+                   </td><td>'.$golongan.'
+                   </td><td>'.Navigation::FormatDateIndo($i['createZip']).'
+                   </td><td><a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'"> Lihat </a></td>
+                   </tr>
+                ';
+                $getCount++;
+            }
+            $head = self::Headtable(['Judul Soal','Deskripsi','Tingkat Soal','Tanggal Pembuatan']);
             return Page::List($head,$listSoal);
         }
         public static function CariSoal(){
@@ -1532,12 +1564,12 @@
             $idUser = Login::isLoggedIn();
             $ListZip = DB::query('SELECT * FROM user_zip WHERE idUser = :idUser ORDER BY idUserZip DESC LIMIT 5',array(':idUser'=>$idUser));
             foreach ($ListZip as $i){
-                $Zip = DB::query('SELECT idZip,judulZip , deskripsiZip , idGolongan , createZip FROM zip WHERE idZIp = :idZip',array(':idZip'=>$i['idZip']))[0];
+                $Zip = DB::query('SELECT idZip,judulZip , deskripsiZip , idGolongan , createZip, passwordZip FROM zip WHERE idZIp = :idZip',array(':idZip'=>$i['idZip']))[0];
                 $golongan  = DB::query('SELECT namaGolongan FROM golongan WHERE idGolongan = :idGolongan',array(':idGolongan'=>$Zip['idGolongan']))[0]['namaGolongan'];
                 $list .= '
                 <tr>
                     <td>
-                        '.$Zip['judulZip'].'
+                        '.Content::AdaPassword($Zip['passwordZip']).' '.$Zip['judulZip'].'
                     </td>
                     <td>
                         '.$golongan.'
@@ -1546,7 +1578,7 @@
                         '.Navigation::FormatDateIndo($Zip['createZip']).'
                     </td>
                     <td>
-                        <a class="btn btn-primary" href="./zip?id'.$i['idZip'].'" ><span class="fa fa-arrow-right"></span></a>
+                        <a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'" ><span class="fa fa-arrow-right"></span></a>
                     </td>
                    ';
                 $iteration ++;
@@ -1802,6 +1834,13 @@
             }else{
                 return Page::Title('Reviewer Profil Anda','Belum ada reviewer profil anda');
             }
+        }
+        public static function AdaPassword($password){
+            if($password == ''){
+                return '<span class="fa fa-unlock text-success"></span> ';
+            }else{
+                return '<span class="fa fa-lock text-danger"></span> ';
+            } 
         }
     }
 ?>

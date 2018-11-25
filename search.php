@@ -12,6 +12,9 @@ if ($idUser != false){
     if(isset($_POST['soal'])){
         $content1 = Page::Title('Hasil Pencarian "'.$_POST['soal'].'"',Content::HasilCariSoal($_POST['soal']));
         $content = Page::BlockContent($content,$content1,''); 
+    }else{
+        $content1 = Page::Title('Soal Terbaru',Content::SoalTerbaru());
+        $content = Page::BlockContent($content,$content1,'');
     }
     echo Page::DefaultPage($title,$notif,$content);    
 }else{
