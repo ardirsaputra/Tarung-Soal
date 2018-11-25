@@ -4,8 +4,8 @@ include('./classes/Login.php');
 include('./classes/Navigation.php');
 include('./classes/Content.php');
 include('./classes/Page.php');
-if (Login::isLoggedIn()){
-    $idUser = Login::isLoggedIn();
+$idUser = Login::isLoggedIn();
+if ($idUser != false){
     $title = 'Buat soal - Tarung Soal';
     $notif = '';
 
@@ -244,7 +244,7 @@ if (Login::isLoggedIn()){
             }
         }
     }else{
-        Login::redirect('./collection.php');
+        Login::redirect('./collection.php?msg=Data soal belum dipilih');
     }
     if(isset($_GET['msg'])){
         $notif = $_GET['msg']; 

@@ -4,8 +4,8 @@ include('./classes/Login.php');
 include('./classes/Navigation.php');
 include('./classes/Content.php');
 include('./classes/Page.php');
-if (Login::isLoggedIn()){
-    $idUser = Login::isLoggedIn();
+$idUser = Login::isLoggedIn();
+if ($idUser != false){
     $title = 'Koleksi Soal - Tarung Soal';
     $notif = '';
     $array = ['No','Judul Soal','Tingkat Soal','Tanggal Pembuatan','<a href="./zip.php?tambahzip" class="btn btn-success"><span class"fa fa-plus" aria-hidden="true">+</span>Soal</a>'];

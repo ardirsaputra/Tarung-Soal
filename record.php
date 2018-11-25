@@ -4,8 +4,8 @@ include('./classes/Login.php');
 include('./classes/Navigation.php');
 include('./classes/Content.php');
 include('./classes/Page.php');
-if (Login::isLoggedIn()){
-    $idUser = Login::isLoggedIn();
+$idUser = Login::isLoggedIn();
+if ($idUser != false){
     $title = 'Data Hasil - Tarung Soal';
     $content = Page::Title('Data Hasil',Content::HasilZip($idUser));
     $notif = '';

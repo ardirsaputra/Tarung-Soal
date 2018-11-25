@@ -4,11 +4,10 @@ include('./classes/Login.php');
 include('./classes/Navigation.php');
 include('./classes/Content.php');
 include('./classes/Page.php');
-if (!Login::isLoggedIn()){
-    $idUser = Login::isLoggedIn();
+$idUser = Login::isLoggedIn();
+if ($idUser == false){
     $notif = '';
     $content = Content::ForgotPassword();
-    //---------------------------------
     if(isset($_POST['forgotpassword'])){
         if(isset($_POST['email'])&&(isset($_POST['nomorInduk']))){
             if($_POST['email'] != '' || $_POST['nomorInduk'] =! ''){
@@ -47,7 +46,7 @@ if (!Login::isLoggedIn()){
                 $content = Content::BuatPassword($_POST['id']);
                 $notif ="Password baru tidak sama";
             }
-        }else $notif = "User tidak dipilih";
+        }else $notif = "User tidak diada";
     }
     //---------------------------------
     echo Page::LoginPage('Forgot Password - Tarung Soal',$notif,$content);    

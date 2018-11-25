@@ -46,6 +46,7 @@ if (Login::isLoggedIn()){
     }
     if(isset($_COOKIE['TSH'])){
         $title = 'Hasil - Tarung soal';
+        $notif = 'Soal Telah Selesai Dikerjakan';
         $hasil = $_COOKIE['TSSR'] / $_COOKIE['TSC'] * 100;
         DB::query('INSERT INTO hasil VALUES (\'\',:hasil,:poin,:jumlahsoal,:zip,:idUser,NOW())',array(':hasil'=>(int)$hasil,':poin'=>$_COOKIE['TSSR'],':jumlahsoal'=>$_COOKIE['TSC'],':zip'=>$_COOKIE['TSI'],':idUser'=>$idUser));
         $idHasil = DB::query('SELECT idHasil FROM hasil WHERE idUser = :idUser AND idZip = :zip ORDER BY idHasil DESC',array(':zip'=>$_COOKIE['TSI'],':idUser'=>$idUser))[0]['idHasil'];

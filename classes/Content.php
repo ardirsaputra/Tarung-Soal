@@ -164,7 +164,7 @@
                 <div class="form-group">
                     <label class="label">Jawaban</label>
                     <div class="input-group">
-                        <input type="text" name="jawaban" class="form-control" placeholder="Password Baru" value="'.$forgot['jawaban'].'"required>
+                        <input type="password" name="jawaban" class="form-control" placeholder="Password Baru" value="'.$forgot['jawaban'].'"required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -580,7 +580,6 @@
                     </td>
                     <td>
                         <a href="./zip.php?id='.$Zip['idZip'].'" class="btn btn-primary"><span class="fa fa-arrow-right"></span></a>
-                        <a href="./user.php?idz='.$Zip['idZip'].'" class="btn btn-info"><span class="fa fa-send-o"></span></a>
                     </td>
                 </tr>';
                 $iteration ++;
@@ -730,8 +729,8 @@
             return $content ; 
         }
         public static function Zip($idZip){
-            if(DB::query('SELECT * FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))){
-                $Zip = DB::query('SELECT * FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))[0];
+            $Zip = DB::query('SELECT * FROM zip WHERE idZip =:idZip',array(':idZip'=>$idZip))[0];
+            if($Zip != false){
                 $jumlahSoal = DB::query('SELECT count(idSoal) as Jumlah FROM zip_soal WHERE idZip =:idZip',array(':idZip'=>$idZip))[0]['Jumlah'];
                 $dataGolongan = DB::selectAllGolongan();
                 $listGolongan ="";
@@ -758,16 +757,6 @@
                     <div class="card-body">
                         <p class="card-description">Data Deskripsi Soal</p>
                             <div class="form-group row">    
-                                <label for="keterangan" class="col-sm-2 col-form-label">ID Soal</label>    
-                                <div class="input-group col-sm-4">
-                                    <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.$Zip['idZip'].'"disabled>
-                                </div>
-                                <label for="keterangan" class="col-sm-2 col-form-label">Tanggal Pembuatan Soal</label>    
-                                <div class="input-group col-sm-4">
-                                    <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.Navigation::FormatDateIndo($Zip['createZip']).'"disabled>
-                                </div>        
-                            </div>
-                            <div class="form-group row">    
                                 <label for="keterangan" class="col-sm-2 col-form-label">Judul Soal</label>    
                                 <div class="input-group col-sm-10">
                                     <input type="text" name="judul" class="form-control"  placeholder="Judul Soal" value="'.$Zip['judulZip'].'"disabled>
@@ -783,11 +772,16 @@
 
                             <div class="form-group row">
                                 <label for="nama_panggilan" class="col-md-2 col-form-label">Tingkat</label>
-                                <div class="input-group col-md-10">
-                                <select name="idGolongan" class="form-control" disabled>
-                                '.$listGolongan.'
-                                </select>
+                                <div class="input-group col-md-4">
+                                    <select name="idGolongan" class="form-control" disabled>
+                                    '.$listGolongan.'
+                                    </select>
                                 </div>
+                                <label for="keterangan" class="col-sm-2 col-form-label">Tanggal Pembuatan Soal</label>    
+                                <div class="input-group col-sm-4">
+                                    <input type="text" name="judul" class="form-control"  placeholder="Tanggal Pembuatan " value="'.Navigation::FormatDateIndo($Zip['createZip']).'"disabled>
+                                </div>        
+                            
                             </div>
                             
                             <div class="form-group row">
@@ -828,9 +822,19 @@
                                 <label for="password" class="col-md-2 col-form-label">Jumlah soal</label>
                                 <div class="input-group col-md-10">
                                     <p class="form-control ">'.$jumlahSoal.'</p>
-                                    <a href="./zip.php?id='.$idZip.'&tambahsoal" class="btn btn-primary ">Tambah Soal</a>
-                                    <a href="./zip.php?id='.$Zip['idZip'].'" class="btn btn-success" />Edit Soal</a>
-                                    <a href="./zip.php?id='.$idZip.'&deleteallsoal" class="btn btn-danger">Hapus Semua Soal</a>
+                                </div>  
+                            </div>
+                            <div class="form-group row">  
+                                <div class="input-group col-md-12">
+                                    <a href="./user.php?idz='.$Zip['idZip'].'" class="btn btn-info form-control"><span class="fa fa-send-o"></span> Kirim Soal</a> 
+                                    <a href="./zip.php?id='.$Zip['idZip'].'&edit" class="btn btn-success form-control" /><span class="fa fa-pencil"></span> Edit Soal</a>
+                            
+                                </div>  
+                            </div>
+                            <div class="form-group row">  
+                                <div class="input-group col-md-12">
+                                    <a href="./zip.php?id='.$idZip.'&tambahsoal" class="btn btn-primary form-control"><span class="fa fa-plus"></span> Tambah Soal</a>
+                                    <a href="./zip.php?id='.$idZip.'&deleteallsoal" class="btn btn-danger form-control"><span class="fa fa-trash-o"></span> Hapus Semua Soal</a>
                                 </div>  
                             </div>
                     </div>    
@@ -845,6 +849,7 @@
                     ';
 
             }else{
+                $idPemilik = DB::query('SELECT idUser FROM user_zip WHERE idZip = :idZip',array(':idZip'=>$idZip))[0]['idUser'];
                 $password = '';
                 if(DB::query('SELECT count(idSoal) AS Jumlah FROM zip_soal WHERE idZip = :idZip',array(':idZip'=>$idZip))[0]['Jumlah'] >= 5){
                     if($Zip['passwordZip']!=''){
@@ -875,6 +880,13 @@
                 }
                 return '
                         <div class="card-body">
+                            <div class="form-group row">    
+                                <label for="keterangan" class="col-sm-2 col-form-label">Pemilik soal</label>    
+                                <div class="input-group col-sm-10">
+                                    <p class="form-control">'.DB::getNamaLengkap($idPemilik).'</p>
+                                </div>
+                            </div>
+                            
                             <div class="form-group row">    
                                 <label for="keterangan" class="col-sm-2 col-form-label">Judul Soal</label>    
                                 <div class="input-group col-sm-10">
@@ -1268,10 +1280,16 @@
         public static function TombolKirim($idPenerima,$idZip){
             $idUser = Login::isLoggedIn();
             $namaLengkap = DB::getNamaLengkap($idPenerima);
+            $judulSoal = DB::getJudulZip($idZip);
             return '
             <div class="card-body">   
                 <form action="./user.php?id='.$idPenerima.'&idz='.$idZip.'" method="post">                      
-                    <h4 class="card-title">Kirim Soal</h4>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Judul Soal</label>
+                        <div class="input-group col-sm-10">
+                            <textarea type="text"  class="form-control" aria-label="Deskripsi Soal" aria-describedby="colored-addon3">'.$judulSoal.'</textarea>
+                        </div>
+                    </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Berikan Pesan</label>
                         <div class="input-group col-sm-10">
@@ -1675,6 +1693,115 @@
             <a href="./logout.php?z" class="btn btn-danger form-control"> Keluar dari semua perangkat yang pernah masuk dan keluar</a>
             ';
             return $content;
+        }
+        public static function ReviewUser($idPenerima){
+            $idUser = Login::isLoggedIn();
+            $namaLengkap = DB::getNamaLengkap($idPenerima);
+            if(DB::query('SELECT idRating FROM rating WHERE jenisItem = :jenisItem AND itemRating = :idPenerima AND pengirim = :idUser',array(':jenisItem'=>'User',':idPenerima'=>$idPenerima,':idUser'=>$idUser))){
+                $datarating = DB::query('SELECT * FROM rating WHERE jenisItem = :User AND itemRating = :idPenerima AND pengirim = :idUser',array(':User'=>'User',':idPenerima'=>$idPenerima,':idUser'=>$idUser))[0];
+                if($datarating['nilaiRating'] == 5){
+                    $bagus = 'checked';
+                    $buruk = '';
+                }else{
+                    $bagus = '';
+                    $buruk = 'checked';
+                }
+                return '
+                <div class="card-body">   
+                    <form action="./user.php?id='.$idPenerima.'" method="post">                      
+                        <h4 class="card-title">Review User</h4>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Berikan Review</label>
+                            <div class="input-group col-sm-6">
+                                <input type="hidden" name="r" value="'.$datarating['idRating'].'"/>
+                                <textarea type="text" name="review" class="form-control" placeholder="Berikan review untuk '.$namaLengkap.'" aria-label="Deskripsi Soal" rows="2" aria-describedby="colored-addon3" required>'.$datarating['komentarRating'].'</textarea>
+                            </div>
+                            <div class="col-sm-1">
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-radio ">
+                                        <input type="radio" class="form-check-input" name="rating" id="membershipRadios1" value="5" '.$bagus.' required> <span class="fa fa-thumbs-o-up"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-radio">
+                                        <input type="radio" class="form-check-input" name="rating" id="membershipRadios2" value="-2" '.$buruk.' required><span class="fa fa-thumbs-o-down"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="input-group col-sm-12">
+                                <input name="editreviewuser" class="form-control btn btn-success" type="submit" value="Edit Review"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                ';
+            }else{
+                return '
+                <div class="card-body">   
+                    <form action="./user.php?id='.$idPenerima.'" method="post">                      
+                        <h4 class="card-title">Review User</h4>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Berikan Review</label>
+                            <div class="input-group col-sm-6">
+                                <textarea type="text" name="review" class="form-control" placeholder="Berikan review untuk '.$namaLengkap.'" aria-label="Deskripsi Soal" rows="2" aria-describedby="colored-addon3" required></textarea>
+                            </div>
+                            <div class="col-sm-1">
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-radio ">
+                                        <input type="radio" class="form-check-input" name="rating" id="membershipRadios1" value="5" required> <span class="fa fa-thumbs-o-up"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-radio">
+                                        <input type="radio" class="form-check-input" name="rating" id="membershipRadios2" value="-2" required><span class="fa fa-thumbs-o-down"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="input-group col-sm-12">
+                                <input name="reviewuser" class="form-control btn btn-success" type="submit" value="Kirim Review"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                ';
+            }
+        }
+        public static function ListReview($idUser){
+            $rating = DB::query('SELECT * FROM rating WHERE jenisItem = :jenisItem AND itemRating = :itemRating ORDER BY idRating DESC',array(':jenisItem'=> 'User' , ':itemRating' => $idUser));
+            if($rating != false){
+                $list = '';
+                $jumlah = 0 ;
+                foreach($rating as $i){
+                    if($i['nilaiRating']>= 4){
+                        $review = '<span class="fa fa-thumbs-o-up"></span>';
+                    }else{
+                        $review = '<span class="fa fa-thumbs-o-down"></span>';
+                    }
+                    $list .='
+                    <tr>
+                        <td>
+                        <img src="'.Navigation::getSourceImageProfil($i['pengirim']).'" /> 
+                            <a href="./user.php?id='.$i['pengirim'].'">'.DB::getNamaLengkap($i['pengirim']).'</a>
+                        </td>
+                        <td>
+                            '.$review.'
+                        </td>
+                        <td>
+                            <p class="form-control"> '.$i['komentarRating'].' </p>
+                        </td>
+                    </tr>
+                    ';
+                    $jumlah++;
+                }
+                $array = ['Reviewer','','Pesan'];
+                return Page::Title('Reviewer Profil Anda ',Page::List(Content::Headtable($array),$list));
+            }else{
+                return Page::Title('Reviewer Profil Anda','Belum ada reviewer profil anda');
+            }
         }
     }
 ?>

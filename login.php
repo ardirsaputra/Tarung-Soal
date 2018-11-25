@@ -20,7 +20,7 @@
                         $idUser = DB::query('SELECT idUser FROM user WHERE email=:email', array(':email'=> $email))[0]['idUser'];
                         if(password_verify($password,DB::query('SELECT passwordUser FROM user WHERE email=:email', array(':email'=>$email))[0]['passwordUser'])){
                             DB::loginUser($idUser);
-                            Login::redirect('./index.php');    
+                            Login::redirect('./');    
                         }else $notif = "Password Salah";  
                     }else $notif = "User tidak terdaftar";
                 }else $notif =  'Password kosong';
@@ -45,7 +45,7 @@
                                 DB::insertUser($namaLengkap,$email,$password,$golongan,$nomorInduk,$sekolahUser,$gender,$tempatLahir,$tanggalLahir,'',$foto);
                                 $idUser = DB::query('SELECT idUser FROm user WHERE namaLengkap = :namaLengkap AND email =:email AND tempatLahir = :tempatLahir ORDER BY idUser DESC',array(':namaLengkap'=> $namaLengkap ,':email'=>$email, ':tempatLahir' => $tempatLahir))[0]['idUser'];
                                 DB::loginUser($idUser);
-                                Login::redirect('./index.php');
+                                Login::redirect('./');
                             }else $notif = 'Nomor induk Harus Angka' ;
                         }else $notif = 'Nama Lengkap tidak diperbolehkan';
                     }else $notif = 'Panjang nama lengkap tidak diizinkan';

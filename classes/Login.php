@@ -70,7 +70,7 @@ class Login{
         self::redirect('./pages/samples/error-404.html');
     }
     public static function Dashboard(){
-        self::redirect('./index.php');     
+        self::redirect('./');     
     }
 }
 ?>

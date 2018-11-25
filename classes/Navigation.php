@@ -145,7 +145,7 @@ class Navigation {
         </div>
         <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
         <div class="text-center navbar-brand-wrapper d-flex align-items-top justify-content-center">
-            <a class="navbar-brand brand-logo" href="index.php">
+            <a class="navbar-brand brand-logo" href="./">
                 <img src="images/logo.png" alt="logo" />
             </a>
             <a class="navbar-brand brand-logo-mini" href="index.html">
@@ -222,7 +222,7 @@ class Navigation {
                         <a class="dropdown-item" href="./user.php">
                             Biodata
                         </a>
-                        <a class="dropdown-item">
+                        <a class="dropdown-item" href="./rating.php">
                             Ratting </a>
 
                         <a class="dropdown-item" href="./collection.php">
@@ -266,7 +266,7 @@ class Navigation {
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./index.php">
+                <a class="nav-link" href="./">
                     <i class="menu-icon mdi mdi-home"></i>
                     <span class="menu-title">Home</span>
                 </a>
