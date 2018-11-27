@@ -112,14 +112,21 @@ if ($idUser != false){
                         $jawabanC = $_POST['pilihanc'];
                         $jawabanD = $_POST['pilihand'];
                         $jawaban = $_POST['jawaban'];
-                        if(!empty($_FILES['foto']['tmp_name'])){
-                            $foto = file_get_contents($_FILES['foto']['tmp_name']);
-                            DB::query('UPDATE soal SET soal = :soal,jawabanA = :A ,jawabanB = :B,jawabanC = :C,jawabanD = :D,jawaban = :jawaban,foto = :foto WHERE idSoal = :idSoal ',array(':idSoal'=>$idSoal,':soal'=>$soal,':A'=>$jawabanA,':B'=>$jawabanB,':C'=>$jawabanC,':D'=>$jawabanD,':jawaban'=>$jawaban,':foto'=>$foto));
-                        }else{
-                            DB::query('UPDATE soal SET soal = :soal,jawabanA = :A ,jawabanB = :B,jawabanC = :C,jawabanD = :D,jawaban = :jawaban WHERE idSoal = :idSoal',array(':idSoal'=>$idSoal,':soal'=>$soal,':A'=>$jawabanA,':B'=>$jawabanB,':C'=>$jawabanC,':D'=>$jawabanD,':jawaban'=>$jawaban));
-                        }
+                        $maxsize = 1024 * 200; 
+                            if($_FILES['foto']['size'] <= $maxsize ){
+                                if(!empty($_FILES['foto']['tmp_name'])){
+                                    $foto = file_get_contents($_FILES['foto']['tmp_name']);
+                                }else{
+                                    $foto = '';
+                                }
+                                DB::query('UPDATE soal SET soal = :soal,jawabanA = :A ,jawabanB = :B,jawabanC = :C,jawabanD = :D,jawaban = :jawaban,foto = :foto WHERE idSoal = :idSoal ',array(':idSoal'=>$idSoal,':soal'=>$soal,':A'=>$jawabanA,':B'=>$jawabanB,':C'=>$jawabanC,':D'=>$jawabanD,':jawaban'=>$jawaban,':foto'=>$foto));
+                                $notif = 'Soal ID '.$idSoal.' berhasil diedit';
+                            }else{
+                                DB::query('UPDATE soal SET soal = :soal,jawabanA = :A ,jawabanB = :B,jawabanC = :C,jawabanD = :D,jawaban = :jawaban WHERE idSoal = :idSoal',array(':idSoal'=>$idSoal,':soal'=>$soal,':A'=>$jawabanA,':B'=>$jawabanB,':C'=>$jawabanC,':D'=>$jawabanD,':jawaban'=>$jawaban));
+                                $notif = 'Ukuran foto maksimal 200 kb';
+
+                            }
                         $content = Content::Zip($idZip,$idUser);
-                        $notif = 'Soal ID '.$idSoal.' berhasil diedit';
                     }
                 }
             }elseif(isset($_GET['delete'])){
@@ -141,17 +148,23 @@ if ($idUser != false){
                     $jawabanC = $_POST['pilihanc'];
                     $jawabanD = $_POST['pilihand'];
                     $jawaban = $_POST['jawaban'];
-                    $foto = '';
+                    $maxsize = 1024 * 200; 
                     if(!empty($_FILES['foto']['tmp_name'])){
-                        $foto = file_get_contents($_FILES['foto']['tmp_name']);
+                        if($_FILES['foto']['size'] <= $maxsize){
+                            $foto = file_get_contents($_FILES['foto']['tmp_name']);
+                            $notif = 'Soal berhasil dibuat';
+                        }else{
+                            $foto = '';
+                            $notif = 'Soal berhasil dibuat tetapi ukuran foto Melebihi batas';
+                        }
                     }else{
                         $foto = '';
+                        $notif = 'Soal berhasil dibuat';
                     }
                     DB::query('INSERT INTO soal VALUES (\'\',:soal,:A,:B,:C,:D,:jawaban,:foto)',array(':soal'=>$soal,':A'=>$jawabanA,':B'=>$jawabanB,':C'=>$jawabanC,':D'=>$jawabanD,':jawaban'=>$jawaban,':foto'=>$foto));
                     $idSoal = DB::query('SELECT idSoal FROM soal WHERE soal = :soal AND jawabanA = :jawabanA AND jawaban = :jawaban ORDER BY idSoal DESC',array(':soal'=>$soal, ':jawabanA'=>$jawabanA,':jawaban'=>$jawaban))[0]['idSoal'];
                     DB::query('INSERT INTO zip_soal VALUES (\'\',:idZip,:idSoal)',array(':idZip'=>$idZip,':idSoal'=>$idSoal));
-                    $content = Page::Title('Data Soal',Content::Zip($idZip));
-                    $notif = 'Soal berhasil dibuat';
+                    $content = Page::Title('Data Soal',Content::Zip($idZip,$idUser));
                 }
             }
         }elseif(isset($_POST['delete'])){

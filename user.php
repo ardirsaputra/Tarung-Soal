@@ -40,6 +40,7 @@ if ($idUser != false){
         }elseif(isset($_GET['idz'])) {
             if(DB::query('SELECT idZip FROM user_zip WHERE idZip = :idZip AND idUser =:idUser',array(':idZip'=>$_GET['idz'],':idUser'=>$idUser))){
                 $content2 = Page::Title('Kirim Soal',Content::TombolKirim($idPenerima,$_GET['idz']));
+                $content3 ='';
                 if(isset($_POST['kirimsoal'])){
                     $keterangan = $_POST['keterangan'];
                     $idPengirim = $idUser ;

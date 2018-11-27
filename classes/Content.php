@@ -108,7 +108,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="foto" class="col-sm-3 col-form-label">Foto</label>
+                        <label for="foto" class="col-sm-3 col-form-label">Foto (max 200kb)</label>
                         <div class="input-group col-sm-9">
                             <input type="file" name="foto" class="form-control" id="">
                         </div>
@@ -164,7 +164,7 @@
                 <div class="form-group">
                     <label class="label">Jawaban</label>
                     <div class="input-group">
-                        <input type="password" name="jawaban" class="form-control" placeholder="Password Baru" value="'.$forgot['jawaban'].'"required>
+                        <input type="password" name="jawaban" class="form-control" placeholder="Jawaban" value="'.$forgot['jawaban'].'"required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -187,7 +187,7 @@
                   <div class="form-group">
                       <label class="label">Jawabaan</label>
                       <div class="input-group">
-                          <input type="text" name="jawabaan" class="form-control" placeholder="Password Baru" required>
+                          <input type="text" name="jawabaan" class="form-control" placeholder="Jawaban" required>
                       </div>
                   </div>
                   <div class="form-group">
@@ -327,7 +327,7 @@
                                                 <div class="form-group">
                                                     <label class="label">Email</label>
                                                     <div class="input-group">
-                                                        <input type="email" name="email" class="form-control" placeholder="Username" required>
+                                                        <input type="email" name="email" class="form-control" placeholder="email" required>
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">
                                                                 <i class="mdi mdi-check-circle-outline"></i>
@@ -363,8 +363,7 @@
                                                     <a href="./forgot_password.php" class="text-small forgot-password text-black">Lupa Password</a>
                                                     
                                                 </div>
-                                                <p class="footer-text text-center">copyright © 2018 ARS. Infomatic Engineering UNILA .</p>
-                                            </form>
+                                           </form>
                                         </div>
                                         <div id="register" class="tab-pane"><br>
                                             <form class="forms-sample" action="./login.php" method="post" enctype="multipart/form-data">
@@ -420,12 +419,6 @@
                                                             '.$listGolongan.'
                                                         </select>
                                                     </div>
-                                                    <div class="input-form">
-                                                        <input type="text" name="sekolahUser" class="form-control" placeholder="Nama Sekolah" required>
-                                                    </div>
-                                                    <div class="input-form">
-                                                        <input type="text" name="nomorInduk" class="form-control" placeholder="NISN\NPM\NIP" required>
-                                                    </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="label">Password</label>
@@ -441,22 +434,13 @@
                                                        
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label class="label">Password Beta Tester</label>
-                                                    <div class="input-form">
-                                                        <input type="password" name="passwordbeta" class="form-control" placeholder="*********" required>
-                                                    
-                                                    </div>
-                                                </div>
                                                 <div class="input-form">
                                                     <input type="submit" name="create_account" class="btn btn-primary col-md-12" value="Daftar">
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
-                                    <ul class="auth-footer">
-                                        <p class="footer-text text-center">copyright © 2018 ARS. Infomatic Engineering UNILA .</p>
-                                    </ul>
+                                   
             ';
         } 
         public static function Dashboard(){
@@ -557,7 +541,7 @@
                         '.$golongan.'
                     </td>
                     <td>
-                        '.$Zip['createZip'].'
+                        '.Navigation::FormatDateHoursIndo($Zip['createZip']).'
                     </td>
                 </tr>';
                 $iteration ++;
@@ -681,15 +665,15 @@
         }
         public static function ListHasilZip($idZip){
             $list = '';
-            if(DB::query('SELECT * FROM hasil WHERE idZip = :idZip',array(':idZip'=>$idZip))){
-                $DataHasil = DB::query('SELECT * FROM hasil WHERE idZip = :idZip',array(':idZip'=>$idZip));
+            $DataHasil = DB::query('SELECT * FROM hasil WHERE idZip = :idZip',array(':idZip'=>$idZip));
+            if($DataHasil != false){
                 $iteration = 1;
                 foreach ($DataHasil as $hasil){
                     $dataUser = DB::query('SELECT * FROM user WHERE idUser = :idUser',array(':idUser'=>$hasil['idUser']))[0];
                     $list .= '
                     <tr>
                         <td>'.$iteration.'</td>
-                        <td><img src="'.Navigation::getSourceImageProfil($hasil['idUser']).'"> '.$dataUser['namaLengkap'].'</td>
+                        <td><a href="./user.php?id='.$hasil['idUser'].'" class="text-black"><img src="'.Navigation::getSourceImageProfil($hasil['idUser']).'"> '.$dataUser['namaLengkap'].'</a></td>
                         <td>'.$dataUser['nomorInduk'].'</td>
                         <td>'.$hasil['Hasil'].'</td>
                         <td>'.$dataUser['sekolahUser'].'</td>
@@ -828,6 +812,7 @@
             }else{
                 $idPemilik = DB::query('SELECT idUser FROM user_zip WHERE idZip = :idZip',array(':idZip'=>$idZip))[0]['idUser'];
                 $password = '';
+                $hasil = '';
                 if(DB::query('SELECT count(idSoal) AS Jumlah FROM zip_soal WHERE idZip = :idZip',array(':idZip'=>$idZip))[0]['Jumlah'] >= 5){
                     $Hasil = DB::query('SELECT * FROM hasil WHERE idZip = :idZip AND idUser = :idUser',array('idUser' => $idUser, ':idZip'=>$idZip));
                     $password = '';
@@ -1095,9 +1080,9 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="exampleInputEmail2" class="col-form-label col-sm-2">Gambar</label>
+                        <label for="exampleInputEmail2" class="col-form-label col-sm-2">Gambar (200kb max)</label>
                         <div class="input-group col-sm-10">
-                            <input type="file" name="foto" class="form-control" placeholder=""aria-describedby="colored-addon3" disabled>
+                            <input type="file" name="foto" class="form-control" placeholder=""aria-describedby="colored-addon3">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -1186,7 +1171,7 @@
                     <div class="form-group row">
                         <label for="exampleInputEmail2" class="col-form-label col-sm-2">Gambar</label>
                         <div class="input-group col-sm-10">
-                            <input type="file" name="foto" class="form-control" placeholder=""aria-describedby="colored-addon3" disabled>
+                            <input type="file" name="foto" class="form-control" placeholder=""aria-describedby="colored-addon3">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -1252,6 +1237,20 @@
                     $Golongan .= ''.$i['namaGolongan'].'';
                 }   
             }
+            if($diskripsi != ''){
+                $deskripsi2 = '<div class="form-group row">    
+                <div class="input-group col-md-12">
+                    <label for="keterangan" class=" col-form-label">Deskripsi Diri</label>    
+                    <div class="input-group">
+                        <p  class="form-control" >'.$diskripsi.'</p>
+                    </div>
+                </div>
+            </div>';
+            }else{
+                $deskripsi2 ='';
+            }
+            $good = DB::query('SELECT count(idRating)as Jumlah FROM rating WHERE jenisItem = :jenisItem AND itemRating = :user AND nilaiRating = 5',array(':jenisItem' => 'User',':user'=>$idUser))[0]['Jumlah'];
+            $bad = DB::query('SELECT count(idRating)as Jumlah FROM rating WHERE jenisItem = :jenisItem AND itemRating = :user AND nilaiRating != 5',array(':jenisItem' => 'User',':user'=>$idUser))[0]['Jumlah'];
             return '
             <div class="card-body">
                 <h4 class="card-title"></h4>
@@ -1261,14 +1260,17 @@
                             <img class="mb-3 mx-auto d-block" style="width:auto; height: 200px" src="'.Navigation::getSourceImageProfil($idUser).'" alt="Foto"/>
                         </div>
                     </div>
-                    <div class="form-group row">    
-                        <div class="input-group col-md-12">
-                            <label for="keterangan" class=" col-form-label">Deskripsi Diri</label>    
-                            <div class="input-group">
-                                <p  class="form-control" >'.$diskripsi.'</p>
-                            </div>
+                    <div class="form-group row">
+                        <div class="input-group col-md-12 text-center">
+                        <span class="col-md-5"></span>
+
+                        <span class="fa fa-thumbs-o-up text-success col-md-1"> '.$good.'</span>
+                        <span class="fa fa-thumbs-o-down text-danger col-md-1"> '.$bad.'</span>
+                        <span class=" col-md-5"></span>
+
                         </div>
                     </div>
+                   '.$deskripsi2.'
                     <div class="form-group row">
                         <label for="exampleInputEmail2" class="col-sm-2 col-form-label">Nama</label>
                         <div class="input-group col-sm-10">
@@ -1469,7 +1471,7 @@
         }
         public static function HasilCariSoal($nama){
             if(!empty($nama)){
-                $user = DB::query('SELECT * FROM zip WHERE judulZip LIKE :judul ORDER BY idZip DESC LIMIT 100 ', array(':judul'=>'%'.$nama.'%'));
+                $user = DB::query('SELECT * FROM zip WHERE judulZip LIKE :judul ORDER BY idZip DESC LIMIT 500', array(':judul'=>'%'.$nama.'%'));
                 $listuser ='';
                 $getCount =0;
                 $listSoal ='';
@@ -1477,11 +1479,11 @@
                     $golongan = DB::query('SELECT namaGolongan FROM golongan WHERE idGolongan = :idGolongan ',array(':idGolongan'=>$i['idGolongan']))[0]['namaGolongan'];
                     $listSoal .= '
                        <tr><td>
-                       '.Content::AdaPassword($Zip['passwordZip']).' '.$i['judulZip'].' 
+                       '.Content::AdaPassword($i['passwordZip']).' <a class="text-black" href="./zip.php?id='.$i['idZip'].'">'.$i['judulZip'].'</a>
                        </td><td>'.$i['deskripsiZip'].'
                        </td><td>'.$golongan.'
                        </td><td>'.Navigation::FormatDateIndo($i['createZip']).'
-                       </td><td><a class="btn btn-primary" href="./zip.php?id='.$i['idZip'].'"> Lihat </a></td>
+                       </td>
                        </tr>
                     ';
                     $getCount++;
@@ -1490,6 +1492,39 @@
                 if($getCount==0){
                     $head ='';
                     $listSoal = "<tr><td>Tidak ada soal yang ditemukan <td><tr>";
+                }
+            }else{
+                $head='';
+                $listSoal = '';
+            }
+            return Page::List($head,$listSoal);
+        }
+        public static function HasilCariUser($nama,$idUser){
+            if(!empty($nama)){
+                $nama2 = '%'.$nama.'%';
+                $user = DB::query('SELECT * FROM user WHERE  namaLengkap LIKE :nama AND idUser != :user LIMIT 500',array(':nama' => $nama2 ,':user'=>$idUser));
+                $listuser ='';
+                $getCount =0;
+                $listSoal ='';
+                foreach($user as $i){
+                    $getCount++;
+                    if($i['sekolahUser'] == ''){
+                        $sekolah = 'Belum Diisi';
+                    }
+                    $listSoal .= '
+                       <tr><td>
+                       '.$getCount.'
+                       </td><td>
+                       <a href="./user.php?id='.$i['idUser'].'"><img src="'.Navigation::getSourceImageProfil($i['idUser']).'">'.$i['namaLengkap'].'</a> 
+                       </td><td>'.$sekolah.'
+                       </tr>
+                    ';
+
+                }
+                $head = self::Headtable(['No','Nama','Sekolah']);
+                if($getCount==0){
+                    $head ='';
+                    $listSoal = "<tr><td>Tidak ada pengguna yang ditemukan <td><tr>";
                 }
             }else{
                 $head='';
@@ -1509,7 +1544,7 @@
                    '.Content::AdaPassword($i['passwordZip']).' <a class="text-black" href="./zip.php?id='.$i['idZip'].'">'.$i['judulZip'].'</a> 
                    </td><td>'.$i['deskripsiZip'].'
                    </td><td>'.$golongan.'
-                   </td><td>'.Navigation::FormatDateIndo($i['createZip']).'
+                   </td><td>'.Navigation::FormatDateHoursIndo($i['createZip']).'
                    </td>
                    </tr>
                 ';
@@ -1523,7 +1558,29 @@
             <form class="forms-sample" action="./search.php" method="post">
                 <div class="form-group row">  
                     <div class="input-group col-sm-12">
-                        <input type="text" name="soal" class="form-control" placeholder="Cari Soal Disini" aria-label="Masukkan Nama" aria-describedby="colored-addon3">
+                        <div class="input-group-append bg-primary border-primary">
+                            <button class="btn btn-primary" type="submit">
+                                <span class="fa fa-list text-white"></span>
+                            </button>
+                        </div>
+                        <input type="text" name="soal" class="form-control" placeholder="Cari Soal disini" aria-label="Masukkan Nama" aria-describedby="colored-addon3">
+                        <div class="input-group-append bg-primary border-primary">
+                            <button class="btn btn-primary" type="submit">
+                                <span class="fa fa-search text-white"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <form class="forms-sample" action="./search.php" method="post">
+                <div class="form-group row">  
+                    <div class="input-group col-sm-12">
+                        <div class="input-group-append bg-primary border-primary">
+                            <button class="btn btn-primary" type="submit">
+                                <span class="fa fa-user text-white"></span>
+                            </button>
+                        </div>
+                        <input type="text" name="u" class="form-control" placeholder="Cari Pengguna lain ..." aria-label="Masukkan Nama" aria-describedby="colored-addon3">
                         <div class="input-group-append bg-primary border-primary">
                             <button class="btn btn-primary" type="submit">
                                 <span class="fa fa-search text-white"></span>
@@ -1612,7 +1669,7 @@
                 $gambar = '
                 <div class="form-group row">
                     <div class="input-group col-sm-12">
-                        <img src="'.Navigation::getSourceImageSoal($idSoal).'" class="mb-3 mx-auto d-block" style="width:auto; height: 200px">
+                        <img src="'.Navigation::getSourceImageSoal($idSoal).'">
                     </div>
                 </div>';
             }else{

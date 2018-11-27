@@ -148,16 +148,16 @@ class Navigation {
             <a class="navbar-brand brand-logo" href="./">
                 <img src="images/logo.png" alt="logo" />
             </a>
-            <a class="navbar-brand brand-logo-mini" href="index.html">
-                <img src="'.self::getSourceImageProfilLoggedIn().'" alt="logo" />
+            <a class="navbar-brand brand-logo-mini" href="./">
+                <img src="./images/favicon2.png" alt="logo"/>
             </a>
         </div>
 
         <div class="navbar-menu-wrapper d-flex align-items-center">
             <ul class="navbar-nav navbar-nav-left header-links d-none d-md-flex">
                 <li class="nav-item">
-                    <a href="#search" class="nav-link" data-toggle="modal" data-target="#search">
-                        <span class="fa fa-search"></span>
+                    <a href="#search" class="text-white" data-toggle="modal" data-target="#search">
+                        <span class="fa fa-search">Soal</span> 
                     </a>
                 </li>
             </ul>
@@ -253,7 +253,7 @@ class Navigation {
                 <div class="nav-link">
                     <div class="user-wrapper">
                         <div class="profile-image">
-                            <img src="'.Navigation::getSourceImageProfilLoggedIn().'" alt="profile image">
+                            <img class="img-xs rounded-circle" src="'.Navigation::getSourceImageProfilLoggedIn().'" alt="profile image">
                         </div>
                         <div class="text-wrapper">
                             <p class="profile-name"><a href="./user.php?id='.Login::isLoggedIn().'">'.Login::getNamaLengkapProfilLoggedIn().'</a></p>
@@ -280,7 +280,7 @@ class Navigation {
             <li class="nav-item">
                 <a class="nav-link" data-toggle="collapse" href="#datakoleksi" aria-expanded="false" aria-controls="datakoleksi">
                     <i class="menu-icon mdi mdi-content-copy"></i>
-                    <span class="menu-title">Koleksi</span>
+                    <span class="menu-title">Koleksi Soal</span>
                     <i class="menu-arrow"></i>
                 </a>
                 <div class="collapse" id="datakoleksi">
@@ -310,6 +310,12 @@ class Navigation {
                 <a class="nav-link" href="./notification.php">
                     <i class="menu-icon fa fa-stack-exchange"></i>
                     <span class="menu-title">Notifikasi</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./rating.php">
+                    <i class="menu-icon fa fa-star"></i>
+                    <span class="menu-title">Rating Ku</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -372,6 +378,18 @@ class Navigation {
         $bulan = substr($date, 5, 2);
         $tanggal = substr($date, 8, 2);
         $result = $tanggal." ".$BulanIndo[(int)$bulan]. " ". $tahun;
+        if($bulan == "00"){
+            return "Tidak ada";
+        }
+        return $result ;
+    }
+    public static function FormatDateHoursIndo($date){
+        $BulanIndo = array("","Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember");        
+        $tahun = substr($date, 0, 4);               
+        $bulan = substr($date, 5, 2);
+        $tanggal = substr($date, 8, 2);
+        $jam   = substr($date, 10, 6);  
+        $result = $jam." , ".$tanggal." ".$BulanIndo[(int)$bulan]. " ". $tahun;
         if($bulan == "00"){
             return "Tidak ada";
         }
