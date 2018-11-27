@@ -33,14 +33,17 @@ if ($idUser != false){
             }
         }else $notif = 'Nomor induk harus terisi untuk bisa mengatur fitur ini';
     }elseif(isset($_POST['updaterecovery'])){
-        if(isset($_POST['idrecovery'])){
-            if(isset($_POST['pertanyaan'])){
-                if(isset($_POST['jawaban'])){
-                     DB::query('UPDATE forgot SET pertanyaan = :pertanyaan , jawaban = :jawaban WHERE idForgot = :idForgot)',array(':idForgot'=>$_POST['idrecovery'],':pertanyaan'=>$_POST['pertanyaan'],':jawaban'=>$_POST['jawaban']));
-                     $notif = "Mengubah Pengaturan Lupa Password Berhasil";
-                }else $notif = "Jawaban tidak ada";
-            }else $notif ="Pertanyaan tidak ada";
-        }else $notif = "Lupa id user";
+        $nomorInduk = DB::query('SELECT nomorInduk FROM user WHERE idUser = :idUser',array(':idUser'=>$idUser))[0]['nomorInduk'];
+        if($nomorInduk != ''){    
+            if(isset($_POST['idrecovery'])){
+                if(isset($_POST['pertanyaan'])){
+                    if(isset($_POST['jawaban'])){
+                        DB::query('UPDATE forgot SET pertanyaan = :pertanyaan , jawaban = :jawaban WHERE idForgot = :idForgot)',array(':idForgot'=>$_POST['idrecovery'],':pertanyaan'=>$_POST['pertanyaan'],':jawaban'=>$_POST['jawaban']));
+                        $notif = "Mengubah Pengaturan Lupa Password Berhasil";
+                    }else $notif = "Jawaban tidak ada";
+                }else $notif ="Pertanyaan tidak ada";
+            }else $notif = "Lupa id user";
+        }else $notif = 'Nomor induk harus terisi untuk bisa mengatur fitur ini';
     }elseif(isset($_POST['updateUser'])){
         if(isset($_POST['namaLengkap']) && strlen($_POST['namaLengkap']) >= 4 ){
             if(isset($_POST['email']) && $_POST['email']!=''){

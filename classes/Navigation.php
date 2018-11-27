@@ -157,7 +157,7 @@ class Navigation {
             <ul class="navbar-nav navbar-nav-left header-links d-none d-md-flex">
                 <li class="nav-item">
                     <a href="#search" class="text-white" data-toggle="modal" data-target="#search">
-                        <span class="fa fa-search"> Soal</span> 
+                        <span class="fa fa-search"> Cari Soal ...</span> 
                     </a>
                 </li>
             </ul>
@@ -246,6 +246,50 @@ class Navigation {
         </nav>';
     }
     public static function SideBar(){
+        $idUser = Login::isLoggedIn();
+        $dataNotifPesan = DB::query('SELECT idKoleksi FROM koleksi WHERE statusKoleksi = 0 AND idPenerima = :idPenerima',array(':idPenerima'=>$idUser));
+        $countNotifPesan = 0;
+        $listPesan ='';
+        foreach($dataNotifPesan as $i ){
+            $countNotifPesan++;
+        }
+        if($countNotifPesan != 0){
+            $ifanypesan = '<a href="notification.php" ><span class="badge badge-info badge-pill float-right">Lihat Semua</span></a>'    ;                
+            $infojumlahpesan = '<span class="count bg-primary text-white rounded p-1 img-xs">'.$countNotifPesan.'</span>';
+        }else{
+            $infojumlahpesan = '';
+            $ifanypesan ='';
+        }
+        $listsoal = '';
+        $datasoal = DB::query('SELECT idZip FROM user_zip WHERE idUser = :user ',array(':user'=>$idUser));
+        if($datasoal != false){
+            foreach($datasoal as $i){
+                $judul =DB::getJudulZip($i['idZip']);
+                if($judul >= 13 ){
+                    $c = substr($judul,0,13).'...';
+                }else{
+                    $c = $judul;
+                }
+                $listsoal .= '
+                <li class="">
+                    <a class="nav-link" href="./zip.php?id='.$i['idZip'].'">
+                        <i class="menu-icon mdi mdi-pencil"></i>
+                        <span class="menu-title">'.$c.'</span>
+                    </a>
+                </li>
+                ';
+                
+            }
+        }else{
+            $listsoal = '
+            <li class="nav-item">
+                <a class="nav-link" href="./zip.php?tambahzip">
+                    <i class="menu-icon mdi mdi-pencil"></i>
+                    <span class="menu-title">Tambah Judul Soal</span>
+                </a>
+            </li>
+            ';
+        }
         return '
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
             <ul class="nav">
@@ -274,7 +318,7 @@ class Navigation {
             <li class="nav-item">
                 <a class="nav-link" href="./search.php">
                     <i class="menu-icon fa fa-search"></i>
-                    <span class="menu-title">Cari Soal</span>
+                    <span class="menu-title">Pencarian</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -291,12 +335,7 @@ class Navigation {
                                 <span class="menu-title">Koleksi</span>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="./zip.php">
-                                <i class="menu-icon mdi mdi-pencil"></i>
-                                <span class="menu-title">Soal</span>
-                            </a>
-                        </li>
+                        '.$listsoal.'
                     </ul>
                 </div>
             </li>
@@ -309,7 +348,7 @@ class Navigation {
             <li class="nav-item">
                 <a class="nav-link" href="./notification.php">
                     <i class="menu-icon fa fa-stack-exchange"></i>
-                    <span class="menu-title">Notifikasi</span>
+                    <span class="menu-title">Notifikasi   '.$infojumlahpesan.'</span>
                 </a>
             </li>
             <li class="nav-item">

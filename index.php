@@ -10,7 +10,7 @@ if ($idUser != false){
     $content = Content::CariSoal().''.Page::Row(Content::Total('Jumlah Pengguna','user').''.Content::Total('Jumlah Judul Soal','zip').''.Content::Total('Jumlah Soal','soal').''.Content::Total('Jumlah Peserta Soal','hasil'));
     $array = ['Judul Soal','Tingkat','Pembuatan'];
     $zip = Page::Title('Koleksi Soal',Page::List(Content::Headtable($array),Content::ListZipDasboard()));
-    $content .= Page::Row(Content::CardLarge6($zip).'');
+    $content .= Page::Title('Soal Terbaru',Content::SoalTerbaru());
     $notif = '';
     echo Page::DefaultPage($title,$notif,$content);    
 }else{

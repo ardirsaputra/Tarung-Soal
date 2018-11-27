@@ -10,7 +10,7 @@ if ($idUser == false){
     $content = Content::ForgotPassword();
     if(isset($_POST['forgotpassword'])){
         if(isset($_POST['email'])&&(isset($_POST['nomorInduk']))){
-            if($_POST['email'] != '' || $_POST['nomorInduk'] =! ''){
+            if($_POST['email'] != ''){
                 $email = $_POST['email'];
                 $nomorInduk = $_POST['nomorInduk'];
                 if(DB::query('SELECT idUser FROM user WHERE email =:email AND nomorInduk = :nomorInduk',array(':email'=>$email,':nomorInduk'=>$nomorInduk))){
