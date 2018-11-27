@@ -176,24 +176,27 @@
           }else{
               return '
               <div class="card-body">
-                <h4 class="card-title">Recovery Password</h4>
-                  <form class="forms-sample" action="./setting.php" method="post">
-                  <div class="form-group">
-                      <label class="label">Pertanyaan</label>
-                      <div class="input-group">
-                          <input type="text" name="pertanyaan" class="form-control" placeholder="Pertanyaan" required>
-                      </div>
-                  </div>       
-                  <div class="form-group">
-                      <label class="label">Jawabaan</label>
-                      <div class="input-group">
-                          <input type="text" name="jawabaan" class="form-control" placeholder="Jawaban" required>
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <input type="submit" class="btn btn-succes  container" name="forgotpassword" class="form-control" value="Set Lupa Password">
-                  </div>  
-              </form>
+                <h4 class="card-title">Recovery Password</h4>  
+                <div class="text-center form-group bg-warning text-white rounded">
+                    untuk mengunakan fitur ini harus mengisi nomor induk pada borang biodata anda
+                </div>
+                    <form class="forms-sample" action="./setting.php" method="post">
+                <div class="form-group">
+                    <label class="label">Pertanyaan</label>
+                    <div class="input-group">
+                        <input type="text" name="pertanyaan" class="form-control" placeholder="Pertanyaan" required>
+                    </div>
+                </div>       
+                <div class="form-group">
+                        <label class="label">Jawabaan</label>
+                    <div class="input-group">
+                        <input type="text" name="jawabaan" class="form-control" placeholder="Jawaban" required>
+                    </div>
+                </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-succes  container" name="forgotpassword" class="form-control" value="Set Lupa Password">
+                    </div>  
+                </form>
             </div> 
             ';
             }
@@ -712,18 +715,27 @@
                 $finishTime = Navigation::FormatDateIndo($finish[1]);
                 $create = $Zip['createZip'];
                 $password = $Zip['passwordZip'];
-                
+                if($jumlahSoal >= 5){
+                    $jumlahbatas = '';
+                }else{
+                    $jumlahbatas = ' <div class="form-group row">  
+                    <div class="input-group col-md-12">
+                        <p class="bg-warning text-white col-md-12 text-center"> Soal harus berisi minimal 5 buah untuk bisa dikerjakan oleh orang lain</span>  
+                    </div>        
+                </div>';
+                }
                 if(DB::query('SELECT idZip FROM user_zip WHERE idUser = :idUser AND idZip = :idZip',array('idUser'=>$idUser,':idZip'=>$idZip))){
                     return '
                     <div class="card-body">
-                        <p class="card-description">Data Deskripsi Soal</p>
+                    '.$jumlahbatas.'    
+                    <p class="card-description">Data Deskripsi Soal</p>
                             <div class="form-group row">    
                                 <label for="keterangan" class="col-sm-2 col-form-label">Judul Soal</label>    
                                 <div class="input-group col-sm-10">
                                     <input type="text" name="judul" class="form-control"  placeholder="Judul Soal" value="'.$Zip['judulZip'].'"disabled>
                                 </div>
                             </div>
-                            
+                          
                             <div class="form-group row">
                                 <label for="exampleInputEmail2" class="col-sm-2 col-form-label">Deskripsi</label>
                                 <div class="input-group col-sm-10">
@@ -785,6 +797,7 @@
                                     <p class="form-control ">'.$jumlahSoal.'</p>
                                 </div>  
                             </div>
+                           
                             <div class="form-group row">  
                                 <div class="input-group col-md-12">
                                     <a href="./user.php?idz='.$Zip['idZip'].'" class="btn btn-info form-control"><span class="fa fa-send-o"></span> Kirim Soal</a> 
@@ -963,6 +976,8 @@
                                     <p class="form-control ">'.$jumlahSoal.'</p>
                                 </div>  
                             </div>
+                            
+                            
                             '.$password.'
                         </div>                        
                         '.$hasil.'
@@ -1830,12 +1845,12 @@
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-radio ">
-                                        <input type="radio" class="form-check-input" name="rating" id="membershipRadios1" value="5" '.$bagus.' required> <span class="fa fa-thumbs-o-up"></span>
+                                        <input type="radio" class="form-check-input" name="rating" id="membershipRadios1" value="5" '.$bagus.' required> <span class="fa fa-thumbs-o-up text-success"></span>
                                 </div>
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-radio">
-                                        <input type="radio" class="form-check-input" name="rating" id="membershipRadios2" value="-2" '.$buruk.' required><span class="fa fa-thumbs-o-down"></span>
+                                        <input type="radio" class="form-check-input" name="rating" id="membershipRadios2" value="-2" '.$buruk.' required><span class="fa fa-thumbs-o-down text-danger"></span>
                                 </div>
                             </div>
                         </div>
@@ -1861,12 +1876,12 @@
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-radio ">
-                                        <input type="radio" class="form-check-input" name="rating" id="membershipRadios1" value="5" required> <span class="fa fa-thumbs-o-up"></span>
+                                        <input type="radio" class="form-check-input" name="rating" id="membershipRadios1" value="5" required> <span class="fa fa-thumbs-o-up text-success"></span>
                                 </div>
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-radio">
-                                        <input type="radio" class="form-check-input" name="rating" id="membershipRadios2" value="-2" required><span class="fa fa-thumbs-o-down"></span>
+                                        <input type="radio" class="form-check-input" name="rating" id="membershipRadios2" value="-2" required><span class="fa fa-thumbs-o-down text-danger"></span>
                                 </div>
                             </div>
                         </div>

@@ -157,7 +157,7 @@ class Navigation {
             <ul class="navbar-nav navbar-nav-left header-links d-none d-md-flex">
                 <li class="nav-item">
                     <a href="#search" class="text-white" data-toggle="modal" data-target="#search">
-                        <span class="fa fa-search">Soal</span> 
+                        <span class="fa fa-search"> Soal</span> 
                     </a>
                 </li>
             </ul>
@@ -303,7 +303,7 @@ class Navigation {
             <li class="nav-item">
                 <a class="nav-link" href="./record.php">
                     <i class="menu-icon fa fa-check-circle"></i>
-                    <span class="menu-title">Hasil</span>
+                    <span class="menu-title">Data Hasil</span>
                 </a>
             </li>
             <li class="nav-item">

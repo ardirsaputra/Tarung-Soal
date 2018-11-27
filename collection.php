@@ -9,7 +9,7 @@ if ($idUser != false){
     $title = 'Koleksi Soal - Tarung Soal';
     $notif = '';
     $array = ['No','Judul Soal','Tingkat Soal','Tanggal Pembuatan'];
-    $content = Page::Title('Koleksi Soal','<a href="./zip.php?tambahzip" class="btn btn-success form-control"><span class"fa fa-plus" aria-hidden="true">+</span>Soal</a>'.Page::List(Content::Headtable($array),Content::ListZip($idUser)));
+    $content = Page::Title('Koleksi Soal','<a href="./zip.php?tambahzip" class="btn btn-success form-control"><span class"fa fa-plus" aria-hidden="true">+</span> Tambah Soal</a>'.Page::List(Content::Headtable($array),Content::ListZip($idUser)));
     if(isset($_GET['msg'])){
         $notif = $_GET['msg'];
     }

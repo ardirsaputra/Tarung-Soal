@@ -71,7 +71,7 @@
                                 
                                 '.$content.'
                                 <br>
-                                <p class="footer-text text-muted text-center">copyright © 2018 ARS. Infomatic Engineer <br>Universitas Lampung </p>
+                                <p class="footer-text text-muted text-center">copyright © 2018 ARS. Infomatic Engineer <br>Universitas Lampung <br>Versi 1.0 </p>
                             
                             </div>
                         </div>

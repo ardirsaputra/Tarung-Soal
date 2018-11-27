@@ -23,12 +23,15 @@ if ($idUser != false){
             }else $notif = "Password lama salah";
         }else $notif = "ada borang yang kosong";
     }elseif(isset($_POST['forgotpassword'])){
-        if(isset($_POST['pertanyaan'])){
-            if(isset($_POST['jawabaan'])){
-                 DB::query('INSERT INTO forgot VALUES ( \'\',:idUser,:pertanyaan,:jawabaan)',array(':idUser'=>$idUser,':pertanyaan'=>$_POST['pertanyaan'],':jawabaan'=>$_POST['jawabaan']));
-                 $notif = "Menambah Pengaturan Lupa Password Berhasil";
+        $nomorInduk = DB::query('SELECT nomorInduk FROM user WHERE idUser = :idUser',array(':idUser'=>$idUser))[0]['nomorInduk'];
+        if($nomorInduk != ''){    
+            if(isset($_POST['pertanyaan'])){
+                if(isset($_POST['jawabaan'])){
+                    DB::query('INSERT INTO forgot VALUES ( \'\',:idUser,:pertanyaan,:jawabaan)',array(':idUser'=>$idUser,':pertanyaan'=>$_POST['pertanyaan'],':jawabaan'=>$_POST['jawabaan']));
+                    $notif = "Menambah Pengaturan Lupa Password Berhasil";
+                }
             }
-        }
+        }else $notif = 'Nomor induk harus terisi untuk bisa mengatur fitur ini';
     }elseif(isset($_POST['updaterecovery'])){
         if(isset($_POST['idrecovery'])){
             if(isset($_POST['pertanyaan'])){

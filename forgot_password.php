@@ -15,6 +15,7 @@ if ($idUser == false){
                 $nomorInduk = $_POST['nomorInduk'];
                 if(DB::query('SELECT idUser FROM user WHERE email =:email AND nomorInduk = :nomorInduk',array(':email'=>$email,':nomorInduk'=>$nomorInduk))){
                     $content = Content::FormPertanyaan($email,$nomorInduk);
+                    $notif = 'user tidak memasang fitur ini';
                 }else $notif = 'email atau nomor induk tidak diketahui';
             }else $notif = 'email atau nomorinduk kosong';
         }else $notif = 'email dan nomor induk';
